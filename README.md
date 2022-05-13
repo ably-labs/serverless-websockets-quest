@@ -1,4 +1,4 @@
-# Ably Labs Template Repo
+# Serverless Websockets Quest
 
 ---
 
