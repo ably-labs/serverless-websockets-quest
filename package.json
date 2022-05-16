@@ -13,7 +13,7 @@
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src"
   },
   "dependencies": {
-    "axios": "^0.24.0",
+    "axios": "^0.27.2",
     "vue": "^3.2.26",
     "vue-router": "^4.0.12",
     "vuex": "^4.0.2"
