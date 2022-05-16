@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Newtonsoft.Json;
 
-namespace AblyLabs.ServerlessWebsocketsQuest
+namespace AblyLabs.ServerlessWebsocketsQuest.Models
 {
     [JsonObject(MemberSerialization.OptIn)]
     public class GameState

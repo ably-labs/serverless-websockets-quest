@@ -1,4 +1,4 @@
-namespace AblyLabs.ServerlessWebsocketsQuest
+namespace AblyLabs.ServerlessWebsocketsQuest.Models
 {
     public class Turn
     {
