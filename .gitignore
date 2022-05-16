@@ -1,4 +1,7 @@
+# Azurite
 __azurite*
+__blobstorage*
+__queuestorage*
 
 # Logs
 logs
