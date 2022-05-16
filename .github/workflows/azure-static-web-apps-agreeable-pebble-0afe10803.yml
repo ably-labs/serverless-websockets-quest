@@ -32,13 +32,6 @@ jobs:
           app_location: "/"
           api_location: "api"
           output_location: "dist"
-      - name: Set App Settings
-        uses: azure/CLI@v1.0.6
-        with:
-          inlineScript: |
-            az staticwebapp appsettings set \
-              --name serverless-websockets-quest-swa
-              --setting-names "ABLY_APIKEY=${{ secrets.ABLY_APIKEY }}"
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
