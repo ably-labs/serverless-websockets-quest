@@ -17,3 +17,6 @@ jobs:
         with:
             account-id: '${{ secrets.ABLY_ACCOUNT_ID }}'
             control-api-key: '${{ secrets.ABLY_CONTROL_API_KEY }}'
+            create-key: 'true'
+            key-name: 'Gameplay'
+            key-capabilities: 'publish, subscribe, presence'
