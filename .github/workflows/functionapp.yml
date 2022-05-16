@@ -16,7 +16,7 @@ env:
   DOTNET_VERSION: '6.0.x'
   
 jobs:
-  Infrastructure:
+  FunctionApp:
     runs-on: ubuntu-latest
     environment: Production
     steps:
