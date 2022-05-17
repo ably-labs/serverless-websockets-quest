@@ -6,13 +6,8 @@ using Newtonsoft.Json;
 namespace AblyLabs.ServerlessWebsocketsQuest.Models
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class GameState
+    public class GameState : IGameState
     {
-        [JsonProperty("questId")]
-        public string QuestId { get; set; }
-
-        public void SetQuestId(string questId) => QuestId = questId;
-
         [JsonProperty("monsterHealth")]
         public int MonsterHealth { get; set; }
         public void SetMonsterHealth(int health) => MonsterHealth = health;
@@ -26,6 +21,23 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
         {
             var currentIndex = Array.IndexOf(Players, currentPlayerId);
             return (currentIndex == Players.Length - 1) ? Players[0] : Players[currentIndex + 1];
+        }
+
+        public string GetNextTurn(string currentPlayerId)
+        {
+            var currentIndex = Array.IndexOf(Players, currentPlayerId);
+            return currentIndex == Players.Length - 1 ? "monster" : GetNextPlayer(currentPlayerId);
+        }
+
+        public string GetRandomPlayer()
+        {
+            var index = new Random().Next(0, Players.Length - 1);
+            return Players[index];
+        }
+
+        public int GetMonsterAttackDamage()
+        {
+            return new Random().Next(10, 20);
         }
 
         public bool IsGameOver => MonsterHealth <= 0;

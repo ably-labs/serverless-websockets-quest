@@ -10,30 +10,28 @@ using AblyLabs.ServerlessWebsocketsQuest.Models;
 
 namespace AblyLabs.ServerlessWebsocketsQuest
 {
-    public class ExecuteTurn
+    public class StartQuest
     {
         private AblyRealtime _realtime;
 
-        public ExecuteTurn(AblyRealtime realtime)
+        public StartQuest(AblyRealtime realtime)
         {
             _realtime = realtime;
         }
 
-        [FunctionName(nameof(ExecuteTurn))]
+        [FunctionName(nameof(StartQuest))]
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequestMessage req,
             [DurableClient] IDurableClient durableClient,
             ILogger log)
         {
-            // Read Turn object from Ably Message
-            var turn = await req.Content.ReadAsAsync<TurnData>();
-            var entityId = new EntityId(nameof(GameState), turn.QuestId);
+            var startQuestData = await req.Content.ReadAsAsync<StartQuestData>();
+            var entityId = new EntityId(nameof(GameState), startQuestData.QuestId);
+            await durableClient.SignalEntityAsync<IGameState>(entityId, proxy => proxy.SetPlayers(startQuestData.PlayerIds));
             var entityStateResponse = await durableClient.ReadEntityStateAsync<GameState>(entityId);
             if (entityStateResponse.EntityExists)
             {
-                // Determine if next turn is user or monster
-                
-                var channel = _realtime.Channels.Get(turn.QuestId);
+                var channel = _realtime.Channels.Get(startQuestData.QuestId);
                 await channel.PublishAsync(
                     "monster-attack", 
                     new { 
