@@ -36,7 +36,8 @@ namespace AblyLabs.ServerlessWebsocketsQuest
                     "monster-attack", 
                     new { 
                         playerId = entityStateResponse.EntityState.GetRandomPlayer(),
-                        damage = entityStateResponse.EntityState.GetMonsterAttackDamage() 
+                        damage = entityStateResponse.EntityState.GetMonsterAttackDamage(),
+                        nextPlayerId = entityStateResponse.EntityState.GetNextPlayer(null)
                     }
                 );
             }

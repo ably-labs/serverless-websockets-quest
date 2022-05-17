@@ -31,16 +31,34 @@ namespace AblyLabs.ServerlessWebsocketsQuest
             var entityStateResponse = await durableClient.ReadEntityStateAsync<GameState>(entityId);
             if (entityStateResponse.EntityExists)
             {
-                // Determine if next turn is user or monster
-                
                 var channel = _realtime.Channels.Get(turn.QuestId);
-                await channel.PublishAsync(
-                    "monster-attack", 
-                    new { 
-                        playerId = entityStateResponse.EntityState.GetRandomPlayer(),
-                        damage = entityStateResponse.EntityState.GetMonsterAttackDamage() 
-                    }
-                );
+                if (entityStateResponse.EntityState.IsMonsterTurn(turn.PlayerId))
+                {
+                    
+                    await channel.PublishAsync(
+                        "monster-attacks", 
+                        new { 
+                            playerId = entityStateResponse.EntityState.GetRandomPlayer(),
+                            damage = entityStateResponse.EntityState.GetMonsterAttackDamage(),
+                            nextPlayerId = entityStateResponse.EntityState.GetNextPlayer(null)
+                        }
+                    );
+                }
+                else
+                {
+                    var damage = entityStateResponse.EntityState.GetPlayerAttackDamage();
+                    // update the monster health entity
+
+                    await channel.PublishAsync(
+                        "player-attacks", 
+                        new { 
+                            nextPlayerId = entityStateResponse.EntityState.GetNextPlayer(turn.PlayerId),
+                            damage = damage
+                        }
+                    );
+                }
+                
+                
             }
 
             return new OkResult();

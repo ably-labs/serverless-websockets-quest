@@ -2,7 +2,7 @@ using Xunit;
 using AblyLabs.ServerlessWebsocketsQuest.Models;
 using FluentAssertions;
 
-namespace AblyLabs.ServerlessWebsocketsQuest.Models
+namespace AblyLabs.ServerlessWebsocketsQuest.Test.Models
 {
 
     public class GameStateTests
@@ -35,21 +35,22 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
         [InlineData(new string[] {"abc", "def"}, "def", "abc")]
         [InlineData(new string[] {"abc", "def", "ghi"}, "def", "ghi")]
         [InlineData(new string[] {"abc", "def", "ghi"}, "abc", "def")]
-        public void GetNextPlayer(string[] playerIds, string currentPlayerId, string expectedPlayerId)
+        [InlineData(new string[] {"abc", "def"}, null, "abc")]
+        public void GetNextPlayer(string[] playerIds, string? currentPlayerId, string expectedPlayerId)
         {
             var gameState = new GameState() { Players = playerIds };
             gameState.GetNextPlayer(currentPlayerId).Should().Be(expectedPlayerId);
         }
 
         [Theory()]
-        [InlineData(new string[] {"abc"}, "abc", "monster")]
-        [InlineData(new string[] {"abc", "def"}, "def", "monster")]
-        [InlineData(new string[] {"abc", "def", "ghi"}, "def", "ghi")]
-        [InlineData(new string[] {"abc", "def", "ghi"}, "abc", "def")]
-        public void GetNextTurn(string[] playerIds, string currentPlayerId, string expectedTurn)
+        [InlineData(new string[] {"abc"}, "abc", true)]
+        [InlineData(new string[] {"abc", "def"}, "def", true)]
+        [InlineData(new string[] {"abc", "def", "ghi"}, "def", false)]
+        [InlineData(new string[] {"abc", "def", "ghi"}, "abc", false)]
+        public void IsMonsterTurn(string[] playerIds, string currentPlayerId, bool isMonsterTurn)
         {
             var gameState = new GameState() { Players = playerIds };
-            gameState.GetNextTurn(currentPlayerId).Should().Be(expectedTurn);
+            gameState.IsMonsterTurn(currentPlayerId).Should().Be(isMonsterTurn);
         }
     }
 }

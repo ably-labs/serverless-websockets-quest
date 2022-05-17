@@ -17,16 +17,23 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
         [JsonProperty("players")]
         public string[] Players { get; set; }
         public void SetPlayers(string[] players) => Players = players;
-        public string GetNextPlayer(string currentPlayerId)
+        public string GetNextPlayer(string? currentPlayerId)
         {
+            string nextPlayerId;
+            if (string.IsNullOrEmpty(currentPlayerId))
+            {
+                nextPlayerId = Players[0];
+            }
             var currentIndex = Array.IndexOf(Players, currentPlayerId);
-            return (currentIndex == Players.Length - 1) ? Players[0] : Players[currentIndex + 1];
+            nextPlayerId = currentIndex == Players.Length - 1 ? Players[0] : Players[currentIndex + 1];
+
+            return nextPlayerId;
         }
 
-        public string GetNextTurn(string currentPlayerId)
+        public bool IsMonsterTurn(string currentPlayerId)
         {
             var currentIndex = Array.IndexOf(Players, currentPlayerId);
-            return currentIndex == Players.Length - 1 ? "monster" : GetNextPlayer(currentPlayerId);
+            return currentIndex == Players.Length - 1 ? true : false;
         }
 
         public string GetRandomPlayer()
@@ -38,6 +45,11 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
         public int GetMonsterAttackDamage()
         {
             return new Random().Next(10, 20);
+        }
+
+        public int GetPlayerAttackDamage()
+        {
+            return new Random().Next(5, 10);
         }
 
         public bool IsGameOver => MonsterHealth <= 0;
