@@ -1,7 +1,8 @@
 sequenceDiagram
   Client ->> Function App: StartQuest
   activate Function App
-    Function App ->> Durable Entity: SignalEntity SetPlayers
+  Function App ->> Durable Entity: SignalEntity SetPlayers
   Durable Entity -->> Function App: ReadEntity GameState
-  Function App ->> Ably: Publish monster-attack
+  Function App -->> Ably: Publish update-player
+  Function App -->> Ably: Publish check-player-turn
   deactivate Function App

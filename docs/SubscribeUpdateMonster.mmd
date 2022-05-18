@@ -1,0 +1,5 @@
+sequenceDiagram
+  Ably ->> Client: Subscribe update-monster
+  activate Client
+  Client ->> Client: Update local Monster
+  deactivate Client

@@ -36,11 +36,16 @@ namespace AblyLabs.ServerlessWebsocketsQuest
             {
                 var channel = _realtime.Channels.Get(startQuestData.QuestId);
                 await channel.PublishAsync(
-                    "monster-attack", 
+                    "update-player", 
                     new { 
                         playerId = entityStateResponse.EntityState.GetRandomPlayer(),
-                        damage = entityStateResponse.EntityState.GetMonsterAttackDamage(),
-                        nextPlayerId = entityStateResponse.EntityState.GetNextPlayer(null)
+                        damage = entityStateResponse.EntityState.GetMonsterAttackDamage()
+                    }
+                );
+                await channel.PublishAsync(
+                    "check-player-turn", 
+                    new { 
+                        playerId = entityStateResponse.EntityState.GetNextPlayer(null)
                     }
                 );
             }
