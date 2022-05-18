@@ -1,0 +1,8 @@
+sequenceDiagram
+  Ably ->> Client: Subcribe monster-attack
+  activate Client
+  Client ->> Client: Update local Player Health
+  Client ->> Ably: Publish player-health
+  Client ->> Client: Check if client has the turn
+  Client ->> Function App: Execute turn
+  deactivate Client

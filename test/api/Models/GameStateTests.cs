@@ -2,7 +2,7 @@ using Xunit;
 using AblyLabs.ServerlessWebsocketsQuest.Models;
 using FluentAssertions;
 
-namespace AblyLabs.ServerlessWebsocketsQuest.Models
+namespace AblyLabs.ServerlessWebsocketsQuest.Test.Models
 {
 
     public class GameStateTests
@@ -28,6 +28,47 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             var gameState = new GameState() { MonsterHealth = health };
             gameState.ApplyDamageToMonster(damage);
             gameState.IsGameOver.Should().Be(isGameOver);
+        }
+
+        [Theory()]
+        [InlineData(new string[] {"abc"}, "abc", "abc")]
+        [InlineData(new string[] {"abc", "def"}, "def", "abc")]
+        [InlineData(new string[] {"abc", "def", "ghi"}, "def", "ghi")]
+        [InlineData(new string[] {"abc", "def", "ghi"}, "abc", "def")]
+        [InlineData(new string[] {"abc", "def"}, null, "abc")]
+        public void GetNextPlayer(string[] playerIds, string? currentPlayerId, string expectedPlayerId)
+        {
+            var gameState = new GameState() { Players = playerIds };
+            gameState.GetNextPlayer(currentPlayerId).Should().Be(expectedPlayerId);
+        }
+
+        [Theory()]
+        [InlineData(new string[] {"abc"}, "abc", true)]
+        [InlineData(new string[] {"abc", "def"}, "def", true)]
+        [InlineData(new string[] {"abc", "def", "ghi"}, "def", false)]
+        [InlineData(new string[] {"abc", "def", "ghi"}, "abc", false)]
+        public void IsMonsterTurn(string[] playerIds, string currentPlayerId, bool isMonsterTurn)
+        {
+            var gameState = new GameState() { Players = playerIds };
+            gameState.IsMonsterTurn(currentPlayerId).Should().Be(isMonsterTurn);
+        }
+
+        [Theory()]
+        [InlineData(100, 10, 20)]
+        [InlineData(20, 2, 4)]
+        public void GetMonsterAttackDamage(int monsterHealth, int min, int max)
+        {
+            var gameState = new GameState() { MonsterHealth = monsterHealth };
+            gameState.GetMonsterAttackDamage().Should().BeInRange(min, max);
+        }
+
+        [Theory()]
+        [InlineData(100, 5, 10)]
+        [InlineData(20, 1, 2)]
+        public void GetPlayerAttackDamage(int monsterHealth, int min, int max)
+        {
+            var gameState = new GameState() { MonsterHealth = monsterHealth };
+            gameState.GetPlayerAttackDamage().Should().BeInRange(min, max);
         }
     }
 }
