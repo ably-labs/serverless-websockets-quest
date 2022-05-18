@@ -23,7 +23,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Login to Azure
-      uses: azure/login@v1.4.3
+      uses: azure/login@v1.4.4
       with:
         creds: ${{ secrets.AZURE_RBAC_CREDENTIALS }}
     - name: Create Resource Group
