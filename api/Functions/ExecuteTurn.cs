@@ -19,6 +19,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest
             _realtime = realtime;
         }
 
+        // The ExecuteTurn function is called by a player that performs a turn.
         [FunctionName(nameof(ExecuteTurn))]
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequestMessage req,
@@ -26,12 +27,41 @@ namespace AblyLabs.ServerlessWebsocketsQuest
             ILogger log)
         {
             // Read Turn object from Ably Message
-            var turn = await req.Content.ReadAsAsync<Turn>();
+            var turn = await req.Content.ReadAsAsync<TurnData>();
             var entityId = new EntityId(nameof(GameState), turn.QuestId);
-            // Update entityId
-            // Publish monster damage and next player turn
-            var responseJson = new { title = "This is a title from the api call!" };
-            return new OkObjectResult(responseJson);
+            var entityStateResponse = await durableClient.ReadEntityStateAsync<GameState>(entityId);
+            if (entityStateResponse.EntityExists)
+            {
+                var channel = _realtime.Channels.Get(turn.QuestId);
+                if (turn.IsMonster)
+                {
+                    await channel.PublishAsync(
+                        "monster-attacks",
+                        new { 
+                            playerId = entityStateResponse.EntityState.GetRandomPlayer(),
+                            damage = entityStateResponse.EntityState.GetMonsterAttackDamage(),
+                            nextPlayerId = entityStateResponse.EntityState.GetNextPlayer(null)
+                        }
+                    );
+                }
+                else
+                {
+                    var damage = entityStateResponse.EntityState.GetPlayerAttackDamage();
+                    await durableClient.SignalEntityAsync<IGameState>(entityId, proxy => proxy.ApplyDamageToMonster(damage));
+                    entityStateResponse = await durableClient.ReadEntityStateAsync<GameState>(entityId);
+
+                    await channel.PublishAsync(
+                        "player-attacks", 
+                        new { 
+                            nextPlayerId = entityStateResponse.EntityState.GetNextPlayer(turn.PlayerId),
+                            damage = damage,
+                            monsterHealth = entityStateResponse.EntityState.MonsterHealth
+                        }
+                    );
+                }
+            }
+
+            return new AcceptedResult();
         }
     }
 }

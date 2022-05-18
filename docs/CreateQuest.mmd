@@ -1,0 +1,6 @@
+sequenceDiagram
+  Client ->> Function App: CreateQuest
+  activate Function App
+  Function App ->> Durable Entity: Signal SetMonsterHealth
+  Function App ->> Durable Entity: Signal SetHost
+  deactivate Function App
