@@ -44,12 +44,12 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
 
         public int GetMonsterAttackDamage()
         {
-            return new Random().Next(10, 20);
+            return new Random().Next(MonsterHealth/10, MonsterHealth/5);
         }
 
         public int GetPlayerAttackDamage()
         {
-            return new Random().Next(5, 10);
+            return new Random().Next(MonsterHealth/20, MonsterHealth/10);
         }
 
         public bool IsGameOver => MonsterHealth <= 0;

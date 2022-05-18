@@ -1,24 +1,18 @@
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
-using System.Net.Http;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
+using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
-using IO.Ably;
 using AblyLabs.ServerlessWebsocketsQuest.Models;
 
 namespace AblyLabs.ServerlessWebsocketsQuest
 {
     public class CreateQuest
     {
-        private AblyRealtime _realtime;
-
-        public CreateQuest(AblyRealtime realtime)
-        {
-            _realtime = realtime;
-        }
-
+        /// The CreateQuest function is called by the host (the firs player).
+        /// The function creates the initial GameState and stores this as a Durable Entity.
         [FunctionName(nameof(CreateQuest))]
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequestMessage req,
@@ -29,9 +23,9 @@ namespace AblyLabs.ServerlessWebsocketsQuest
             var entityId = new EntityId(nameof(GameState), newQuestData.QuestId);
             const int monsterHealth = 100;
             await durableClient.SignalEntityAsync<IGameState>(entityId, proxy => proxy.SetMonsterHealth(monsterHealth));
-            var channel = _realtime.Channels.Get(newQuestData.QuestId);
+            await durableClient.SignalEntityAsync<IGameState>(entityId, proxy => proxy.SetPlayers(new[] {newQuestData.PlayerId}));
 
-            return new OkResult();
+            return new OkObjectResult(newQuestData.QuestId);
         }
     }
 }
