@@ -23,7 +23,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest
             var entityId = new EntityId(nameof(GameState), newQuestData.QuestId);
             const int monsterHealth = 100;
             await durableClient.SignalEntityAsync<IGameState>(entityId, proxy => proxy.SetMonsterHealth(monsterHealth));
-            await durableClient.SignalEntityAsync<IGameState>(entityId, proxy => proxy.SetPlayers(new[] {newQuestData.PlayerId}));
+            await durableClient.SignalEntityAsync<IGameState>(entityId, proxy => proxy.SetHost(newQuestData.PlayerId));
 
             return new OkObjectResult(newQuestData.QuestId);
         }

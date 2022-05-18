@@ -14,6 +14,10 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
         public void ApplyDamageToMonster(int damage) => 
             MonsterHealth = damage < MonsterHealth ? MonsterHealth - damage : 0;
 
+        [JsonProperty("host")]
+        public string Host { get; set; }
+        public void SetHost(string host) => Host = host;
+
         [JsonProperty("players")]
         public string[] Players { get; set; }
         public void SetPlayers(string[] players) => Players = players;
