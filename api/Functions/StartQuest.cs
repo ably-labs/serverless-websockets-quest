@@ -19,6 +19,9 @@ namespace AblyLabs.ServerlessWebsocketsQuest
             _realtime = realtime;
         }
 
+        /// The StartQuest function is called when all players have joined the quest.
+        /// The PlayerIds will be stored in a Durable Entity.
+        /// The monster will attack first.
         [FunctionName(nameof(StartQuest))]
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequestMessage req,
@@ -42,7 +45,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest
                 );
             }
 
-            return new OkResult();
+            return new AcceptedResult();
         }
     }
 }

@@ -19,6 +19,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest
             _realtime = realtime;
         }
 
+        // The ExecuteTurn function is called by a player that performs a turn.
         [FunctionName(nameof(ExecuteTurn))]
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequestMessage req,
@@ -32,11 +33,10 @@ namespace AblyLabs.ServerlessWebsocketsQuest
             if (entityStateResponse.EntityExists)
             {
                 var channel = _realtime.Channels.Get(turn.QuestId);
-                if (entityStateResponse.EntityState.IsMonsterTurn(turn.PlayerId))
+                if (turn.IsMonster)
                 {
-                    
                     await channel.PublishAsync(
-                        "monster-attacks", 
+                        "monster-attacks",
                         new { 
                             playerId = entityStateResponse.EntityState.GetRandomPlayer(),
                             damage = entityStateResponse.EntityState.GetMonsterAttackDamage(),
@@ -47,21 +47,21 @@ namespace AblyLabs.ServerlessWebsocketsQuest
                 else
                 {
                     var damage = entityStateResponse.EntityState.GetPlayerAttackDamage();
-                    // update the monster health entity
+                    await durableClient.SignalEntityAsync<IGameState>(entityId, proxy => proxy.ApplyDamageToMonster(damage));
+                    entityStateResponse = await durableClient.ReadEntityStateAsync<GameState>(entityId);
 
                     await channel.PublishAsync(
                         "player-attacks", 
                         new { 
                             nextPlayerId = entityStateResponse.EntityState.GetNextPlayer(turn.PlayerId),
-                            damage = damage
+                            damage = damage,
+                            monsterHealth = entityStateResponse.EntityState.MonsterHealth
                         }
                     );
                 }
-                
-                
             }
 
-            return new OkResult();
+            return new AcceptedResult();
         }
     }
 }

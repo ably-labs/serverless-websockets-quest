@@ -52,5 +52,23 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Test.Models
             var gameState = new GameState() { Players = playerIds };
             gameState.IsMonsterTurn(currentPlayerId).Should().Be(isMonsterTurn);
         }
+
+        [Theory()]
+        [InlineData(100, 10, 20)]
+        [InlineData(20, 2, 4)]
+        public void GetMonsterAttackDamage(int monsterHealth, int min, int max)
+        {
+            var gameState = new GameState() { MonsterHealth = monsterHealth };
+            gameState.GetMonsterAttackDamage().Should().BeInRange(min, max);
+        }
+
+        [Theory()]
+        [InlineData(100, 5, 10)]
+        [InlineData(20, 1, 2)]
+        public void GetPlayerAttackDamage(int monsterHealth, int min, int max)
+        {
+            var gameState = new GameState() { MonsterHealth = monsterHealth };
+            gameState.GetPlayerAttackDamage().Should().BeInRange(min, max);
+        }
     }
 }

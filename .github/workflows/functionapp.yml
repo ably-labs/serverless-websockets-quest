@@ -21,9 +21,9 @@ jobs:
     environment: Production
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Login to Azure
-      uses: azure/login@v1.4.3
+      uses: azure/login@v1.4.4
       with:
         creds: ${{ secrets.AZURE_RBAC_CREDENTIALS }}
     - name: Create Resource Group
@@ -68,7 +68,7 @@ jobs:
         dotnet build --configuration Release --output ./output
         popd
     - name: 'Run Azure Functions Action'
-      uses: Azure/functions-action@v1.4.4
+      uses: Azure/functions-action@v1.4.6
       with:
         app-name: ${{ env.FUNCTION_APP_NAME }}
         package: './${{ env.FUNCTION_APP_PACKAGE_PATH }}/output'
