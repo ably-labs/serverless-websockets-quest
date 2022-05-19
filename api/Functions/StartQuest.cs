@@ -29,25 +29,12 @@ namespace AblyLabs.ServerlessWebsocketsQuest
         {
             var questData = await req.Content.ReadAsAsync<QuestData>();
 
-            var gameStateEntityId = new EntityId(nameof(GameState), questData.QuestId);
-            var gameState = await durableClient.ReadEntityStateAsync<GameState>(gameStateEntityId);
+            var channel = _realtime.Channels.Get(questData.QuestId);
+            var gameEngine = new GameEngine(durableClient, questData.QuestId, channel);
+            var gameState = await gameEngine.GetGameState();
+            await gameEngine.AttackByMonsterAsync(gameState);
 
-            var monsterEntityId = new EntityId(nameof(Monster), Monster.GetEntityId(questData.QuestId));
-            await durableClient.SignalEntityAsync<IPlayer>(monsterEntityId, proxy => proxy.SetHealth(100));
-            var monster = await durableClient.ReadEntityStateAsync<Monster>(monsterEntityId);
-
-            if (gameState.EntityExists && monster.EntityExists)
-            {
-                var channel = _realtime.Channels.Get(questData.QuestId);
-                var gameEngine = new GameEngine(durableClient, channel, questData.QuestId);
-                await gameEngine.AttackByMonster(gameState);
-
-                return new AcceptedResult();
-            }
-            else
-            {
-                return new BadRequestObjectResult("No game data was found. Please start a new quest.");
-            }
+            return new AcceptedResult();
         }
     }
 }

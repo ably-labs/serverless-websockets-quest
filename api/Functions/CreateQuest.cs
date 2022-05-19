@@ -20,8 +20,9 @@ namespace AblyLabs.ServerlessWebsocketsQuest
             ILogger log)
         {
             var questData = await req.Content.ReadAsAsync<QuestData>();
-            var gameStateEntityId = new EntityId(nameof(GameState), questData.QuestId);
-            await durableClient.SignalEntityAsync<IGameState>(gameStateEntityId, proxy => proxy.SetHost(questData.PlayerId));
+            var gameEngine = new GameEngine(durableClient, questData.QuestId, null);
+            await gameEngine.SetHostAsync(questData.PlayerId);
+            await gameEngine.CreateMonsterAsync(100);
 
             return new AcceptedResult();
         }

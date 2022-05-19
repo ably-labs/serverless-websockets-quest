@@ -27,21 +27,19 @@ namespace AblyLabs.ServerlessWebsocketsQuest
             ILogger log)
         {
             // Read Turn object from Ably Message
-            var turnData = await req.Content.ReadAsAsync<TurnData>();
-            var entityId = new EntityId(nameof(GameState), turnData.QuestId);
-            var gameState = await durableClient.ReadEntityStateAsync<GameState>(entityId);
-            if (gameState.EntityExists)
+            var questData = await req.Content.ReadAsAsync<QuestData>();
+
+            var channel = _realtime.Channels.Get(questData.QuestId);
+            var gameEngine = new GameEngine(durableClient, questData.QuestId, channel);
+            var gameState = await gameEngine.GetGameState();
+            
+            if (questData.PlayerId == Monster.ID)
             {
-                var channel = _realtime.Channels.Get(turnData.QuestId);
-                var gameEngine = new GameEngine(durableClient, channel, turnData.QuestId);
-                if (turnData.IsMonster)
-                {
-                    await gameEngine.AttackByMonster(gameState);
-                }
-                else
-                {
-                    await gameEngine.AttackByPlayer(turnData.PlayerId, gameState);
-                }
+                await gameEngine.AttackByMonsterAsync(gameState);
+            }
+            else
+            {
+                await gameEngine.AttackByPlayerAsync(questData.PlayerId, gameState);
             }
 
             return new AcceptedResult();
