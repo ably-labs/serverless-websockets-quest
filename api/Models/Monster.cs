@@ -6,9 +6,9 @@ using Newtonsoft.Json;
 namespace AblyLabs.ServerlessWebsocketsQuest.Models
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class Player : IPlayer
+    public class Monster : IPlayer
     {
-        public Player(string id, int health)
+        public Monster(string id, int health)
         {
             Id = id;
             Health = health;
@@ -23,9 +23,9 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
         public void SetHealth(int health) => Health = health;
         public void ApplyDamage(int damage) => Health = damage > Health ? 0 : Health - damage;
 
-        [FunctionName(nameof(Player))]
+        [FunctionName(nameof(Monster))]
         public static Task Run(
             [EntityTrigger] IDurableEntityContext ctx)
-            => ctx.DispatchAsync<Player>();
+            => ctx.DispatchAsync<Monster>();
     }
 }

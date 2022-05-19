@@ -38,14 +38,14 @@ namespace AblyLabs.ServerlessWebsocketsQuest
                     await channel.PublishAsync(
                         "update-player",
                         new {
-                            playerId = entityStateResponse.EntityState.GetRandomPlayer(),
+                            playerId = entityStateResponse.EntityState.GetRandomPlayerId(),
                             damage = entityStateResponse.EntityState.GetMonsterAttackDamage(),
                         }
                     );
                     await channel.PublishAsync(
                         "check-player-turn", 
                         new {
-                            playerId = entityStateResponse.EntityState.GetNextPlayer(null)
+                            playerId = entityStateResponse.EntityState.GetNextPlayerId(null)
                         }
                     );
                 }
@@ -65,7 +65,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest
                     await channel.PublishAsync(
                         "check-player-turn", 
                         new {
-                            playerId = entityStateResponse.EntityState.GetNextPlayer(turn.Player.Id)
+                            playerId = entityStateResponse.EntityState.GetNextPlayerId(turn.Player.Id)
                         }
                     );
                 }

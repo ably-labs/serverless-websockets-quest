@@ -30,22 +30,25 @@ namespace AblyLabs.ServerlessWebsocketsQuest
         {
             var startQuestData = await req.Content.ReadAsAsync<StartQuestData>();
             var entityId = new EntityId(nameof(GameState), startQuestData.QuestId);
-            await durableClient.SignalEntityAsync<IGameState>(entityId, proxy => proxy.SetPlayers(startQuestData.Players));
+            await durableClient.SignalEntityAsync<IGameState>(entityId, proxy => proxy.AddPlayerId(startQuestData.PlayerId));
             var entityStateResponse = await durableClient.ReadEntityStateAsync<GameState>(entityId);
             if (entityStateResponse.EntityExists)
             {
+                var player = entityStateResponse.EntityState.GetRandomPlayerId();
+                var damage = entityStateResponse.EntityState.GetMonsterAttackDamage();
+
                 var channel = _realtime.Channels.Get(startQuestData.QuestId);
                 await channel.PublishAsync(
                     "update-player", 
                     new { 
-                        playerId = entityStateResponse.EntityState.GetRandomPlayer(),
+                        playerId = entityStateResponse.EntityState.GetRandomPlayerId(),
                         damage = entityStateResponse.EntityState.GetMonsterAttackDamage()
                     }
                 );
                 await channel.PublishAsync(
                     "check-player-turn", 
                     new { 
-                        playerId = entityStateResponse.EntityState.GetNextPlayer(null)
+                        playerId = entityStateResponse.EntityState.GetNextPlayerId(null)
                     }
                 );
             }

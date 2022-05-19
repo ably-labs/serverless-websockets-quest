@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Newtonsoft.Json;
 
@@ -20,19 +21,30 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
         public void SetHost(string host) => Host = host;
 
         [JsonProperty("players")]
-        public List<Player> Players { get; set; }
-        public void SetPlayers(List<Player> players) => Players = players;
-        public Player GetNextPlayer(string? currentPlayerId)
-        {
-            Player nextPlayer;
-            if (string.IsNullOrEmpty(currentPlayerId))
+        public List<string> PlayerIds { get; set; }
+        public void AddPlayerId(string playerId)
+        {  
+            if (PlayerIds == null)
             {
-                nextPlayer = Players[0];
+                PlayerIds =  new List<string> { playerId };
             }
             else
             {
-                var currentIndex = Players.FindIndex(0, Players.Count, p => p.Id == currentPlayerId);
-                nextPlayer = currentIndex == Players.Count - 1 ? Players[0] : Players[currentIndex + 1];
+                PlayerIds.Add(playerId);
+            }
+        }
+
+        public string GetNextPlayerId(string? currentPlayerId)
+        {
+            string nextPlayer;
+            if (string.IsNullOrEmpty(currentPlayerId))
+            {
+                nextPlayer = PlayerIds[0];
+            }
+            else
+            {
+                var currentIndex = PlayerIds.FindIndex(0, PlayerIds.Count, p => p == currentPlayerId);
+                nextPlayer = currentIndex == PlayerIds.Count - 1 ? PlayerIds[0] : PlayerIds[currentIndex + 1];
             }
 
             return nextPlayer;
@@ -40,14 +52,14 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
 
         public bool IsMonsterTurn(string currentPlayerId)
         {
-            var currentIndex = Players.FindIndex(0, Players.Count, p => p.Id == currentPlayerId);
-            return currentIndex == Players.Count - 1 ? true : false;
+            var currentIndex = PlayerIds.FindIndex(0, PlayerIds.Count, p => p == currentPlayerId);
+            return currentIndex == PlayerIds.Count - 1 ? true : false;
         }
 
-        public Player GetRandomPlayer()
+        public string GetRandomPlayerId()
         {
-            var index = new Random().Next(0, Players.Count - 1);
-            return Players[index];
+            var index = new Random().Next(0, PlayerIds.Count - 1);
+            return PlayerIds[index];
         }
 
         public int GetMonsterAttackDamage()
@@ -62,9 +74,8 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
 
         public bool IsGameOver => MonsterHealth <= 0;
 
-        public static Task Run(
-            [EntityTrigger] IDurableEntityContext ctx)
+        [FunctionName(nameof(GameState))]
+        public static Task Run([EntityTrigger] IDurableEntityContext ctx)
             => ctx.DispatchAsync<GameState>();
-
     }
 }

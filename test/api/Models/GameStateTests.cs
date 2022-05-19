@@ -33,22 +33,19 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Test.Models
 
         public static IEnumerable<object[]> GetPlayers()
         {
-            var abc = new Player("abc", 50);
-            var def = new Player("def", 50);
-            var ghi = new Player("ghi", 50);
-            yield return new object[] { new List<Player> { abc }, "abc", "abc" };
-            yield return new object[] { new List<Player> { abc, def }, "def", "abc" };
-            yield return new object[] { new List<Player> { abc, def, ghi }, "def", "ghi" };
-            yield return new object[] { new List<Player> { abc, def, ghi }, "abc", "def" };
-            yield return new object[] { new List<Player> { abc, def }, null, "abc" };
+            yield return new object[] { new List<string> { "abc" }, "abc", "abc" };
+            yield return new object[] { new List<string> { "abc", "def" }, "def", "abc" };
+            yield return new object[] { new List<string> { "abc", "def", "ghi" }, "def", "ghi" };
+            yield return new object[] { new List<string> { "abc", "def", "ghi" }, "abc", "def" };
+            yield return new object[] { new List<string> { "abc", "def" }, null, "abc" };
         }
 
         [Theory()]
         [MemberData(nameof(GetPlayers))]
-        public void GetNextPlayer(List<Player> players, string? currentPlayerId, string expectedPlayerId)
+        public void GetNextPlayer(List<string> playerIds, string? currentPlayerId, string expectedPlayerId)
         {
-            var gameState = new GameState() { Players = players };
-            gameState.GetNextPlayer(currentPlayerId).Id.Should().Be(expectedPlayerId);
+            var gameState = new GameState() { PlayerIds = playerIds };
+            gameState.GetNextPlayerId(currentPlayerId).Should().Be(expectedPlayerId);
         }
 
         // [Theory()]
