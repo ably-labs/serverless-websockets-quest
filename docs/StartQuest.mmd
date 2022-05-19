@@ -1,8 +1,21 @@
 sequenceDiagram
   Client ->> Function App: StartQuest
   activate Function App
-  Function App ->> Durable Entity: SignalEntity SetPlayers
-  Durable Entity -->> Function App: ReadEntity GameState
-  Function App -->> Ably: Publish update-player
-  Function App -->> Ably: Publish check-player-turn
+  Function App ->> Game Engine: ExecuteTurn
+  activate Game Engine
+  Game Engine ->> GameState (Durable Entity): Read GameState
+  activate GameState (Durable Entity)
+  GameState (Durable Entity) -->> Game Engine: GameState
+  deactivate GameState (Durable Entity)
+  Game Engine ->> Game Engine: AttackByMonster
+  Game Engine ->> Player (Durable Entity): Signal ApplyDamage
+  Game Engine ->> Player (Durable Entity): Read Player
+  activate Player (Durable Entity)
+  Player (Durable Entity) -->> Game Engine: Player
+  deactivate Player (Durable Entity)
+  Game Engine ->> Ably: Publish update-player
+  Game Engine ->> Ably: Publish check-player-turn
+  Game Engine -->> Function App:
+  deactivate Game Engine
+  Function App -->> Client: Accepted
   deactivate Function App

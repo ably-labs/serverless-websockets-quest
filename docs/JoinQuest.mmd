@@ -1,0 +1,10 @@
+sequenceDiagram
+  Client ->> Function App: JoinQuest
+  activate Function App
+  Function App ->> Game Engine: JoinQuest
+  activate Game Engine
+  Game Engine ->> GameState (Durable Entity): SignalEntity AddPlayerId
+  Game Engine ->> Player (Durable Entity): SignalEntity SetHealth
+  deactivate Game Engine
+  Function App -->> Client: Accepted
+  deactivate Function App
