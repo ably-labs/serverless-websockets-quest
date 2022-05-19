@@ -21,8 +21,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest
         {
             var questData = await req.Content.ReadAsAsync<QuestData>();
             var gameEngine = new GameEngine(durableClient, questData.QuestId, null);
-            await gameEngine.SetHostAsync(questData.PlayerId);
-            await gameEngine.CreateMonsterAsync(100);
+            await gameEngine.CreateQuest(questData.PlayerId, 100);
 
             return new AcceptedResult();
         }

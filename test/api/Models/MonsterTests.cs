@@ -1,7 +1,6 @@
 using Xunit;
 using AblyLabs.ServerlessWebsocketsQuest.Models;
 using FluentAssertions;
-using System.Collections.Generic;
 
 namespace AblyLabs.ServerlessWebsocketsQuest.Test.Models
 {

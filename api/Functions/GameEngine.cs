@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
+using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using AblyLabs.ServerlessWebsocketsQuest.Models;
 using IO.Ably.Realtime;
-using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 
 namespace AblyLabs.ServerlessWebsocketsQuest
 {
@@ -18,13 +18,19 @@ namespace AblyLabs.ServerlessWebsocketsQuest
             _channel = channel;
         }
 
-        public async Task SetHostAsync(string playerId)
+        public async Task CreateQuest(string hostId, int monsterHealth)
         {
-            var gameStateEntityId = new EntityId(nameof(GameState), _questId);
-            await _durableClient.SignalEntityAsync<IGameState>(gameStateEntityId, proxy => proxy.SetHost(playerId));
+            await SetHostAsync(hostId);
+            await CreateMonsterAsync(monsterHealth);
         }
 
-        public async Task CreateMonsterAsync(int health)
+        private async Task SetHostAsync(string hostId)
+        {
+            var gameStateEntityId = new EntityId(nameof(GameState), _questId);
+            await _durableClient.SignalEntityAsync<IGameState>(gameStateEntityId, proxy => proxy.SetHost(hostId));
+        }
+
+        private async Task CreateMonsterAsync(int health)
         {
             var monsterEntityId = new EntityId(nameof(Monster), Monster.GetEntityId(_questId));
             await _durableClient.SignalEntityAsync<IMonster>(monsterEntityId, proxy => proxy.SetHealth(health));
@@ -33,15 +39,31 @@ namespace AblyLabs.ServerlessWebsocketsQuest
             await _durableClient.SignalEntityAsync<IGameState>(gameStateEntityId, proxy => proxy.AddPlayerId(Monster.ID));
         }
 
-        public async Task<GameState> GetGameState()
+        public async Task JoinQuest(string playerId, int health)
+        {
+            var gameStateEntityId = new EntityId(nameof(GameState), _questId);
+            await _durableClient.SignalEntityAsync<IGameState>(gameStateEntityId, proxy => proxy.AddPlayerId(playerId));
+
+            var playerEntityId = new EntityId(nameof(Player), Player.GetEntityId(_questId, playerId));
+            await _durableClient.SignalEntityAsync<IPlayer>(playerEntityId, proxy => proxy.SetHealth(health));
+        }
+
+        public async Task ExecuteTurn(string playerId)
         {
             var entityId = new EntityId(nameof(GameState), _questId);
             var gameState = await _durableClient.ReadEntityStateAsync<GameState>(entityId);
 
-            return gameState.EntityState;
+            if (playerId == Monster.ID)
+            {
+                await AttackByMonsterAsync(gameState.EntityState);
+            }
+            else
+            {
+                await AttackByPlayerAsync(playerId, gameState.EntityState);
+            }
         }
 
-        public async Task AttackByMonsterAsync(GameState gameState)
+        private async Task AttackByMonsterAsync(GameState gameState)
         {
             var playerId = gameState.GetRandomPlayerId();
             var damage = Monster.GetAttackDamage();
@@ -52,22 +74,14 @@ namespace AblyLabs.ServerlessWebsocketsQuest
 
             if (_channel != null)
             {
-                await _channel.PublishAsync(
-                "update-player",
-                    new
-                    {
-                        playerId = playerId,
-                        health = player.EntityState.Health,
-                        damage = damage
-                    }
-                );
+                await PublishUpdatePlayer(playerId, player.EntityState.Health, damage);
 
                 var nextPlayerId = gameState.GetNextPlayerId(null);
                 await PublishPlayerTurnAsync(nextPlayerId);
             }
         }
 
-        public async Task AttackByPlayerAsync(string playerId, GameState gameState)
+        private async Task AttackByPlayerAsync(string playerId, GameState gameState)
         {
             var monsterEntityId = new EntityId(nameof(Monster), Monster.GetEntityId(_questId));
             var damage = Player.GetAttackDamage();
@@ -76,17 +90,26 @@ namespace AblyLabs.ServerlessWebsocketsQuest
 
             if (_channel != null)
             {
-                await _channel.PublishAsync(
-                    "update-monster",
-                    new
-                    {
-                        damage = damage,
-                        health = monster.EntityState.Health
-                    }
-                );
+                await PublishUpdatePlayer(Monster.ID, monster.EntityState.Health, damage);
 
                 var nextPlayerId = gameState.GetNextPlayerId(playerId);
                 await PublishPlayerTurnAsync(nextPlayerId);
+            }
+        }
+
+        private async Task PublishUpdatePlayer(string playerId, int health, int damage)
+        {
+            if (_channel != null)
+            {
+                await _channel.PublishAsync(
+                    "update-player",
+                        new
+                        {
+                            playerId = playerId,
+                            health = health,
+                            damage = damage
+                        }
+                    );
             }
         }
 

@@ -28,19 +28,9 @@ namespace AblyLabs.ServerlessWebsocketsQuest
         {
             // Read Turn object from Ably Message
             var questData = await req.Content.ReadAsAsync<QuestData>();
-
             var channel = _realtime.Channels.Get(questData.QuestId);
             var gameEngine = new GameEngine(durableClient, questData.QuestId, channel);
-            var gameState = await gameEngine.GetGameState();
-            
-            if (questData.PlayerId == Monster.ID)
-            {
-                await gameEngine.AttackByMonsterAsync(gameState);
-            }
-            else
-            {
-                await gameEngine.AttackByPlayerAsync(questData.PlayerId, gameState);
-            }
+            await gameEngine.ExecuteTurn(questData.PlayerId);
 
             return new AcceptedResult();
         }
