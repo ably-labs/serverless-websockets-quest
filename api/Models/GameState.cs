@@ -10,12 +10,6 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
     [JsonObject(MemberSerialization.OptIn)]
     public class GameState : IGameState
     {
-        [JsonProperty("monsterHealth")]
-        public int MonsterHealth { get; set; }
-        public void SetMonsterHealth(int health) => MonsterHealth = health;
-        public void ApplyDamageToMonster(int damage) => 
-            MonsterHealth = damage < MonsterHealth ? MonsterHealth - damage : 0;
-
         [JsonProperty("host")]
         public string Host { get; set; }
         public void SetHost(string host) => Host = host;
@@ -23,7 +17,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
         [JsonProperty("players")]
         public List<string> PlayerIds { get; set; }
         public void AddPlayerId(string playerId)
-        {  
+        {
             if (PlayerIds == null)
             {
                 PlayerIds =  new List<string> { playerId };
@@ -61,18 +55,6 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             var index = new Random().Next(0, PlayerIds.Count - 1);
             return PlayerIds[index];
         }
-
-        public int GetMonsterAttackDamage()
-        {
-            return new Random().Next(MonsterHealth/10, MonsterHealth/5);
-        }
-
-        public int GetPlayerAttackDamage()
-        {
-            return new Random().Next(MonsterHealth/20, MonsterHealth/10);
-        }
-
-        public bool IsGameOver => MonsterHealth <= 0;
 
         [FunctionName(nameof(GameState))]
         public static Task Run([EntityTrigger] IDurableEntityContext ctx)

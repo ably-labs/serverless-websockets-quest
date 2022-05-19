@@ -1,8 +1,8 @@
 namespace AblyLabs.ServerlessWebsocketsQuest.Models
 {
-    public class StartQuestData
+    public class QuestData
     {
-        public StartQuestData(string questId, string playerId)
+        public QuestData(string questId, string playerId)
         {
             QuestId = questId;
             PlayerId = playerId;

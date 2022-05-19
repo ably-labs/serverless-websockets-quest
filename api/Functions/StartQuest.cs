@@ -19,8 +19,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest
             _realtime = realtime;
         }
 
-        /// The StartQuest function is called when all players have joined the quest.
-        /// The PlayerIds will be stored in a Durable Entity.
+        /// The StartQuest function is called when all players have joined the quest and the host starts the quest.
         /// The monster will attack first.
         [FunctionName(nameof(StartQuest))]
         public async Task<IActionResult> Run(
@@ -28,32 +27,27 @@ namespace AblyLabs.ServerlessWebsocketsQuest
             [DurableClient] IDurableClient durableClient,
             ILogger log)
         {
-            var startQuestData = await req.Content.ReadAsAsync<StartQuestData>();
-            var entityId = new EntityId(nameof(GameState), startQuestData.QuestId);
-            await durableClient.SignalEntityAsync<IGameState>(entityId, proxy => proxy.AddPlayerId(startQuestData.PlayerId));
-            var entityStateResponse = await durableClient.ReadEntityStateAsync<GameState>(entityId);
-            if (entityStateResponse.EntityExists)
+            var questData = await req.Content.ReadAsAsync<QuestData>();
+
+            var gameStateEntityId = new EntityId(nameof(GameState), questData.QuestId);
+            var gameState = await durableClient.ReadEntityStateAsync<GameState>(gameStateEntityId);
+
+            var monsterEntityId = new EntityId(nameof(Monster), Monster.GetEntityId(questData.QuestId));
+            await durableClient.SignalEntityAsync<IPlayer>(monsterEntityId, proxy => proxy.SetHealth(100));
+            var monster = await durableClient.ReadEntityStateAsync<Monster>(monsterEntityId);
+
+            if (gameState.EntityExists && monster.EntityExists)
             {
-                var player = entityStateResponse.EntityState.GetRandomPlayerId();
-                var damage = entityStateResponse.EntityState.GetMonsterAttackDamage();
+                var channel = _realtime.Channels.Get(questData.QuestId);
+                var gameEngine = new GameEngine(durableClient, channel, questData.QuestId);
+                await gameEngine.AttackByMonster(gameState);
 
-                var channel = _realtime.Channels.Get(startQuestData.QuestId);
-                await channel.PublishAsync(
-                    "update-player", 
-                    new { 
-                        playerId = entityStateResponse.EntityState.GetRandomPlayerId(),
-                        damage = entityStateResponse.EntityState.GetMonsterAttackDamage()
-                    }
-                );
-                await channel.PublishAsync(
-                    "check-player-turn", 
-                    new { 
-                        playerId = entityStateResponse.EntityState.GetNextPlayerId(null)
-                    }
-                );
+                return new AcceptedResult();
             }
-
-            return new AcceptedResult();
+            else
+            {
+                return new BadRequestObjectResult("No game data was found. Please start a new quest.");
+            }
         }
     }
 }
