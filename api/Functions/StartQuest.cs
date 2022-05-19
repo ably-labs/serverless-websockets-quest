@@ -30,7 +30,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest
         {
             var startQuestData = await req.Content.ReadAsAsync<StartQuestData>();
             var entityId = new EntityId(nameof(GameState), startQuestData.QuestId);
-            await durableClient.SignalEntityAsync<IGameState>(entityId, proxy => proxy.SetPlayers(startQuestData.PlayerIds));
+            await durableClient.SignalEntityAsync<IGameState>(entityId, proxy => proxy.SetPlayers(startQuestData.Players));
             var entityStateResponse = await durableClient.ReadEntityStateAsync<GameState>(entityId);
             if (entityStateResponse.EntityExists)
             {

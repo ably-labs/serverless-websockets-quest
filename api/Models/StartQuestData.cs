@@ -1,14 +1,16 @@
+using System.Collections.Generic;
+
 namespace AblyLabs.ServerlessWebsocketsQuest.Models
 {
     public class StartQuestData
     {
-        public StartQuestData(string questId, string[] playerIds)
+        public StartQuestData(string questId, List<Player> players)
         {
             QuestId = questId;
-            PlayerIds = playerIds;
+            Players = players;
         }
 
         public string QuestId { get; set; }
-        public string[] PlayerIds { get; set; }
+        public List<Player> Players { get; set; }
     }
 }

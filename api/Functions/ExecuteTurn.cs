@@ -65,7 +65,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest
                     await channel.PublishAsync(
                         "check-player-turn", 
                         new {
-                            playerId = entityStateResponse.EntityState.GetNextPlayer(turn.PlayerId)
+                            playerId = entityStateResponse.EntityState.GetNextPlayer(turn.Player.Id)
                         }
                     );
                 }

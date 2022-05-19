@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Newtonsoft.Json;
@@ -19,30 +20,33 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
         public void SetHost(string host) => Host = host;
 
         [JsonProperty("players")]
-        public string[] Players { get; set; }
-        public void SetPlayers(string[] players) => Players = players;
-        public string GetNextPlayer(string? currentPlayerId)
+        public List<Player> Players { get; set; }
+        public void SetPlayers(List<Player> players) => Players = players;
+        public Player GetNextPlayer(string? currentPlayerId)
         {
-            string nextPlayerId;
+            Player nextPlayer;
             if (string.IsNullOrEmpty(currentPlayerId))
             {
-                nextPlayerId = Players[0];
+                nextPlayer = Players[0];
             }
-            var currentIndex = Array.IndexOf(Players, currentPlayerId);
-            nextPlayerId = currentIndex == Players.Length - 1 ? Players[0] : Players[currentIndex + 1];
+            else
+            {
+                var currentIndex = Players.FindIndex(0, Players.Count, p => p.Id == currentPlayerId);
+                nextPlayer = currentIndex == Players.Count - 1 ? Players[0] : Players[currentIndex + 1];
+            }
 
-            return nextPlayerId;
+            return nextPlayer;
         }
 
         public bool IsMonsterTurn(string currentPlayerId)
         {
-            var currentIndex = Array.IndexOf(Players, currentPlayerId);
-            return currentIndex == Players.Length - 1 ? true : false;
+            var currentIndex = Players.FindIndex(0, Players.Count, p => p.Id == currentPlayerId);
+            return currentIndex == Players.Count - 1 ? true : false;
         }
 
-        public string GetRandomPlayer()
+        public Player GetRandomPlayer()
         {
-            var index = new Random().Next(0, Players.Length - 1);
+            var index = new Random().Next(0, Players.Count - 1);
             return Players[index];
         }
 
