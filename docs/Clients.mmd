@@ -1,0 +1,14 @@
+sequenceDiagram
+  participant Client 1
+  participant Client 2
+  participant Client 3
+  Client 1 ->> Function App: CreateQuest
+  Client 1 ->> Function App: JoinQuest
+  Client 1 ->> Ably: Subscribe QuestId channel & Presence
+  Client 2 ->> Function App: JoinQuest
+  Client 2 ->> Ably: Subscribe QuestId channel & Presence
+  Client 3 ->> Function App: JoinQuest
+  Client 3 ->> Ably: Subscribe QuestId channel & Presence
+  Client 1 ->> Function App: StartQuest
+
+

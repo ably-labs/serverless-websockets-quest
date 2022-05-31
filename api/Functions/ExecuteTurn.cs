@@ -27,49 +27,10 @@ namespace AblyLabs.ServerlessWebsocketsQuest
             ILogger log)
         {
             // Read Turn object from Ably Message
-            var turn = await req.Content.ReadAsAsync<TurnData>();
-            var entityId = new EntityId(nameof(GameState), turn.QuestId);
-            var entityStateResponse = await durableClient.ReadEntityStateAsync<GameState>(entityId);
-            if (entityStateResponse.EntityExists)
-            {
-                var channel = _realtime.Channels.Get(turn.QuestId);
-                if (turn.IsMonster)
-                {
-                    await channel.PublishAsync(
-                        "update-player",
-                        new {
-                            playerId = entityStateResponse.EntityState.GetRandomPlayer(),
-                            damage = entityStateResponse.EntityState.GetMonsterAttackDamage(),
-                        }
-                    );
-                    await channel.PublishAsync(
-                        "check-player-turn", 
-                        new {
-                            playerId = entityStateResponse.EntityState.GetNextPlayer(null)
-                        }
-                    );
-                }
-                else
-                {
-                    var damage = entityStateResponse.EntityState.GetPlayerAttackDamage();
-                    await durableClient.SignalEntityAsync<IGameState>(entityId, proxy => proxy.ApplyDamageToMonster(damage));
-                    entityStateResponse = await durableClient.ReadEntityStateAsync<GameState>(entityId);
-
-                    await channel.PublishAsync(
-                        "update-monster",
-                        new {
-                            damage = damage,
-                            monsterHealth = entityStateResponse.EntityState.MonsterHealth
-                        }
-                    );
-                    await channel.PublishAsync(
-                        "check-player-turn", 
-                        new {
-                            playerId = entityStateResponse.EntityState.GetNextPlayer(turn.PlayerId)
-                        }
-                    );
-                }
-            }
+            var questData = await req.Content.ReadAsAsync<QuestData>();
+            var channel = _realtime.Channels.Get(questData.QuestId);
+            var gameEngine = new GameEngine(durableClient, questData.QuestId, channel);
+            await gameEngine.ExecuteTurn(questData.PlayerId);
 
             return new AcceptedResult();
         }

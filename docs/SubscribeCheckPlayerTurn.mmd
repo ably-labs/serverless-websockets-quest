@@ -1,12 +1,9 @@
 sequenceDiagram
   Ably ->> Client: Subscribe check-player-turn
   activate Client
-  Client ->> Client: Check if client has the turn
-  Client ->> Function App: ExecuteTurn
+  alt IF PLAYER HAS TURN
+    Client ->> Function App: ExecuteTurn
   activate Function App
-  deactivate Client
-  Function App ->> Durable Entity: SignalEntity ApplyDamageToMonster
-  Durable Entity -->> Function App: ReadEntity GameState
-  Function App -->> Ably: Publish update-monster
-  Function App -->> Ably: Publish check-player-turn
   deactivate Function App
+  deactivate Client
+  end

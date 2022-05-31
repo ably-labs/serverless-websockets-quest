@@ -19,13 +19,11 @@ namespace AblyLabs.ServerlessWebsocketsQuest
             [DurableClient] IDurableClient durableClient,
             ILogger log)
         {
-            var newQuestData = await req.Content.ReadAsAsync<NewQuestData>();
-            var entityId = new EntityId(nameof(GameState), newQuestData.QuestId);
-            const int monsterHealth = 100;
-            await durableClient.SignalEntityAsync<IGameState>(entityId, proxy => proxy.SetMonsterHealth(monsterHealth));
-            await durableClient.SignalEntityAsync<IGameState>(entityId, proxy => proxy.SetHost(newQuestData.PlayerId));
+            var questData = await req.Content.ReadAsAsync<QuestData>();
+            var gameEngine = new GameEngine(durableClient, questData.QuestId, null);
+            await gameEngine.CreateQuest(questData.PlayerId, 100);
 
-            return new OkObjectResult(newQuestData.QuestId);
+            return new AcceptedResult();
         }
     }
 }

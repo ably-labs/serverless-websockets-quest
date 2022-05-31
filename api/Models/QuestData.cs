@@ -1,8 +1,8 @@
 namespace AblyLabs.ServerlessWebsocketsQuest.Models
 {
-    public class TurnData
+    public class QuestData
     {
-        public TurnData(string questId, string playerId)
+        public QuestData(string questId, string playerId)
         {
             QuestId = questId;
             PlayerId = playerId;
@@ -10,6 +10,5 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
 
         public string QuestId { get; set; }
         public string PlayerId { get; set; }
-        public bool IsMonster { get; set; }
     }
 }
