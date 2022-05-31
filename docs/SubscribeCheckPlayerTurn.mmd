@@ -1,9 +1,0 @@
-sequenceDiagram
-  Ably ->> Client: Subscribe check-player-turn
-  activate Client
-  alt IF PLAYER HAS TURN
-    Client ->> Function App: ExecuteTurn
-  activate Function App
-  deactivate Function App
-  deactivate Client
-  end

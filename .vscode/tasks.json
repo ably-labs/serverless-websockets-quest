@@ -2,7 +2,7 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "clean (functions)",
+			"label": "clean",
 			"command": "dotnet",
 			"args": [
 				"clean",
@@ -12,11 +12,11 @@
 			"type": "process",
 			"problemMatcher": "$msCompile",
 			"options": {
-				"cwd": "${workspaceFolder}/api"
+				"cwd": "${workspaceFolder}/ServerlessWebsocketsQuest.Api"
 			}
 		},
 		{
-			"label": "build (functions)",
+			"label": "build",
 			"command": "dotnet",
 			"args": [
 				"build",
@@ -24,18 +24,18 @@
 				"/consoleloggerparameters:NoSummary"
 			],
 			"type": "process",
-			"dependsOn": "clean (functions)",
+			"dependsOn": "clean",
 			"group": {
 				"kind": "build",
 				"isDefault": true
 			},
 			"problemMatcher": "$msCompile",
 			"options": {
-				"cwd": "${workspaceFolder}/api"
+				"cwd": "${workspaceFolder}/ServerlessWebsocketsQuest.Api"
 			}
 		},
 		{
-			"label": "clean release (functions)",
+			"label": "clean release",
 			"command": "dotnet",
 			"args": [
 				"clean",
@@ -47,11 +47,11 @@
 			"type": "process",
 			"problemMatcher": "$msCompile",
 			"options": {
-				"cwd": "${workspaceFolder}/api"
+				"cwd": "${workspaceFolder}/ServerlessWebsocketsQuest.Api"
 			}
 		},
 		{
-			"label": "publish (functions)",
+			"label": "publish",
 			"command": "dotnet",
 			"args": [
 				"publish",
@@ -61,21 +61,21 @@
 				"/consoleloggerparameters:NoSummary"
 			],
 			"type": "process",
-			"dependsOn": "clean release (functions)",
+			"dependsOn": "clean release",
 			"problemMatcher": "$msCompile",
 			"options": {
-				"cwd": "${workspaceFolder}/api"
+				"cwd": "${workspaceFolder}/ServerlessWebsocketsQuest.Api"
 			}
 		},
 		{
 			"type": "func",
-			"dependsOn": "build (functions)",
+			"dependsOn": "build",
 			"options": {
-				"cwd": "${workspaceFolder}/api/bin/Debug/net6.0"
+				"cwd": "${workspaceFolder}/ServerlessWebsocketsQuest.Api/bin/Debug/net6.0"
 			},
 			"command": "host start",
 			"isBackground": true,
-			"problemMatcher": "$func-dotnet-watch"
+			"problemMatcher": "$func-watch"
 		}
 	]
 }
