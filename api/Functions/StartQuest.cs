@@ -31,7 +31,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest
 
             var channel = _realtime.Channels.Get(questData.QuestId);
             var gameEngine = new GameEngine(durableClient, questData.QuestId, channel);
-            await gameEngine.ExecuteTurn(Monster.ID);
+            await gameEngine.ExecuteTurnAsync(Monster.ID);
 
             return new AcceptedResult();
         }

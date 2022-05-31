@@ -1,9 +1,8 @@
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
-using AblyLabs.ServerlessWebsocketsQuest.Models;
 using IO.Ably.Realtime;
 
-namespace AblyLabs.ServerlessWebsocketsQuest
+namespace AblyLabs.ServerlessWebsocketsQuest.Models
 {
     public class GameEngine
     {
@@ -18,7 +17,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest
             _channel = channel;
         }
 
-        public async Task CreateQuest(string hostId, int monsterHealth)
+        public async Task CreateQuestAsync(string hostId, int monsterHealth)
         {
             await SetHostAsync(hostId);
             await CreateMonsterAsync(monsterHealth);
@@ -39,7 +38,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest
             await _durableClient.SignalEntityAsync<IGameState>(gameStateEntityId, proxy => proxy.AddPlayerId(Monster.ID));
         }
 
-        public async Task JoinQuest(string playerId, int health)
+        public async Task JoinQuestAsync(string playerId, int health)
         {
             var gameStateEntityId = new EntityId(nameof(GameState), _questId);
             await _durableClient.SignalEntityAsync<IGameState>(gameStateEntityId, proxy => proxy.AddPlayerId(playerId));
@@ -48,7 +47,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest
             await _durableClient.SignalEntityAsync<IPlayer>(playerEntityId, proxy => proxy.SetHealth(health));
         }
 
-        public async Task ExecuteTurn(string playerId)
+        public async Task ExecuteTurnAsync(string playerId)
         {
             var entityId = new EntityId(nameof(GameState), _questId);
             var gameState = await _durableClient.ReadEntityStateAsync<GameState>(entityId);

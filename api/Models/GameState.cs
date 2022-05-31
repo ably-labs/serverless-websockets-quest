@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
@@ -52,8 +53,9 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
 
         public string GetRandomPlayerId()
         {
-            var index = new Random().Next(0, PlayerIds.Count - 1);
-            return PlayerIds[index];
+            var playerIdsWithoutMonster = PlayerIds.Where(p => p != Monster.ID).ToList();
+            var index = new Random().Next(0, playerIdsWithoutMonster.Count - 1);
+            return playerIdsWithoutMonster[index];
         }
 
         [FunctionName(nameof(GameState))]
