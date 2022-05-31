@@ -13,6 +13,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
         public int Health { get; set; }
         public void SetHealth(int health) => Health = health;
         public void ApplyDamage(int damage) => Health = damage > Health ? 0 : Health - damage;
+        public bool IsDefeated => Health <= 0;
 
         public static int GetAttackDamage()
         {
