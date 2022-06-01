@@ -8,6 +8,7 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.Configuration["API_Prefix"] ?? builder.HostEnvironment.BaseAddress) });
-builder.Services.AddSingleton<IRealtimeClient>(sp => new AblyRealtime(builder.Configuration["ABLY_API_KEY"]));
+var clientOptions = new ClientOptions() { AuthUrl = new Uri("http://localhost:7071/api/CreateTokenRequest") };
+builder.Services.AddSingleton<IRealtimeClient>(sp => new AblyRealtime(clientOptions));
 
 await builder.Build().RunAsync();
