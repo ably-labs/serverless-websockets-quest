@@ -11,9 +11,9 @@ namespace AblyLabs.ServerlessWebsocketsQuest
 {
     public class CreateTokenRequest
     {
-        private AblyRealtime _realtime;
+        private IRealtimeClient _realtime;
 
-        public CreateTokenRequest(AblyRealtime realtime)
+        public CreateTokenRequest(IRealtimeClient realtime)
         {
             _realtime = realtime;
         }
