@@ -4,5 +4,8 @@
     "azureFunctions.projectRuntime": "~4",
     "debug.internalConsoleOptions": "neverOpen",
     "azureFunctions.preDeployTask": "publish",
-    "azureFunctions.projectSubpath": "ServerlessWebsocketsQuest.Api"
+    "azureFunctions.projectSubpath": "ServerlessWebsocketsQuest.Api",
+    "files.exclude": {
+        "**/.razor__virtual.html": true
+    }
 }
