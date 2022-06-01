@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>BlazorApp.Client</RootNamespace>
+    <UserSecretsId>9cde1eb6-dd65-437d-9fc9-8c938c957eeb</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,9 +13,5 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.0" PrivateAssets="all" />
   </ItemGroup>
-
-  <!-- <ItemGroup>
-    <ProjectReference Include="..\Shared\Shared.csproj" />
-  </ItemGroup> -->
 
 </Project>

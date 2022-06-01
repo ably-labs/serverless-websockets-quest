@@ -1,34 +1,53 @@
-﻿@page "/game"
+﻿@page "/game/{questId}"
 @inject HttpClient Http
-@using IO.Ably
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+@inject IRealtimeClient RealtimeClient
 
 <PageTitle>Serverless WebSockets Quest</PageTitle>
 
-<h1>Counter</h1>
-
-<p role="status">Current count: @currentCount</p>
+<p role="status">Player ID: @playerId</p>
 
 <button id="attackButton" @onclick="Attack">Attack</button>
 
 @code {
-    private int currentCount = 0;
+
+    [Parameter]
+    public string? QuestId { get; set; }
+
+    private IRealtimeChannel _channel;
+    private string playerId;
 
     private void Attack()
     {
-        currentCount++;
+        // Call execute turn endpoint with QuestID and PlayerID
     }
 
     protected override async Task OnInitializedAsync()
     {
+        QuestId = QuestId;
+        playerId = Guid.NewGuid().ToString();
         // Join the channel, read it from the url
+        // Publish player image via Presence
         try
         {
-            //var channel = new AblyRealtime();
-            //forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("/api/WeatherForecast") ?? new WeatherForecast[]{};
+            _channel = RealtimeClient.Channels.Get(QuestId);
+            _channel.Presence.Subscribe(message => HandlePresence(message.Data));
+            _channel.Subscribe("update-player", message => HandleUpdatePlayer(message.Data));
+            _channel.Subscribe("check-player-turn", message => HandleCheckPlayerTurn(message.Data));
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex.ToString());
         }
     }
+
+    private void HandlePresence(object data)
+    { }
+
+    private void HandleUpdatePlayer(object data)
+    { }
+
+      private void HandleCheckPlayerTurn(object data)
+    { }
 }

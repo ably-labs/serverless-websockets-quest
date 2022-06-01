@@ -1,4 +1,5 @@
 ﻿@page "/"
+@inject NavigationManager NavigationManager
 
 <PageTitle>Serverless Websockets Quest</PageTitle>
 
@@ -10,5 +11,12 @@
 <img class="small" src="images/Mage.png" alt="Fighter" />
 
 <hr />
-<button>Start a new Quest</button> or <input id="questId" placeholder="Quest ID" /> <button>Join a Quest</button>
+<button @onclick="StartQuest">Start a new Quest</button> or <input id="questId" placeholder="Quest ID" /> <button>Join a Quest</button>
 
+@code  {
+    private void StartQuest()
+    {
+        var questId = Guid.NewGuid().ToString();
+        NavigationManager.NavigateTo($"/game/{questId}");
+    }
+}
