@@ -10,15 +10,21 @@ import HomePage from './components/HomePage.vue'
 
 <style>
 
-#app {
-  font-family: 'Courier New', Courier, monospace;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-size: larger;
-  font-weight: bold;
-  text-align: center;
+html {
   background-color: #000;
   color: #fff;
+}
+
+html, button, input {
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bold;
+  font-size: larger;
+} 
+
+#app {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
   padding: 20px;
   margin: 0;
 }
@@ -32,14 +38,20 @@ a {
 }
 
 button {
-  font-family: 'Courier New', Courier, monospace;
-  font-weight: bold;
-  font-size: larger;
   color: #000;
   background-color: #ff55ff;
   border-color: #fff;
   padding: 10px;
   margin: 10px;
+}
+
+input {
+  color: #000;
+  background-color: #fff;
+  border-color: #ff55ff;
+  padding: 10px;
+  margin: 10px;
+  width: 500px;
 }
 
 </style>
