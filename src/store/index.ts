@@ -8,14 +8,20 @@ export type State = {
 
 export const store = defineStore('main', {
   state: () => ({
-    playerId: "",
-    questId: "",
-    characterId: ""
+    playerId: "abc",
+    questId: "wowie-world-quest",
+    characterId: "ranger"
   }) as State,
   getters: {
-    getPlayerId: (state) => state.playerId,
-    getQuestId: (state) => state.questId,
-    getCharacterId: (state) => state.characterId
+    getPlayerId(state) {
+      return state.playerId;
+    },
+    getQuestId(state) {
+      return state.questId;
+    },
+    getCharacterId(state) {
+      return state.characterId;
+    }
   },
   actions: {
     setPlayerId(state: State, input: String) {

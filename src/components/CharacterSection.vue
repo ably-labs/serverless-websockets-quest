@@ -11,7 +11,7 @@ async function startQuest() {
 <template>
     <h1>Chose your character</h1>
     <PlayersSection v-bind="{ useHealth:false, includeMonster:false, isPlayerSelect:true }" />
-    <input type="text" v-model="playerId" placeholder="Player name" />
+    <input type="text" v-model="playerId" placeholder="Character name" />
     <button @click="joinQuest">Join quest</button>
 
 </template>

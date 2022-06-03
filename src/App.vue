@@ -18,7 +18,7 @@ html {
 html, button, input {
   font-family: 'Courier New', Courier, monospace;
   font-weight: bold;
-  font-size: larger;
+  font-size: large;
 } 
 
 #app {
@@ -41,6 +41,10 @@ img {
   margin: 10px;
 }
 
+figcaption {
+  width: 180px;
+}
+
 button {
   color: #000;
   background-color: #ff55ff;
@@ -48,6 +52,11 @@ button {
   padding: 10px;
   margin: 10px;
 }
+
+button:disabled {
+  background-color: #55ffff;
+}
+
 
 input[type=text] {
   color: #000;
