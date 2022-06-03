@@ -11,8 +11,7 @@
     "ably": "^1.2.22",
     "node-fetch": "^3.2.5",
     "pinia": "^2.0.14",
-    "vue": "^3.2.25",
-    "vue-router": "^4.0.15"
+    "vue": "^3.2.25"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.3.3",
