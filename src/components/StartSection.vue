@@ -52,8 +52,7 @@ async function joinQuest() {
     <img class="small" alt="monster" src="../assets/Mage.png" />
 
     <br>
-    <a href="character">Start new quest</a>
-    <!-- <button @click="createQuest">Start new quest</button> -->
+    <button @click="createQuest">Create quest</button>
     <br>or<br>
     <input v-model="questId" placeholder="quest ID" />
     <button @click="joinQuest">Join quest</button>

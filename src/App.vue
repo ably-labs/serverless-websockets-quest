@@ -51,7 +51,7 @@ input {
   border-color: #ff55ff;
   padding: 10px;
   margin: 10px;
-  width: 500px;
+  width: 300px;
 }
 
 </style>

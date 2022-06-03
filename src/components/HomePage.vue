@@ -1,28 +1,34 @@
 <script setup lang="ts">
 import { computed, defineComponent, ref, onMounted, ComputedRef } from "vue";
-import { generateQuestId } from '../util/questIdGenerator';
 import FooterSection from "./FooterSection.vue";
 import StartSection from "./StartSection.vue";
 import CharacterSection from "./CharacterSection.vue";
+import PlayGameSection from "./PlayGameSection.vue";
+import EndSection from "./EndSection.vue";
 
-const routes: any = {
-  '/': StartSection,
-  '/character': CharacterSection
+function isStart() {
+    return !isCharacterSelection() && !isGameOver() && !isPlayGame();
 }
 
-let currentPath: String = computed(()=> window.location.hash).value;
-const currentView: String = computed(()=> routes[currentPath.slice(1) || '/']).value;
+function isCharacterSelection() {
+    return window.location.pathname.endsWith("character");
+}
 
-onMounted(() => {
-   window.addEventListener('hashchange', () => {
-    currentPath = window.location.hash;
-    })
-})
+function isPlayGame() {
+    return window.location.pathname.includes("play");
+}
+
+function isGameOver() {
+    return window.location.pathname.endsWith("end");
+}
 
 </script>
 
 <template>
-    <component :is="currentView" />
+    <StartSection v-if="isStart()" />
+    <CharacterSection v-if="isCharacterSelection()" />
+    <PlayGameSection v-if="isPlayGame()" />
+    <EndSection v-if="isGameOver()" />
     <FooterSection />
 </template>
 
