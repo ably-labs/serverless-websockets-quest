@@ -37,6 +37,10 @@ a {
   width: 150px;
 }
 
+img {
+  margin: 10px;
+}
+
 button {
   color: #000;
   background-color: #ff55ff;
@@ -45,7 +49,7 @@ button {
   margin: 10px;
 }
 
-input {
+input[type=text] {
   color: #000;
   background-color: #fff;
   border-color: #ff55ff;

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { defineComponent, ref } from "vue";
 import { generateQuestId } from '../util/questIdGenerator';
+import PlayersSection from "./PlayersSection.vue";
 
 const props = defineProps({
   questId: { type: String, required: false }
@@ -9,6 +10,8 @@ const props = defineProps({
 async function createQuest() {
     console.log("Start new Quest");
     const questId = generateQuestId();
+    window.location.href = "/character";
+
     
     // TODO: Generate a playerId
     // await window.fetch("/api/CreateQuest", {
@@ -46,15 +49,12 @@ async function joinQuest() {
 
 <template>
     <h1>Serverless Websockets Quest</h1>
-    <img class="small" alt="monster" src="../assets/Monster.png" />
-    <img class="small" alt="monster" src="../assets/Fighter.png" />
-    <img class="small" alt="monster" src="../assets/Ranger.png" />
-    <img class="small" alt="monster" src="../assets/Mage.png" />
+    <PlayersSection v-bind="{ useHealth:false, includeMonster:true, isPlayerSelect:false }" />
 
     <br>
     <button @click="createQuest">Create quest</button>
     <br>or<br>
-    <input v-model="questId" placeholder="quest ID" />
+    <input type="text" v-model="questId" placeholder="quest ID" />
     <button @click="joinQuest">Join quest</button>
 </template>
 

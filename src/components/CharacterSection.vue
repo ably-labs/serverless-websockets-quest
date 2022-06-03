@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { defineComponent, ref } from "vue";
+import PlayersSection from "./PlayersSection.vue";
 
 async function startQuest() {
     console.log("Start Quest");
@@ -9,11 +10,9 @@ async function startQuest() {
 
 <template>
     <h1>Chose your character</h1>
-    <img class="small" alt="monster" src="../assets/Fighter.png" />
-    <img class="small" alt="monster" src="../assets/Ranger.png" />
-    <img class="small" alt="monster" src="../assets/Mage.png" />
-
-    <button @click="startQuest">Start quest</button>
+    <PlayersSection v-bind="{ useHealth:false, includeMonster:false, isPlayerSelect:true }" />
+    <input type="text" v-model="playerId" placeholder="Player name" />
+    <button @click="joinQuest">Join quest</button>
 
 </template>
 

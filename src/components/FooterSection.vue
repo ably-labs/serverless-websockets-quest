@@ -3,7 +3,8 @@ import { defineComponent } from "@vue/runtime-core";
 </script>
 
 <template>
-    <p>
+    <hr />
+    <p class="lighter">
         Made with <span class="pink">&#10084;</span> by
         <a href="https://twitter.com/marcduiker" target="_blank">@marcduiker</a>.
         Powered by <a href="https://www.ably.com" target="_blank">ably.com</a> 🚀.
@@ -21,4 +22,18 @@ import { defineComponent } from "@vue/runtime-core";
 .pink {
     color: #ff55ff;
 }
+
+.lighter {
+  font-weight: lighter;
+  font-size: smaller;
+}
+
+hr {
+    margin-top: 25px;
+    width: 80%;
+    border-color: #fff;
+    height: 1px;
+    background-color: #55ffff;
+}
+
 </style>
