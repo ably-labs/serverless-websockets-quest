@@ -1,15 +1,29 @@
 <script setup lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, onMounted, ref } from "vue";
+import { useStore } from "../store";
+
+const store = useStore();
 
 const props = defineProps({
 	useHealth: Boolean,
 	includeMonster: Boolean,
 	isPlayerSelect: Boolean,
+    playerId: String,
 });
+
 
 async function fight() {
 	console.log("Fight");
 }
+
+function updateName()
+{
+
+}
+
+onMounted(() => {
+    console.log("Mounted");
+});
 
 let monsterHealth: Number = 100;
 let fighterHealth: Number = 50;
@@ -21,7 +35,7 @@ let fighterName: String = "Edge message fighter";
 let rangerName: String = "Realtime ranger";
 let mageName: String = "Open sourcerer";
 
-let isMonsterActive: Boolean = true;
+let isMonsterActive: Boolean = false;
 let isFighterActive: Boolean = false;
 let isRangerActive: Boolean = false;
 let isMageActive: Boolean = false;
@@ -53,21 +67,21 @@ let isMageActive: Boolean = false;
 	</ul>
 	<ul v-if="props.isPlayerSelect" class="flex-container">
 		<li>
-			<input type="radio" id="fighter" name="character" checked="true" />
+			<input type="radio" id="fighter" name="character" checked value="fighter" v-model="store.character" />
 			<label for="fighter">
                 <img class="small" alt="fighter" src="../assets/Fighter.png"/>
                 <figcaption>{{ fighterName }}</figcaption>
             </label>
 		</li>
 		<li>
-			<input type="radio" id="ranger" name="character" />
+			<input type="radio" id="ranger" name="character" value="ranger" v-model="store.character" />
 			<label for="ranger">
                 <img class="small" alt="ranger" src="../assets/Ranger.png" />
                 <figcaption>{{ rangerName }}</figcaption>
             </label>
 		</li>
 		<li>
-			<input type="radio" id="mage" name="character" />
+			<input type="radio" id="mage" name="character" value="mage" v-model="store.character"/>
 			<label for="mage">
                 <img class="small" alt="mage" src="../assets/Mage.png"/>
                 <figcaption>{{ mageName }}</figcaption>

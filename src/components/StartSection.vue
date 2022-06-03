@@ -2,6 +2,9 @@
 import { defineComponent, ref } from "vue";
 import { generateQuestId } from '../util/questIdGenerator';
 import PlayersSection from "./PlayersSection.vue";
+import { useStore } from "../store";
+
+const store = useStore();
 
 const props = defineProps({
   questId: { type: String, required: false }

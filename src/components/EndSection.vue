@@ -1,10 +1,15 @@
 <script setup lang="ts">
 import { defineComponent, ref } from "vue";
 import PlayersSection from "./PlayersSection.vue";
+import { useStore } from "../store";
+
+const store = useStore();
 
 async function playAgain() {
     console.log("Play Again");
 }
+
+
 
 </script>
 

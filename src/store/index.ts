@@ -3,14 +3,20 @@ import { defineStore } from "pinia";
 export type State = {
   playerId: String
   questId: String
-  characterId: String
+  character: String,
+  fighterName: String,
+  rangerName: String,
+  mageName: String,
 }
 
-export const store = defineStore('main', {
+export const useStore = defineStore('main', {
   state: () => ({
-    playerId: "abc",
-    questId: "wowie-world-quest",
-    characterId: "ranger"
+    playerId: "",
+    questId: "",
+    character: "",
+    fighterName: "",
+    rangerName: "",
+    mageName: "",
   }) as State,
   getters: {
     getPlayerId(state) {
@@ -19,9 +25,18 @@ export const store = defineStore('main', {
     getQuestId(state) {
       return state.questId;
     },
-    getCharacterId(state) {
-      return state.characterId;
-    }
+    getCharacter(state) {
+      return state.character;
+    },
+    getFighterName(state) {
+      return state.fighterName;
+    },
+    getRangerName(state) {
+      return state.rangerName;
+    },
+    getMageName(state) {
+      return state.mageName;
+    },
   },
   actions: {
     setPlayerId(state: State, input: String) {
