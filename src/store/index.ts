@@ -4,6 +4,7 @@ export type State = {
   playerId: String
   questId: String
   character: String,
+  monsterName: String,
   fighterName: String,
   rangerName: String,
   mageName: String,
@@ -13,10 +14,11 @@ export const useStore = defineStore('main', {
   state: () => ({
     playerId: "",
     questId: "",
-    character: "",
-    fighterName: "",
-    rangerName: "",
-    mageName: "",
+    character: "fighter",
+    monsterName: "Monstarrr",
+    fighterName: "Edge messaging fighter",
+    rangerName: "Realtime ranger",
+    mageName: "Open sourcerer",
   }) as State,
   getters: {
     getPlayerId(state) {
@@ -28,14 +30,17 @@ export const useStore = defineStore('main', {
     getCharacter(state) {
       return state.character;
     },
+    getMonsterName(state) {
+      return state.monsterName;
+    },
     getFighterName(state) {
-      return state.fighterName;
+      return state.character == "fighter" && state.playerId != "" ? state.playerId : state.fighterName;
     },
     getRangerName(state) {
-      return state.rangerName;
+      return state.character == "ranger" && state.playerId != "" ? state.playerId : state.rangerName;
     },
     getMageName(state) {
-      return state.mageName;
+      return state.character == "mage" && state.playerId != "" ? state.playerId : state.mageName;
     },
   },
   actions: {
@@ -46,7 +51,7 @@ export const useStore = defineStore('main', {
       state.questId = input;
     },
     setCharacterId(state: State, input: String) {
-      state.characterId = input;
+      state.character = input;
     },
   }
 });
