@@ -37,13 +37,21 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             await _durableClient.SignalEntityAsync<IGameState>(gameStateEntityId, proxy => proxy.AddPlayerId(Monster.ID));
         }
 
-        public async Task JoinQuestAsync(string playerId, int health)
+        public async Task AddplayerAsync(string playerId, int health)
         {
             var gameStateEntityId = new EntityId(nameof(GameState), _questId);
             await _durableClient.SignalEntityAsync<IGameState>(gameStateEntityId, proxy => proxy.AddPlayerId(playerId));
 
             var playerEntityId = new EntityId(nameof(Player), Player.GetEntityId(_questId, playerId));
             await _durableClient.SignalEntityAsync<IPlayer>(playerEntityId, proxy => proxy.SetHealth(health));
+        }
+
+        public async Task<bool> CheckQuestExistsAsync()
+        {
+            var entityId = new EntityId(nameof(GameState), _questId);
+            var gameState = await _durableClient.ReadEntityStateAsync<GameState>(entityId);
+
+            return gameState.EntityExists;
         }
 
         public async Task ExecuteTurnAsync(string playerId)

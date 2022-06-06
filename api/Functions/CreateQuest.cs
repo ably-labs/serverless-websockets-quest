@@ -19,7 +19,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest
             [DurableClient] IDurableClient durableClient,
             ILogger log)
         {
-            var questId = await req.Content.ReadAsAsync<string>();
+            var questId = await req.Content.ReadAsStringAsync();
             var gameEngine = new GameEngine(durableClient, questId, null);
             await gameEngine.CreateQuestAsync(100);
 
