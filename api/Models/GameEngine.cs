@@ -17,9 +17,8 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             _channel = channel;
         }
 
-        public async Task CreateQuestAsync(string hostId, int monsterHealth)
+        public async Task CreateQuestAsync(int monsterHealth)
         {
-            await SetHostAsync(hostId);
             await CreateMonsterAsync(monsterHealth);
         }
 

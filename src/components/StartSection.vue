@@ -15,18 +15,13 @@ async function createQuest() {
     const questId = generateQuestId();
     window.location.href = `${window.location.href}character/${questId}`;
 
-    
-    // TODO: Generate a playerId
-    // await window.fetch("/api/CreateQuest", {
-    //     method: "POST",
-    //     headers: {
-    //         "Content-Type": "application/json"
-    //     },
-    //     body: JSON.stringify({
-    //         "questId": generateQuestId(),
-    //         "playerId": "player1"
-    //     })
-    //});
+    await window.fetch("/api/CreateQuest", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: questId
+    });
 }
 
 async function joinQuest() {
@@ -36,8 +31,8 @@ async function joinQuest() {
     //     path: '/',
     //     query: { sessionId: this.sessionId },
     //   });
-    //   navigator.clipboard.writeText(window.location.href);
-    await window.fetch("/api/CreateQuest", {
+    navigator.clipboard.writeText(window.location.href);
+    await window.fetch("/api/JoinQuest", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
