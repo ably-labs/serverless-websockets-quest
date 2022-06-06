@@ -2,14 +2,13 @@
 import { defineComponent, ref } from "vue";
 
 const props = defineProps<{
-    isError: boolean;
     errorMessage?: String;
 }>();
 
 </script>
 
-<template v-if="isError">
-    <p class="error">{{ errorMessage}} </p>
+<template>
+    <p v-if="errorMessage" class="error">{{ errorMessage}} </p>
 </template>
 
 <style scoped>
@@ -19,11 +18,11 @@ const props = defineProps<{
 }
 
 .error::before {
-    content: "!!! ";
+    content: "! ";
 }
 
 .error::after {
-    content: " !!!";
+    content: " !";
 }
 
 </style>

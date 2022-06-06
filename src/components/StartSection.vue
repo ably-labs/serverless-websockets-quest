@@ -6,8 +6,7 @@ import { useStore } from "../store";
 import ErrorMessageSection from "./ErrorMessageSection.vue";
 
 const store = useStore();
-let errorMessage: String = "";
-let isError: boolean = false;
+const errorMessage = ref<String>("");
 
 async function createQuest() {
     console.log("Start new Quest");
@@ -29,7 +28,6 @@ async function createQuest() {
 
 async function joinQuest() {
     console.log("Join a Quest");
-    console.log(store.questId);
     if (store.questId)
     {
         console.log(`/api/GetQuestExists/${store.questId}`);
@@ -38,19 +36,19 @@ async function joinQuest() {
         if (result.ok) {
             const linkWithQuestId = `${window.location.href}character/${store.questId}`;
             window.location.href = linkWithQuestId;
-            isError = false;
         } else {
-            errorMessage = `${store.questId} quest was not found`;
-            isError = true;
-            console.log(errorMessage);
+            errorMessage.value = `${store.questId} quest was not found`;
         }
     } else {
-        errorMessage = "Please enter a quest ID";
-        isError = true;
-        console.log(errorMessage);
+        errorMessage.value = "Please enter a quest ID";
     }
-
 }
+
+function clearError()
+{
+    errorMessage.value = "";
+}
+
 </script>
 
 <template>
@@ -58,9 +56,9 @@ async function joinQuest() {
     <PlayersSection v-bind="{ useHealth:false, includeMonster:true, isPlayerSelect:false }" />
     <button @click="createQuest">Create quest</button>
     <br>or<br>
-    <input type="text" v-model="store.questId" placeholder="quest ID" />
+    <input type="text" v-model="store.questId" placeholder="quest ID" @input="clearError" />
     <button @click="joinQuest">Join quest</button>
-    <ErrorMessageSection v-bind="{ isError:isError, errorMessage:errorMessage }" />
+    <ErrorMessageSection :errorMessage=errorMessage />
 </template>
 
 <style scoped></style>
