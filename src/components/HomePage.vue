@@ -11,15 +11,15 @@ function isStart() {
 }
 
 function isCharacterSelection() {
-    return window.location.pathname.endsWith("character");
+    return window.location.href.includes("/character/");
 }
 
 function isPlayGame() {
-    return window.location.pathname.includes("play");
+    return window.location.href.includes("/play/");
 }
 
 function isGameOver() {
-    return window.location.pathname.endsWith("end");
+    return window.location.href.endsWith("end");
 }
 
 </script>

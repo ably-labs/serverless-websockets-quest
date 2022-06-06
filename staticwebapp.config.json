@@ -1,0 +1,34 @@
+{
+    "routes": [
+      {
+        "route": "/character/*"
+      },
+      {
+        "route": "/play/*"
+      },
+      {
+        "route": "/end/*"
+      },
+      {
+        "route": "/assets/*",
+        "headers": {
+          "cache-control": "must-revalidate, max-age=15770000"
+        }
+      },
+      {
+        "route": "/api/*",
+        "methods": ["GET", "POST"]
+      }
+    ],
+    "navigationFallback": {
+      "rewrite": "index.html",
+      "exclude": ["/images/*.{png,jpg,gif}", "/css/*"]
+    },
+    "globalHeaders": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST"
+    },
+    "mimeTypes": {
+      ".json": "text/json"
+    }
+  }

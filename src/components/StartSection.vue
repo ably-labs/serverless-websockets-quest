@@ -13,7 +13,7 @@ const props = defineProps({
 async function createQuest() {
     console.log("Start new Quest");
     const questId = generateQuestId();
-    window.location.href = "/character";
+    window.location.href = `${window.location.href}character/${questId}`;
 
     
     // TODO: Generate a playerId
