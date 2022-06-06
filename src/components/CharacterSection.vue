@@ -7,10 +7,11 @@ const store = useStore();
 
 async function joinQuest() {
     console.log("Join Quest");
+    const questId = window.location.pathname.split("/").pop();
+    console.log(`/api/GetQuestExists/${questId}`);
+    const result = await window.fetch(`/api/GetQuestExists/${questId}`);
 }
 
-
-let playerId: String;
 
 </script>
 
