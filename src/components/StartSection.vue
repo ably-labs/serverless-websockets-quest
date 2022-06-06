@@ -34,7 +34,7 @@ async function joinQuest() {
         const result = await window.fetch(`/api/GetQuestExists/${store.questId}`);
 
         if (result.ok) {
-            const linkWithQuestId = `${window.location.href}character/${store.questId}`;
+            const linkWithQuestId = `${window.location.origin}/character/${store.questId}`;
             window.location.href = linkWithQuestId;
         } else {
             errorMessage.value = `${store.questId} quest was not found`;
