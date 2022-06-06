@@ -1,0 +1,33 @@
+{
+    "routes": [
+      {
+        "route": "/character/*"
+      },
+      {
+        "route": "/play/*"
+      },
+      {
+        "route": "/end/*"
+      },
+      {
+        "route": "/assets/*",
+        "headers": {
+          "cache-control": "must-revalidate, max-age=15770000"
+        }
+      },
+      {
+        "route": "/api/*",
+        "methods": ["GET", "POST"]
+      }
+    ],
+    "navigationFallback": {
+      "rewrite": "index.html",
+      "exclude": ["/images/*.{png,jpg,gif}", "/css/*"]
+    },
+    "globalHeaders": {
+      "content-security-policy": "default-src https: 'unsafe-eval' 'unsafe-inline'; object-src 'none'"
+    },
+    "mimeTypes": {
+      ".json": "text/json"
+    }
+  }
