@@ -23,7 +23,7 @@ async function createQuest() {
 
     const linkWithQuestId = `${window.location.href}character/${questId}`;
     navigator.clipboard.writeText(linkWithQuestId);
-    window.location.href = linkWithQuestId;
+    store.view = "character";
 }
 
 async function joinQuest() {
@@ -35,7 +35,7 @@ async function joinQuest() {
 
         if (result.ok) {
             const linkWithQuestId = `${window.location.origin}/character/${store.questId}`;
-            window.location.href = linkWithQuestId;
+            store.view = "character";
         } else {
             errorMessage.value = `${store.questId} quest was not found`;
         }

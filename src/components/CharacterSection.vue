@@ -9,9 +9,8 @@ const errorMessage = ref<String>("");
 
 async function addPlayer() {
     console.log("Add player");
-    const questId = window.location.pathname.split("/").pop();
-    console.log(`/api/GetQuestExists/${questId}`);
-    const questExists = await window.fetch(`/api/GetQuestExists/${questId}`);
+    console.log(`/api/GetQuestExists/${store.questId}`);
+    const questExists = await window.fetch(`/api/GetQuestExists/${store.questId}`);
     if (questExists) {
         const addPlayer = await window.fetch("/api/AddPlayer", {
         method: "POST",
@@ -19,26 +18,26 @@ async function addPlayer() {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            questId: questId,
+            questId: store.questId,
             playerId: store.playerId
             })
         })
         if (addPlayer.ok) {
-            const linkWithQuestId = `${window.location.origin}/play/${store.questId}`;
-            window.location.href = linkWithQuestId;
+            store.view = "play";
         } else {
             errorMessage.value = addPlayer.statusText;
         }
     }
     else {
-        errorMessage.value = `${questId} quest was not found`;
+        errorMessage.value = `${store.questId} quest was not found`;
     }
 }
 
 </script>
 
 <template>
-    <h1>Select and name your character</h1>
+    <h1>Quest {{ store.questId }}</h1>
+    <h2>Select and name your character</h2>
     <PlayersSection v-bind="{ useHealth:false, includeMonster:false, isPlayerSelect:true }" />
     <input type="text" v-model="store.playerId" placeholder="Character name" />
     <button @click="addPlayer">Start quest</button>

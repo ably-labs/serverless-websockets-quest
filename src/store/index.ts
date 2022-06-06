@@ -2,7 +2,8 @@ import { defineStore } from "pinia";
 
 export type State = {
   playerId: String
-  questId: String
+  questId: String,
+  view: String,
   character: String,
   monsterName: String,
   fighterName: String,
@@ -14,6 +15,7 @@ export const useStore = defineStore('main', {
   state: () => ({
     playerId: "",
     questId: "",
+    view: "start",
     character: "fighter",
     monsterName: "Monstarrr",
     fighterName: "Edge messaging fighter",

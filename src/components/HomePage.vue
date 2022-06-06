@@ -1,25 +1,28 @@
 <script setup lang="ts">
 import { computed, defineComponent, ref, onMounted, ComputedRef } from "vue";
+import { useStore } from "../store";
 import FooterSection from "./FooterSection.vue";
 import StartSection from "./StartSection.vue";
 import CharacterSection from "./CharacterSection.vue";
 import PlayGameSection from "./PlayGameSection.vue";
 import EndSection from "./EndSection.vue";
 
+const store = useStore();
+
 function isStart() {
-    return !isCharacterSelection() && !isGameOver() && !isPlayGame();
+    return store.view === "start";
 }
 
 function isCharacterSelection() {
-    return window.location.href.includes("/character/");
+    return store.view === "character";
 }
 
 function isPlayGame() {
-    return window.location.href.includes("/play/");
+    return store.view === "play";
 }
 
 function isGameOver() {
-    return window.location.href.endsWith("end");
+    return store.view === "end";
 }
 
 </script>
