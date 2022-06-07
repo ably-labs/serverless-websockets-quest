@@ -2,7 +2,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
 {
     public interface IGameState
     {
-        public void SetHost(string host);
+        public void SetPhase(string phase);
         public void AddPlayerId(string playerId);
     }
 }

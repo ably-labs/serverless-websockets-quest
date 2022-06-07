@@ -74,7 +74,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Test.Models
             int playerHealth = _fixture.Create<int>();
             
             // Act
-            await gameEngine.JoinQuestAsync(playerId, playerHealth);
+            await gameEngine.AddplayerAsync(playerId, playerHealth);
 
             // Assert
             await durableClient.Received(1).SignalEntityAsync<IGameState>(
@@ -94,7 +94,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Test.Models
             int playerHealth = _fixture.Create<int>();
             
             // Act
-            await gameEngine.JoinQuestAsync(playerId, playerHealth);
+            await gameEngine.AddplayerAsync(playerId, playerHealth);
 
             // Assert
             await durableClient.Received(1).SignalEntityAsync<IPlayer>(

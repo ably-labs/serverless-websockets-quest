@@ -1,46 +1,39 @@
-<template>
-  <div>
-    <h1>{{ getTitle }}</h1>
-    <button
-      :disabled="!isDefaultTitle"
-      @click="setTitleViaApi"
-    >
-      Set title via API
-    </button>
-    <button
-      :disabled="isDefaultTitle"
-      @click="resetTitle"
-    >
-      Reset title
-    </button>
-    <p>Use <a href="https://github.com/marcduiker/staticwebapp-vue-vite">this GitHub template repo</a> to make a cool <a href="https://docs.microsoft.com/azure/static-web-apps/">Azure Static Web App</a> yourself! 🚀</p>
-  </div>
-</template>
+<script setup lang="ts">
+import { computed, defineComponent, ref, onMounted, ComputedRef } from "vue";
+import { useStore } from "../store";
+import FooterSection from "./FooterSection.vue";
+import StartSection from "./StartSection.vue";
+import CharacterSection from "./CharacterSection.vue";
+import PlayGameSection from "./PlayGameSection.vue";
+import EndSection from "./EndSection.vue";
+import { GamePhase } from "../types/GamePhases";
 
-<script>
+const store = useStore();
 
-import { mapGetters, mapActions } from "vuex";
+function isStart() {
+    return store.view === GamePhase.Start;
+}
 
-export default {
-  components: {
-  },
-   computed: {
-    ...mapGetters([
-        "getTitle",
-        "isDefaultTitle"
-      ])
-  },
-  methods: {
-    ...mapActions([
-      "setTitleViaApi",
-      "resetTitle"
-    ]),
-  },
-};
+function isCharacterSelection() {
+    return store.view === GamePhase.Character;
+}
+
+function isPlayGame() {
+    return store.view === GamePhase.Play;
+}
+
+function isGameOver() {
+    return store.view === GamePhase.End;
+}
+
 </script>
 
-<style scope>
-body {
-  font-family: 'Comic Sans MS'
-}
-</style>
+<template>
+    <StartSection v-if="isStart()" />
+    <CharacterSection v-if="isCharacterSelection()" />
+    <PlayGameSection v-if="isPlayGame()" />
+    <EndSection v-if="isGameOver()" />
+    <FooterSection />
+</template>
+
+<style scoped></style>
