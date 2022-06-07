@@ -2,11 +2,11 @@
 import { defineComponent, ref } from "vue";
 import { generateQuestId } from '../util/questIdGenerator';
 import PlayersSection from "./PlayersSection.vue";
-import { useStore } from "../store";
+import { gameStore } from "../stores";
 import ErrorMessageSection from "./ErrorMessageSection.vue";
 import { GamePhase } from "../types/GamePhases";
 
-const store = useStore();
+const store = gameStore();
 const errorMessage = ref<String>("");
 
 async function createQuest() {

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { defineComponent, ref } from "vue";
-import { useStore } from "../store";
+import { gameStore } from "../stores";
 import PlayersSection from "./PlayersSection.vue";
 
-const store = useStore();
+const store = gameStore();
 
 async function fight() {
     console.log("Fight");

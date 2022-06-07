@@ -1,17 +1,17 @@
 import { defineStore } from "pinia";
 
 export type State = {
-  playerId: String
-  questId: String,
-  view: String,
-  character: String,
-  monsterName: String,
-  fighterName: String,
-  rangerName: String,
-  mageName: String,
+  playerId: string,
+  questId: string,
+  view: string,
+  character: string,
+  monsterName: string,
+  fighterName: string,
+  rangerName: string,
+  mageName: string,
 }
 
-export const useStore = defineStore('main', {
+export const gameStore = defineStore('game', {
   state: () => ({
     playerId: "",
     questId: "",
@@ -37,13 +37,13 @@ export const useStore = defineStore('main', {
     },
   },
   actions: {
-    setPlayerId(state: State, input: String) {
+    setPlayerId(state: State, input: string) {
       state.playerId = input;
     },
-    setQuestId(state: State, input: String) {
+    setQuestId(state: State, input: string) {
       state.questId = input;
     },
-    setCharacterId(state: State, input: String) {
+    setCharacterId(state: State, input: string) {
       state.character = input;
     },
   }

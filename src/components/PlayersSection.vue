@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { defineComponent, onMounted, ref } from "vue";
-import { useStore } from "../store";
+import { gameStore } from "../stores";
 
-const store = useStore();
+const store = gameStore();
 
 const props = defineProps({
 	useHealth: Boolean,

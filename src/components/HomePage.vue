@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, defineComponent, ref, onMounted, ComputedRef } from "vue";
-import { useStore } from "../store";
+import { gameStore } from "../stores";
 import FooterSection from "./FooterSection.vue";
 import StartSection from "./StartSection.vue";
 import CharacterSection from "./CharacterSection.vue";
@@ -8,7 +8,7 @@ import PlayGameSection from "./PlayGameSection.vue";
 import EndSection from "./EndSection.vue";
 import { GamePhase } from "../types/GamePhases";
 
-const store = useStore();
+const store = gameStore();
 
 function isStart() {
     return store.view === GamePhase.Start;
