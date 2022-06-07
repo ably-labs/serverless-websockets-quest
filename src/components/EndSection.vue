@@ -14,7 +14,8 @@ async function playAgain() {
 </script>
 
 <template>
-    <h1>You won!</h1>
+    <h1>Quest: <span class="pink">{{ store.questId }}</span></h1>
+    <h2>You won!</h2>
     <PlayersSection v-bind="{ useHealth:false, includeMonster:false, isPlayerSelect:false }" />
     <button @click="playAgain">Play again</button>
 

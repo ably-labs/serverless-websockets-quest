@@ -9,11 +9,11 @@ using AblyLabs.ServerlessWebsocketsQuest.Models;
 
 namespace AblyLabs.ServerlessWebsocketsQuest
 {
-    public class JoinQuest
+    public class AddPlayer
     {
         /// The JoinQuest function is called when a player joins a quest created by the host.
         /// The Player Id & Health will be stored in a Durable Entity.
-        [FunctionName(nameof(JoinQuest))]
+        [FunctionName(nameof(AddPlayer))]
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequestMessage req,
             [DurableClient] IDurableClient durableClient,
@@ -21,7 +21,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest
         {
             var questData = await req.Content.ReadAsAsync<QuestData>();
             var gameEngine = new GameEngine(durableClient, questData.QuestId, null);
-            await gameEngine.JoinQuestAsync(questData.PlayerId, 50);
+            await gameEngine.AddplayerAsync(questData.PlayerId, 50);
 
             return new AcceptedResult();
         }
