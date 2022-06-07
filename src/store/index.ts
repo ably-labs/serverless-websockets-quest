@@ -23,15 +23,6 @@ export const useStore = defineStore('main', {
     mageName: "Open sourcerer",
   }) as State,
   getters: {
-    getPlayerId(state) {
-      return state.playerId;
-    },
-    getQuestId(state) {
-      return state.questId;
-    },
-    getCharacter(state) {
-      return state.character;
-    },
     getMonsterName(state) {
       return state.monsterName;
     },

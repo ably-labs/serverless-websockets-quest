@@ -11,9 +11,9 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
     [JsonObject(MemberSerialization.OptIn)]
     public class GameState : IGameState
     {
-        [JsonProperty("host")]
-        public string Host { get; set; }
-        public void SetHost(string host) => Host = host;
+        [JsonProperty("phse")]
+        public string Phase { get; set; }
+        public void SetPhase(string phase) => Phase = phase;
 
         [JsonProperty("players")]
         public List<string> PlayerIds { get; set; }

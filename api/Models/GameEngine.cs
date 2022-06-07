@@ -19,13 +19,14 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
 
         public async Task CreateQuestAsync(int monsterHealth)
         {
+            await SetPhaseAsync("character");
             await CreateMonsterAsync(monsterHealth);
         }
 
-        private async Task SetHostAsync(string hostId)
+        private async Task SetPhaseAsync(string phaseId)
         {
             var gameStateEntityId = new EntityId(nameof(GameState), _questId);
-            await _durableClient.SignalEntityAsync<IGameState>(gameStateEntityId, proxy => proxy.SetHost(hostId));
+            await _durableClient.SignalEntityAsync<IGameState>(gameStateEntityId, proxy => proxy.SetPhase(phaseId));
         }
 
         private async Task CreateMonsterAsync(int health)

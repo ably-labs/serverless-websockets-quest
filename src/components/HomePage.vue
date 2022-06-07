@@ -6,23 +6,24 @@ import StartSection from "./StartSection.vue";
 import CharacterSection from "./CharacterSection.vue";
 import PlayGameSection from "./PlayGameSection.vue";
 import EndSection from "./EndSection.vue";
+import { GamePhase } from "../types/GamePhases";
 
 const store = useStore();
 
 function isStart() {
-    return store.view === "start";
+    return store.view === GamePhase.Start;
 }
 
 function isCharacterSelection() {
-    return store.view === "character";
+    return store.view === GamePhase.Character;
 }
 
 function isPlayGame() {
-    return store.view === "play";
+    return store.view === GamePhase.Play;
 }
 
 function isGameOver() {
-    return store.view === "end";
+    return store.view === GamePhase.End;
 }
 
 </script>

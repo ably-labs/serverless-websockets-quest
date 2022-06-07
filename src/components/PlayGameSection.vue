@@ -14,7 +14,7 @@ let isPlayerTurn: Boolean = false;
 </script>
 
 <template>
-    <h1>Quest {{ store.questId }}</h1>
+    <h1>Quest: <span class="pink">{{ store.questId }}</span></h1>
     <h2>You encouter a monster!</h2>
     <PlayersSection v-bind="{ useHealth:true, includeMonster:true, isPlayerSelect:false }" />
     <div class=flex-container>

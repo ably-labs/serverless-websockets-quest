@@ -3,6 +3,7 @@ import { defineComponent, ref } from "vue";
 import PlayersSection from "./PlayersSection.vue";
 import { useStore } from "../store";
 import ErrorMessageSection from "./ErrorMessageSection.vue";
+import { GamePhase } from "../types/GamePhases";
 
 const store = useStore();
 const errorMessage = ref<String>("");
@@ -23,7 +24,7 @@ async function addPlayer() {
             })
         })
         if (addPlayer.ok) {
-            store.view = "play";
+            store.view = GamePhase.Play;
         } else {
             errorMessage.value = addPlayer.statusText;
         }
@@ -36,7 +37,7 @@ async function addPlayer() {
 </script>
 
 <template>
-    <h1>Quest {{ store.questId }}</h1>
+    <h1>Quest: <span class="pink">{{ store.questId }}</span></h1>
     <h2>Select and name your character</h2>
     <PlayersSection v-bind="{ useHealth:false, includeMonster:false, isPlayerSelect:true }" />
     <input type="text" v-model="store.playerId" placeholder="Character name" />

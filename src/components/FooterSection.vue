@@ -19,9 +19,6 @@ import { defineComponent } from "@vue/runtime-core";
 </template>
 
 <style scoped>
-.pink {
-    color: #ff55ff;
-}
 
 .lighter {
   font-weight: lighter;

@@ -4,6 +4,7 @@ import { generateQuestId } from '../util/questIdGenerator';
 import PlayersSection from "./PlayersSection.vue";
 import { useStore } from "../store";
 import ErrorMessageSection from "./ErrorMessageSection.vue";
+import { GamePhase } from "../types/GamePhases";
 
 const store = useStore();
 const errorMessage = ref<String>("");
@@ -23,7 +24,7 @@ async function createQuest() {
 
     const linkWithQuestId = `${window.location.href}character/${questId}`;
     navigator.clipboard.writeText(linkWithQuestId);
-    store.view = "character";
+    store.view = GamePhase.Character;
 }
 
 async function joinQuest() {
@@ -35,7 +36,7 @@ async function joinQuest() {
 
         if (result.ok) {
             const linkWithQuestId = `${window.location.origin}/character/${store.questId}`;
-            store.view = "character";
+            store.view = GamePhase.Character;
         } else {
             errorMessage.value = `${store.questId} quest was not found`;
         }

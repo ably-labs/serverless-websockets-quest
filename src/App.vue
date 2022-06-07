@@ -67,4 +67,8 @@ input[type=text] {
   width: 300px;
 }
 
+.pink {
+    color: #ff55ff;
+}
+
 </style>
