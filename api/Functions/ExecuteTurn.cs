@@ -12,9 +12,9 @@ namespace AblyLabs.ServerlessWebsocketsQuest
 {
     public class ExecuteTurn
     {
-        private AblyRealtime _realtime;
+        private IRealtimeClient _realtime;
 
-        public ExecuteTurn(AblyRealtime realtime)
+        public ExecuteTurn(IRealtimeClient realtime)
         {
             _realtime = realtime;
         }

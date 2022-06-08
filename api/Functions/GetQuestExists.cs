@@ -6,13 +6,20 @@ using Microsoft.Extensions.Logging;
 using System.Net.Http;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using AblyLabs.ServerlessWebsocketsQuest.Models;
+using IO.Ably;
 
 namespace AblyLabs.ServerlessWebsocketsQuest
 {
     public class GetQuestExists
     {
-        /// The JoinQuest function is called when a player joins a quest created by the host.
-        /// The Player Id & Health will be stored in a Durable Entity.
+        private IRealtimeClient _realtime;
+
+        public GetQuestExists(IRealtimeClient realtime)
+        {
+            _realtime = realtime;
+        }
+        
+        /// The DoesQuestExist function is called when a player wants to join a quest created by the host.
         [FunctionName(nameof(GetQuestExists))]
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = "GetQuestExists/{questId}")] HttpRequestMessage req,
@@ -20,16 +27,17 @@ namespace AblyLabs.ServerlessWebsocketsQuest
             string questId,
             ILogger log)
         {
-            var gameEngine = new GameEngine(durableClient, questId, null);
-            var questExists = await gameEngine.CheckQuestExistsAsync();
+            var channel = _realtime.Channels.Get(questId);
+            var gameEngine = new GameEngine(durableClient, questId, channel);
+            var result = await gameEngine.DoesQuestExistAsync();
 
-            if (questExists) 
+            if (result.QuestExists)
             {
-                return new OkResult();
+                return new OkObjectResult(result.Phase);
             }
             else
             {
-                return new NotFoundResult();
+                return new BadRequestObjectResult(result.Message);        
             }
         }
     }

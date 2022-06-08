@@ -1,13 +1,7 @@
 {
     "routes": [
       {
-        "route": "/character/*"
-      },
-      {
-        "route": "/play/*"
-      },
-      {
-        "route": "/end/*"
+        "route": "/*"
       },
       {
         "route": "/assets/*",

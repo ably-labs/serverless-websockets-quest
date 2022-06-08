@@ -6,12 +6,20 @@ using Microsoft.Extensions.Logging;
 using System.Net.Http;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using AblyLabs.ServerlessWebsocketsQuest.Models;
+using IO.Ably;
 
 namespace AblyLabs.ServerlessWebsocketsQuest
 {
     public class AddPlayer
     {
-        /// The JoinQuest function is called when a player joins a quest created by the host.
+        private IRealtimeClient _realtime;
+
+        public AddPlayer(IRealtimeClient realtime)
+        {
+            _realtime = realtime;
+        }
+        
+        /// The AddPlayer function is called when a player joins a quest created by the host.
         /// The Player Id & Health will be stored in a Durable Entity.
         [FunctionName(nameof(AddPlayer))]
         public async Task<IActionResult> Run(
@@ -20,8 +28,9 @@ namespace AblyLabs.ServerlessWebsocketsQuest
             ILogger log)
         {
             var questData = await req.Content.ReadAsAsync<QuestData>();
-            var gameEngine = new GameEngine(durableClient, questData.QuestId, null);
-            await gameEngine.AddplayerAsync(questData.PlayerId, 50);
+            var channel = _realtime.Channels.Get(questData.QuestId);
+            var gameEngine = new GameEngine(durableClient, questData.QuestId, channel);
+            await gameEngine.AddPlayerAsync(questData.PlayerId, questData.CharacterClass);
 
             return new AcceptedResult();
         }

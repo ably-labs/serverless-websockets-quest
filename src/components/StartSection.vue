@@ -4,41 +4,44 @@ import { generateQuestId } from '../util/questIdGenerator';
 import PlayersSection from "./PlayersSection.vue";
 import { gameStore } from "../stores";
 import ErrorMessageSection from "./ErrorMessageSection.vue";
-import { GamePhase } from "../types/GamePhases";
+import { GamePhase } from "../types/GamePhase";
 
 const store = gameStore();
 const errorMessage = ref<String>("");
 
 async function createQuest() {
     console.log("Start new Quest");
-    let questId = generateQuestId();
+    const questId = generateQuestId();
     store.questId = questId;
+    store.isHost = true;
 
-    await window.fetch("/api/CreateQuest", {
+    console.log(`1 - Quest: ${store.questId}`);
+    const response = await window.fetch("/api/CreateQuest", {
         method: "POST",
         headers: {
             "Content-Type": "application/text"
         },
         body: questId
     });
-
-    const linkWithQuestId = `${window.location.href}character/${questId}`;
-    navigator.clipboard.writeText(linkWithQuestId);
-    store.view = GamePhase.Character;
+    if (response.ok) {
+        console.log(`2 - Quest: ${store.questId}`);
+        store.phase = await response.text();
+       
+        navigator.clipboard.writeText(store.questId);
+    }
 }
 
 async function joinQuest() {
     console.log("Join a Quest");
     if (store.questId)
     {
-        console.log(`/api/GetQuestExists/${store.questId}`);
-        const result = await window.fetch(`/api/GetQuestExists/${store.questId}`);
-
-        if (result.ok) {
-            const linkWithQuestId = `${window.location.origin}/character/${store.questId}`;
-            store.view = GamePhase.Character;
+        console.log(`GetsQuestExist${store.questId}`);
+        const response = await window.fetch(`/api/GetsQuestExist/${store.questId}/${store.phase}`);
+        const data = await response.text();
+        if (response.ok) {
+            store.phase = data;
         } else {
-            errorMessage.value = `${store.questId} quest was not found`;
+            errorMessage.value = data;
         }
     } else {
         errorMessage.value = "Please enter a quest ID";

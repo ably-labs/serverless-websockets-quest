@@ -71,4 +71,8 @@ input[type=text] {
     color: #ff55ff;
 }
 
+.info {
+  color: #55ffff;
+}
+
 </style>

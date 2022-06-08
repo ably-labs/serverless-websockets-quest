@@ -30,11 +30,9 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Test.Models
             var realtimeChannel = Substitute.For<IRealtimeChannel>();
             string questId = _fixture.Create<string>();
             var gameEngine = new GameEngine(durableClient, questId, realtimeChannel);
-            string hostId = _fixture.Create<string>();
-            int monsterHealth = _fixture.Create<int>();
-            
+
             // Act
-            await gameEngine.CreateQuestAsync(hostId, monsterHealth);
+            await gameEngine.CreateQuestAsync();
 
             // Assert
             await durableClient.Received(2).SignalEntityAsync<IGameState>(
@@ -50,11 +48,9 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Test.Models
             var realtimeChannel = Substitute.For<IRealtimeChannel>();
             string questId = _fixture.Create<string>();
             var gameEngine = new GameEngine(durableClient, questId, realtimeChannel);
-            string hostId = _fixture.Create<string>();
-            int monsterHealth = _fixture.Create<int>();
-            
+
             // Act
-            await gameEngine.CreateQuestAsync(hostId, monsterHealth);
+            await gameEngine.CreateQuestAsync();
 
             // Assert
             await durableClient.Received(1).SignalEntityAsync<IMonster>(
@@ -71,10 +67,10 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Test.Models
             string questId = _fixture.Create<string>();
             var gameEngine = new GameEngine(durableClient, questId, realtimeChannel);
             string playerId = _fixture.Create<string>();
-            int playerHealth = _fixture.Create<int>();
+            string className = "fighter";
             
             // Act
-            await gameEngine.AddplayerAsync(playerId, playerHealth);
+            await gameEngine.AddPlayerAsync(playerId, className);
 
             // Assert
             await durableClient.Received(1).SignalEntityAsync<IGameState>(
@@ -91,10 +87,10 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Test.Models
             string questId = _fixture.Create<string>();
             var gameEngine = new GameEngine(durableClient, questId, realtimeChannel);
             string playerId = _fixture.Create<string>();
-            int playerHealth = _fixture.Create<int>();
-            
+            string className = "fighter";
+
             // Act
-            await gameEngine.AddplayerAsync(playerId, playerHealth);
+            await gameEngine.AddPlayerAsync(playerId, className);
 
             // Assert
             await durableClient.Received(1).SignalEntityAsync<IPlayer>(

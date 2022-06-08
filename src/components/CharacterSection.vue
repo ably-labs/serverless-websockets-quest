@@ -1,36 +1,35 @@
 <script setup lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, onMounted } from "vue";
 import PlayersSection from "./PlayersSection.vue";
 import { gameStore } from "../stores";
 import ErrorMessageSection from "./ErrorMessageSection.vue";
-import { GamePhase } from "../types/GamePhases";
 
 const store = gameStore();
 const errorMessage = ref<String>("");
 
 async function addPlayer() {
     console.log("Add player");
-    console.log(`/api/GetQuestExists/${store.questId}`);
-    const questExists = await window.fetch(`/api/GetQuestExists/${store.questId}`);
-    if (questExists) {
-        const addPlayer = await window.fetch("/api/AddPlayer", {
+    console.log(store.questId);
+    const questExistsResponse = await window.fetch(`/api/GetQuestExists/${store.questId}`);
+    const questExistsMessage = await questExistsResponse.text();
+    if (questExistsResponse.ok) {
+        store.createRealtimeConnection(store.playerId, store.questId);
+        await window.fetch("/api/AddPlayer", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
             questId: store.questId,
-            playerId: store.playerId
+            playerId: store.playerId,
+            characterClass: store.characterClass
             })
         })
-        if (addPlayer.ok) {
-            store.view = GamePhase.Play;
-        } else {
-            errorMessage.value = addPlayer.statusText;
-        }
+
+        // Function will publish a gamePhase message which the client responds to.
     }
     else {
-        errorMessage.value = `${store.questId} quest was not found`;
+        errorMessage.value = questExistsMessage;
     }
 }
 
@@ -39,9 +38,11 @@ async function addPlayer() {
 <template>
     <h1>Quest: <span class="pink">{{ store.questId }}</span></h1>
     <h2>Select and name your character</h2>
+    <p class="info" v-if="store.isHost">Quest ID has been copied to your clipboard! Send this to two other players so they can join.</p>
     <PlayersSection v-bind="{ useHealth:false, includeMonster:false, isPlayerSelect:true }" />
     <input type="text" v-model="store.playerId" placeholder="Character name" />
     <button @click="addPlayer">Start quest</button>
+    <p class="blue">Players connected: {{ store.players.toString() }}</p>
     <ErrorMessageSection :errorMessage=errorMessage />
 </template>
 

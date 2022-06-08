@@ -1,0 +1,16 @@
+sequenceDiagram
+  Client ->> Function App: AddPlayer
+  activate Function App
+  Function App ->> Game Engine: AddPlayer
+  activate Game Engine
+  Game Engine ->> GameState (Durable Entity): SignalEntity AddPlayerId
+  Game Engine ->> Player (Durable Entity): SignalEntity SetClassName
+  Game Engine ->> Player (Durable Entity):  SignalEntity SetHealth
+  Game Engine ->> Ably: PublishUpdatePlayer
+  Game Engine ->> GameState (Durable Entity): ReadEntity
+  alt IS PARTY COMPLETE = TRUE
+    Game Engine ->> Ably: PublishPhase Play
+  end
+  deactivate Game Engine
+  Function App -->> Client: Accepted
+  deactivate Function App

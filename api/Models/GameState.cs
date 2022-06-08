@@ -11,7 +11,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
     [JsonObject(MemberSerialization.OptIn)]
     public class GameState : IGameState
     {
-        [JsonProperty("phse")]
+        [JsonProperty("phase")]
         public string Phase { get; set; }
         public void SetPhase(string phase) => Phase = phase;
 
@@ -45,6 +45,8 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             return nextPlayer;
         }
 
+        public bool IsPartyComplete => PlayerIds.Count == NumberOfPlayers;
+
         public bool IsMonsterTurn(string currentPlayerId)
         {
             var currentIndex = PlayerIds.FindIndex(0, PlayerIds.Count, p => p == currentPlayerId);
@@ -61,5 +63,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
         [FunctionName(nameof(GameState))]
         public static Task Run([EntityTrigger] IDurableEntityContext ctx)
             => ctx.DispatchAsync<GameState>();
+
+        private const int NumberOfPlayers = 4;
     }
 }
