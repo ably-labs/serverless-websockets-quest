@@ -47,15 +47,9 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
 
         public bool IsPartyComplete => PlayerIds.Count == NumberOfPlayers;
 
-        public bool IsMonsterTurn(string currentPlayerId)
-        {
-            var currentIndex = PlayerIds.FindIndex(0, PlayerIds.Count, p => p == currentPlayerId);
-            return currentIndex == PlayerIds.Count - 1 ? true : false;
-        }
-
         public string GetRandomPlayerId()
         {
-            var playerIdsWithoutMonster = PlayerIds.Where(p => p != Monster.ID).ToList();
+            var playerIdsWithoutMonster = PlayerIds.Where(p => p != CharacterClassDefinitions.Monster.CharacterClass).ToList();
             var index = new Random().Next(0, playerIdsWithoutMonster.Count - 1);
             return playerIdsWithoutMonster[index];
         }

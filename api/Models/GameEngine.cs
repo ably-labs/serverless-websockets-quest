@@ -53,11 +53,13 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
 
         private async Task CreateMonsterAsync()
         {
-            var monsterEntityId = new EntityId(nameof(Monster), Monster.GetEntityId(_questId));
-            await _durableClient.SignalEntityAsync<IMonster>(monsterEntityId, proxy => proxy.SetHealth(CharacterClassDefinitions.Monster.InitialHealth));
+            var monsterEntityId = new EntityId(nameof(Player), Player.GetEntityId(_questId, CharacterClassDefinitions.Monster.CharacterClass));
+            await _durableClient.SignalEntityAsync<IPlayer>(monsterEntityId, proxy => proxy.SetCharacterClass(CharacterClassDefinitions.Monster.CharacterClass));
+            var health = CharacterClassDefinitions.GetInitialHealthFor(CharacterClassDefinitions.Monster.CharacterClass);
+            await _durableClient.SignalEntityAsync<IPlayer>(monsterEntityId, proxy => proxy.SetHealth(CharacterClassDefinitions.Monster.InitialHealth));
 
             var gameStateEntityId = new EntityId(nameof(GameState), _questId);
-            await _durableClient.SignalEntityAsync<IGameState>(gameStateEntityId, proxy => proxy.AddPlayerId(Monster.ID));
+            await _durableClient.SignalEntityAsync<IGameState>(gameStateEntityId, proxy => proxy.AddPlayerId(CharacterClassDefinitions.Monster.CharacterClass));
         }
 
         public async Task AddPlayerAsync(string playerId, string characterClass)
@@ -66,6 +68,13 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             var gameState = await _durableClient.ReadEntityStateAsync<GameState>(gameStateEntityId);
             if (!gameState.EntityState.IsPartyComplete)
             {
+                if (gameState.EntityState.PlayerIds.Count == 1) {
+                    // Publish monster data now there is a channel
+                    var monsterEntityId = new EntityId(nameof(Player), Player.GetEntityId(_questId, CharacterClassDefinitions.Monster.CharacterClass));
+                    var monster = await _durableClient.ReadEntityStateAsync<Player>(monsterEntityId);
+                    await PublishUpdatePlayer(CharacterClassDefinitions.Monster.CharacterClass, monster.EntityState.CharacterClass, monster.EntityState.Health, null);
+                }
+                
                 var playerEntityId = new EntityId(nameof(Player), Player.GetEntityId(_questId, playerId));
                 await _durableClient.SignalEntityAsync<IPlayer>(playerEntityId, proxy => proxy.SetCharacterClass(characterClass));
                 var health = CharacterClassDefinitions.GetInitialHealthFor(characterClass);
@@ -90,7 +99,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             var entityId = new EntityId(nameof(GameState), _questId);
             var gameState = await _durableClient.ReadEntityStateAsync<GameState>(entityId);
 
-            if (playerId == Monster.ID)
+            if (playerId == CharacterClassDefinitions.Monster.CharacterClass)
             {
                 await AttackByMonsterAsync(gameState.EntityState);
             }
@@ -121,11 +130,11 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             var player = await _durableClient.ReadEntityStateAsync<Player>(playerEntityId);
             var damage = CharacterClassDefinitions.GetDamageFor(player.EntityState.CharacterClass);
 
-            var monsterEntityId = new EntityId(nameof(Monster), Monster.GetEntityId(_questId));
-            await _durableClient.SignalEntityAsync<IMonster>(monsterEntityId, proxy => proxy.ApplyDamage(damage));
-            var monster = await _durableClient.ReadEntityStateAsync<Monster>(monsterEntityId);
+            var monsterEntityId = new EntityId(nameof(Player), Player.GetEntityId(_questId, CharacterClassDefinitions.Monster.CharacterClass));
+            await _durableClient.SignalEntityAsync<IPlayer>(monsterEntityId, proxy => proxy.ApplyDamage(damage));
+            var monster = await _durableClient.ReadEntityStateAsync<Player>(monsterEntityId);
 
-            await PublishUpdatePlayer(Monster.ID, CharacterClassDefinitions.Monster.CharacterClass, monster.EntityState.Health, damage);
+            await PublishUpdatePlayer(CharacterClassDefinitions.Monster.CharacterClass, CharacterClassDefinitions.Monster.CharacterClass, monster.EntityState.Health, damage);
 
             var nextPlayerId = gameState.GetNextPlayerId(playerId);
             await PublishPlayerTurnAsync(nextPlayerId);
