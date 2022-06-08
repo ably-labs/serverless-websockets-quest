@@ -5,11 +5,12 @@ import { gameStore } from "../stores";
 import ErrorMessageSection from "./ErrorMessageSection.vue";
 
 const store = gameStore();
-const errorMessage = ref<String>("");
+const errorMessage = ref<string>("");
 
 async function addPlayer() {
     console.log("Add player");
     console.log(store.questId);
+    store.isPlayerAdded = true;
     const questExistsResponse = await window.fetch(`/api/GetQuestExists/${store.questId}`);
     const questExistsMessage = await questExistsResponse.text();
     if (questExistsResponse.ok) {
@@ -25,7 +26,6 @@ async function addPlayer() {
             characterClass: store.characterClass
             })
         })
-
         // Function will publish a gamePhase message which the client responds to.
     }
     else {
@@ -40,8 +40,8 @@ async function addPlayer() {
     <h2>Select and name your character</h2>
     <p class="info" v-if="store.isHost">Quest ID has been copied to your clipboard! Send this to two other players so they can join.</p>
     <PlayersSection v-bind="{ useHealth:false, includeMonster:false, isPlayerSelect:true }" />
-    <input type="text" v-model="store.playerId" placeholder="Character name" />
-    <button @click="addPlayer">Start quest</button>
+    <input type="text" v-model="store.playerId" :disabled="store.isPlayerAdded" placeholder="Character name" />
+    <button @click="addPlayer" :disabled="store.isPlayerAdded">Add player</button>
     <p class="blue">Players connected: {{ store.players.toString() }}</p>
     <ErrorMessageSection :errorMessage=errorMessage />
 </template>

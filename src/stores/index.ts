@@ -17,6 +17,7 @@ export const gameStore = defineStore("game", {
             fighter: { name: "Edge messaging fighter" },
             ranger: { name: "Realtime ranger" },
             mage: { name: "Open sourcerer" },
+            isPlayerAdded: false,
             players: Array<string>(),
             realtimeClient: undefined,
             channelInstance: undefined,

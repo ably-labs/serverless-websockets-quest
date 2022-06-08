@@ -53,10 +53,10 @@ button {
   margin: 10px;
 }
 
-button:disabled {
+button:disabled, input[type=text]:disabled {
   background-color: #55ffff;
+  border-color: #fff;
 }
-
 
 input[type=text] {
   color: #000;

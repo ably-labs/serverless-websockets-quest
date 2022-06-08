@@ -13,6 +13,7 @@ export type GameState = RealtimeState & {
     ranger: Player;
     mage: Player;
     players: Array<string>;
+    isPlayerAdded: boolean;
 };
 
 export type RealtimeState = {
