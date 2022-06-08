@@ -25,7 +25,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest
             ILogger log)
         {
             var tokenParams = new TokenParams() { ClientId = clientId ?? Guid.NewGuid().ToString() };
-            var tokenData = await _realtime.Auth.CreateTokenRequestAsync(tokenParams);
+            var tokenData = await _realtime.Auth.RequestTokenAsync(tokenParams);
 
             return new OkObjectResult(tokenData);
         }
