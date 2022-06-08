@@ -20,10 +20,11 @@ namespace AblyLabs.ServerlessWebsocketsQuest
 
         [FunctionName(nameof(CreateTokenRequest))]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequestMessage req,
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "CreateTokenRequest/{clientId?}")] HttpRequestMessage req,
+            string? clientId,
             ILogger log)
         {
-            var tokenParams = new TokenParams() { ClientId = Guid.NewGuid().ToString() };
+            var tokenParams = new TokenParams() { ClientId = clientId ?? Guid.NewGuid().ToString() };
             var tokenData = await _realtime.Auth.CreateTokenRequestAsync(tokenParams);
 
             return new OkObjectResult(tokenData);

@@ -15,7 +15,6 @@ async function createQuest() {
     store.questId = questId;
     store.isHost = true;
 
-    console.log(`1 - Quest: ${store.questId}`);
     const response = await window.fetch("/api/CreateQuest", {
         method: "POST",
         headers: {
@@ -24,9 +23,7 @@ async function createQuest() {
         body: questId
     });
     if (response.ok) {
-        console.log(`2 - Quest: ${store.questId}`);
         store.phase = await response.text();
-       
         navigator.clipboard.writeText(store.questId);
     }
 }
@@ -36,7 +33,7 @@ async function joinQuest() {
     if (store.questId)
     {
         console.log(`GetsQuestExist${store.questId}`);
-        const response = await window.fetch(`/api/GetsQuestExist/${store.questId}/${store.phase}`);
+        const response = await window.fetch(`/api/GetQuestExists/${store.questId}`);
         const data = await response.text();
         if (response.ok) {
             store.phase = data;

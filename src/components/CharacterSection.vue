@@ -8,8 +8,6 @@ const store = gameStore();
 const errorMessage = ref<string>("");
 
 async function addPlayer() {
-    console.log("Add player");
-    console.log(store.questId);
     store.isPlayerAdded = true;
     const questExistsResponse = await window.fetch(`/api/GetQuestExists/${store.questId}`);
     const questExistsMessage = await questExistsResponse.text();

@@ -11,16 +11,9 @@ const props = defineProps({
     playerId: String,
 });
 
-
 async function fight() {
 	console.log("Fight");
 }
-
-
-let monsterHealth: Number = 100;
-let fighterHealth: Number = 50;
-let rangerHealth: Number = 50;
-let mageHealth: Number = 50;
 
 let isMonsterActive: Boolean = false;
 let isFighterActive: Boolean = false;
@@ -32,24 +25,24 @@ let isMageActive: Boolean = false;
 <template>
 	<ul v-if="!props.isPlayerSelect" class="flex-container">
 		<li v-if="includeMonster">
-			<p v-if="props.useHealth" class="health">{{ monsterHealth }}</p>
+			<p v-if="props.useHealth" class="health">{{ store.monster.health }}</p>
 			<img class="small" alt="monster" src="../assets/Monster.png" />
-			<figcaption v-bind:class="{ isActive: isMonsterActive }">{{ store.getMonsterName }}</figcaption>
+			<figcaption v-bind:class="{ isActive: isMonsterActive }">{{ store.monster.name }}</figcaption>
 		</li>
 		<li>
-			<p v-if="props.useHealth" class="health">{{ fighterHealth }}</p>
+			<p v-if="props.useHealth" class="health">{{ store.fighter.health }}</p>
 			<img class="small" alt="fighter" src="../assets/Fighter.png" />
-            <figcaption v-bind:class="{ isActive: isFighterActive }">{{ store.getFighterName }}</figcaption>
+            <figcaption v-bind:class="{ isActive: isFighterActive }">{{ store.fighter.name }}</figcaption>
 		</li>
 		<li>
-			<p v-if="props.useHealth" class="health">{{ rangerHealth }}</p>
+			<p v-if="props.useHealth" class="health">{{ store.ranger.health }}</p>
 			<img class="small" alt="ranger" src="../assets/Ranger.png" />
-            <figcaption v-bind:class="{ isActive: isRangerActive }">{{ store.getRangerName }}</figcaption>
+            <figcaption v-bind:class="{ isActive: isRangerActive }">{{ store.ranger.name }}</figcaption>
 		</li>
 		<li>
-			<p v-if="props.useHealth" class="health">{{ mageHealth }}</p>
+			<p v-if="props.useHealth" class="health">{{ store.mage.health }}</p>
 			<img class="small" alt="mage" src="../assets/Mage.png" />
-            <figcaption v-bind:class="{ isActive: isMageActive }">{{ store.getMageName }}</figcaption>
+            <figcaption v-bind:class="{ isActive: isMageActive }">{{ store.mage.name }}</figcaption>
 		</li>
 	</ul>
 	<ul v-if="props.isPlayerSelect" class="flex-container">

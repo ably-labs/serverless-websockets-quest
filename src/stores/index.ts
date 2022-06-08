@@ -61,12 +61,17 @@ export const gameStore = defineStore("game", {
             if (!this.isConnected) {
                 console.log("Not connected");
                 const realtimeClient = new Realtime({
-                    authUrl: "/api/createTokenRequest",
-                    clientId: playerId,
+                    authUrl: "/api/CreateTokenRequest/playerId",
                     echoMessages: false,
+                    authCallback: (tokenParams, err) => {
+                        if (err) {
+                            console.log(err);
+                        }
+                    }
                 });
+                console.log("Created client");
                 realtimeClient.connection.on("connected", () => {
-                    console.log("Connected!");
+                    console.log("On Connected!");
                     this.playerId = playerId;
                     this.questId = questId;
                     this.isConnected = true;
@@ -87,6 +92,7 @@ export const gameStore = defineStore("game", {
             this.realtimeClient?.connection.close();
         },
         async attachToChannel() {
+            console.log("Attaching to channel!");
             const channelInstance = this.realtimeClient?.channels.get(
                 this.getChannelName,
                 {
