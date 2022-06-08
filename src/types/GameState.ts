@@ -17,7 +17,7 @@ export type GameState = RealtimeState & {
 };
 
 export type RealtimeState = {
-    realtimeClient: Realtime | undefined;
+    realtimeClient: Types.RealtimePromise | undefined;
     channelInstance: Types.RealtimeChannelPromise | undefined;
     isConnected: boolean;
 };

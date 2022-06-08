@@ -7,8 +7,7 @@ const store = gameStore();
 const props = defineProps({
 	useHealth: Boolean,
 	includeMonster: Boolean,
-	isPlayerSelect: Boolean,
-    playerId: String,
+	isPlayerSelect: Boolean
 });
 
 async function fight() {

@@ -57,38 +57,31 @@ export const gameStore = defineStore("game", {
                 1
             );
         },
-        createRealtimeConnection(playerId: string, questId: string) {
+        async createRealtimeConnection(playerId: string, questId: string) {
             if (!this.isConnected) {
                 console.log("Not connected");
-                const realtimeClient = new Realtime({
+                const realtimeClient = new Realtime.Promise({
                     authUrl: "/api/CreateTokenRequest/playerId",
                     echoMessages: false,
-                    authCallback: (tokenParams, err) => {
-                        if (err) {
-                            console.log(err);
-                        }
-                    }
                 });
-                console.log("Created client");
-                realtimeClient.connection.on("connected", () => {
-                    console.log("On Connected!");
-                    this.playerId = playerId;
-                    this.questId = questId;
+                console.log(`Connection state ${realtimeClient.connection.state}`);
+                this.realtimeClient = realtimeClient;
+                
+                realtimeClient.connection.on("connected", async (message: Types.ConnectionStateChange) => {
+                    console.log(`Connection state ${realtimeClient.connection.state}`);
                     this.isConnected = true;
-                    this.realtimeClient = realtimeClient;
-                    this.attachToChannel().then(() => {
-                        this.enterPresence();
-                        this.getPresenceSet().then(() => {
-                            this.subscribeToPresence();
-                        });
-                    });
+                    await this.attachToChannel();
+                    await this.enterPresence();
+                    await this.getPresenceSet();
+                    this.subscribeToPresence();
                 });
+
                 realtimeClient.connection.on("disconnected", () => {
                     this.isConnected = false;
                 });
             }
         },
-        closeAblyConnection() {
+        disconnect() {
             this.realtimeClient?.connection.close();
         },
         async attachToChannel() {
@@ -103,8 +96,9 @@ export const gameStore = defineStore("game", {
             this.subscribeToMessages();
         },
 
-        enterPresence() {
-            this.channelInstance?.presence.enter({
+        async enterPresence() {
+            console.log("Entering presence!");
+            await this.channelInstance?.presence.enter({
                 id: this.getClientId,
             });
         },
