@@ -1,9 +1,6 @@
 {
     "routes": [
       {
-        "route": "/*"
-      },
-      {
         "route": "/assets/*",
         "headers": {
           "cache-control": "must-revalidate, max-age=15770000"
