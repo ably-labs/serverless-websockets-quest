@@ -40,7 +40,6 @@ async function addPlayer() {
     <PlayersSection v-bind="{ useHealth:false, includeMonster:false, isPlayerSelect:true }" />
     <input type="text" v-model="store.playerId" :disabled="store.isPlayerAdded" placeholder="Character name" />
     <button @click="addPlayer" :disabled="store.isPlayerAdded">Add player</button>
-    <p class="blue">Players connected: {{ store.players.toString() }}</p>
     <ErrorMessageSection :errorMessage=errorMessage />
 </template>
 

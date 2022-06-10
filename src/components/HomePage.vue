@@ -7,6 +7,7 @@ import CharacterSection from "./CharacterSection.vue";
 import PlayGameSection from "./PlayGameSection.vue";
 import EndSection from "./EndSection.vue";
 import { GamePhase } from "../types/GamePhase";
+import StatusSection from "./StatusSection.vue";
 
 const store = gameStore();
 
@@ -30,10 +31,12 @@ function isGameOver() {
 
 <template>
 
-    <StartSection v-if="isStart()" />
-    <CharacterSection v-if="isCharacterSelection()" />
-    <PlayGameSection v-if="isPlayGame()" />
-    <EndSection v-if="isGameOver()" />
+    <!-- <StartSection v-if="isStart()" />
+    <CharacterSection v-if="isCharacterSelection()" /> -->
+    <!-- <PlayGameSection v-if="isPlayGame()" /> -->
+    <PlayGameSection />
+    <!-- <EndSection v-if="isGameOver()" /> -->
+    <StatusSection />
     <FooterSection />
 </template>
 

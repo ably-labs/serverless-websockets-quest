@@ -24,22 +24,34 @@ let isMageActive: Boolean = false;
 <template>
 	<ul v-if="!props.isPlayerSelect" class="flex-container">
 		<li v-if="includeMonster">
-			<p v-if="props.useHealth" class="health">{{ store.monster.health }}</p>
+			<p v-if="props.useHealth">
+				<span class="health">{{ store.monster.health }}</span>
+				<span class="damage">{{ store.getMonsterDamage }}</span>
+			</p>
 			<img class="small" alt="monster" src="../assets/Monster.png" />
 			<figcaption v-bind:class="{ isActive: isMonsterActive }">{{ store.monster.name }}</figcaption>
 		</li>
 		<li>
-			<p v-if="props.useHealth" class="health">{{ store.fighter.health }}</p>
+			<p v-if="props.useHealth">
+				<span class="health">{{ store.fighter.health }}</span>
+				<span class="damage">{{ store.getFighterDamage }}</span>
+			</p>
 			<img class="small" alt="fighter" src="../assets/Fighter.png" />
             <figcaption v-bind:class="{ isActive: isFighterActive }">{{ store.fighter.name }}</figcaption>
 		</li>
 		<li>
-			<p v-if="props.useHealth" class="health">{{ store.ranger.health }}</p>
+			<p v-if="props.useHealth">
+				<span class="health">{{ store.ranger.health }}</span>
+				<span class="damage">{{ store.getRangerDamage }}</span>
+			</p>
 			<img class="small" alt="ranger" src="../assets/Ranger.png" />
             <figcaption v-bind:class="{ isActive: isRangerActive }">{{ store.ranger.name }}</figcaption>
 		</li>
 		<li>
-			<p v-if="props.useHealth" class="health">{{ store.mage.health }}</p>
+			<p v-if="props.useHealth">
+				<span class="health">{{ store.mage.health }}</span>
+				<span class="damage">{{ store.getMageDamage }}</span>
+			</p>
 			<img class="small" alt="mage" src="../assets/Mage.png" />
             <figcaption v-bind:class="{ isActive: isMageActive }">{{ store.mage.name }}</figcaption>
 		</li>
@@ -102,6 +114,15 @@ input[type=radio]:disabled:checked + label > img {
 
 .health {
     color: #ff55ff;
+	padding: 5px;
+	margin: 5px;
+}
+
+.damage {
+	background-color: #ff55ff;
+	color: #000;
+	padding: 5px;
+	margin: 5px;
 }
 
 .isActive {
