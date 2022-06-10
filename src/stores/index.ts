@@ -6,23 +6,23 @@ import { GamePhase } from "../types/GamePhase";
 import { GameState } from "../types/GameState";
 
 export const gameStore = defineStore("game", {
-    state: () =>
+    state: (): GameState =>
         ({
             playerId: "",
             isHost: false,
             questId: "",
             phase: GamePhase.Start,
             characterClass: CharacterClass.Fighter,
-            monster: { name: "Monstarrr" },
-            fighter: { name: "Edge messaging fighter" },
-            ranger: { name: "Realtime ranger" },
-            mage: { name: "Open sourcerer" },
+            monster: { name: "Monstarrr", health: 100, damage: 20 },
+            fighter: { name: "Edge messaging fighter", health: 0, damage: 0 },
+            ranger: { name: "Realtime ranger", health: 0, damage: 0 },
+            mage: { name: "Open sourcerer", health: 0, damage: 0 },
             isPlayerAdded: false,
             players: Array<string>(),
             realtimeClient: undefined,
             channelInstance: undefined,
             isConnected: false,
-        } as GameState),
+        }),
     getters: {
         getChannelName(state) {
             return state.questId;
@@ -30,30 +30,42 @@ export const gameStore = defineStore("game", {
         getClientId(state) {
             return state.playerId;
         },
+        getMonsterDamage(state) {
+            return state.monster.damage > 0 ? `-${state.monster.damage}` : "";
+        },
         getMonsterName(state) {
             return state.monster.name;
         },
+        getFighterDamage(state) {
+            return state.fighter.damage > 0 ? `-${state.fighter.damage}` : "";
+        },
         getFighterName(state) {
-            return state.characterClass == CharacterClass.Fighter && state.playerId != "" ? state.playerId : state.fighter.name;
+            return state.characterClass === CharacterClass.Fighter && state.playerId !== "" ? state.playerId : state.fighter.name;
+        },
+        getRangerDamage(state) {
+            return state.ranger.damage > 0 ? `-${state.ranger.damage}` : "";
         },
         getRangerName(state) {
-            return state.characterClass == CharacterClass.Ranger && state.playerId != "" ? state.playerId : state.ranger.name;
+            return state.characterClass === CharacterClass.Ranger && state.playerId !== "" ? state.playerId : state.ranger.name;
+        },
+        getMageDamage(state) {
+            return state.mage.damage > 0 ? `-${state.mage.damage}` : "";
         },
         getMageName(state) {
-            return state.characterClass == CharacterClass.Mage && state.playerId != "" ? state.playerId : state.mage.name;
+            return state.characterClass === CharacterClass.Mage && state.playerId !== "" ? state.playerId : state.mage.name;
         },
         havePlayersJoined: (state) => state.players.length > 1,
         numberOfPlayersJoined: (state) => state.players.length - 1, //since there is 1 monster
     },
     actions: {
-        addPlayer(clientId: string) {
-            if (!this.players.includes(clientId)) {
-                this.players.push(clientId);
+        addPlayer(playerId: string) {
+            if (!this.players.includes(playerId)) {
+                this.players.push(playerId);
             }
         },
-        removePlayer(clientId: string) {
+        removePlayer(playerId: string) {
             this.players.splice(
-                this.players.findIndex((player: string) => player === clientId),
+                this.players.findIndex((player: string) => player === playerId),
                 1
             );
         },
@@ -61,7 +73,7 @@ export const gameStore = defineStore("game", {
             if (!this.isConnected) {
                 console.log("Not connected");
                 const realtimeClient = new Realtime.Promise({
-                    authUrl: "/api/CreateTokenRequest/playerId",
+                    authUrl: `/api/CreateTokenRequest/${playerId}`,
                     echoMessages: false,
                 });
                 console.log(`Connection state ${realtimeClient.connection.state}`);
@@ -70,7 +82,7 @@ export const gameStore = defineStore("game", {
                 realtimeClient.connection.on("connected", async (message: Types.ConnectionStateChange) => {
                     console.log(`Connection state ${realtimeClient.connection.state}`);
                     this.isConnected = true;
-                    await this.attachToChannel();
+                    await this.attachToChannel(questId);
                     await this.enterPresence();
                     await this.getPresenceSet();
                     this.subscribeToPresence();
@@ -84,10 +96,10 @@ export const gameStore = defineStore("game", {
         disconnect() {
             this.realtimeClient?.connection.close();
         },
-        async attachToChannel() {
+        async attachToChannel(channelName: string) {
             console.log("Attaching to channel!");
             const channelInstance = this.realtimeClient?.channels.get(
-                this.getChannelName,
+                channelName,
                 {
                     params: { rewind: "2m" },
                 }
@@ -153,26 +165,26 @@ export const gameStore = defineStore("game", {
         },
         handleUpdatePlayer(message: Types.Message) {
             const playerId: string = message.data.playerId;
-            const className: string = message.data.className;
+            const characterClass: string = message.data.characterClass;
             const health: number = message.data.health;
             const damage: number = message.data.damage;
 
             if (this.playerId === playerId) {
-                this.characterClass = className;
+                this.characterClass = characterClass;
             }
-            if (className === CharacterClass.Fighter) {
+            if (characterClass === CharacterClass.Fighter) {
                 this.fighter.name = playerId;
                 this.fighter.health = health;
                 this.fighter.damage = damage;
-            } else if (className === CharacterClass.Ranger) {
+            } else if (characterClass === CharacterClass.Ranger) {
                 this.ranger.name = playerId;
                 this.ranger.health = health;
                 this.ranger.damage = damage;
-            } else if (className === CharacterClass.Mage) {
+            } else if (characterClass === CharacterClass.Mage) {
                 this.mage.name = playerId;
                 this.mage.health = health;
                 this.mage.damage = damage;
-            } else if (className === CharacterClass.Monster) {
+            } else if (characterClass === CharacterClass.Monster) {
                 this.monster.health = health;
                 this.monster.damage = damage;
             }
