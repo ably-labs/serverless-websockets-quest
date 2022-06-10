@@ -3,3 +3,10 @@ GET http://localhost:7071/api/CreateTokenRequest
 ### 
 
 GET http://localhost:7071/api/GetQuestExists/ratty-rude
+
+### 
+
+POST http://localhost:7071/api/CreateQuest
+Content-Type: application/text
+
+xyz

@@ -13,7 +13,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest
         {
             var ablyApiKey = Environment.GetEnvironmentVariable("ABLY_APIKEY");
             var ablyClient = new AblyRealtime(ablyApiKey);
-            builder.Services.AddSingleton<AblyRealtime>(ablyClient);
+            builder.Services.AddSingleton<IRealtimeClient>(ablyClient);
         }
     }
 }

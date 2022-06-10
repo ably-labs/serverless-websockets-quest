@@ -1,15 +1,6 @@
 {
     "routes": [
       {
-        "route": "/character/*"
-      },
-      {
-        "route": "/play/*"
-      },
-      {
-        "route": "/end/*"
-      },
-      {
         "route": "/assets/*",
         "headers": {
           "cache-control": "must-revalidate, max-age=15770000"
