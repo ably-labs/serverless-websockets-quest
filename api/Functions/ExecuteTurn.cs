@@ -22,7 +22,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest
         // The ExecuteTurn function is called by a player that performs a turn.
         [FunctionName(nameof(ExecuteTurn))]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequestMessage req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage req,
             [DurableClient] IDurableClient durableClient,
             ILogger log)
         {

@@ -23,7 +23,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest
         /// The function creates the initial GameState and stores this as a Durable Entity.
         [FunctionName(nameof(CreateQuest))]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequestMessage req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage req,
             [DurableClient] IDurableClient durableClient,
             ILogger log)
         {

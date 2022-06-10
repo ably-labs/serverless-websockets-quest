@@ -20,7 +20,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest
 
         [FunctionName(nameof(CreateTokenRequest))]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "CreateTokenRequest/{clientId?}")] HttpRequestMessage req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "CreateTokenRequest/{clientId?}")] HttpRequestMessage req,
             string? clientId,
             ILogger log)
         {

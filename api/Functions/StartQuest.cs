@@ -23,7 +23,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest
         /// The monster will attack first.
         [FunctionName(nameof(StartQuest))]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequestMessage req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage req,
             [DurableClient] IDurableClient durableClient,
             ILogger log)
         {
