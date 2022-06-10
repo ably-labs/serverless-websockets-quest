@@ -75,4 +75,17 @@ input[type=text] {
   color: #55ffff;
 }
 
+.lighter {
+  font-weight: lighter;
+  font-size: smaller;
+}
+
+hr {
+    margin-top: 25px;
+    width: 80%;
+    border-color: #fff;
+    height: 1px;
+    background-color: #55ffff;
+}
+
 </style>

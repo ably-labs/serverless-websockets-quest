@@ -58,21 +58,21 @@ let isMageActive: Boolean = false;
 	</ul>
 	<ul v-if="props.isPlayerSelect" class="flex-container">
 		<li>
-			<input type="radio" id="fighter" name="character" checked value="fighter" v-model="store.characterClass" :disabled="store.isPlayerAdded" />
+			<input type="radio" id="fighter" name="character" checked value="fighter" v-model="store.characterClass" :disabled="store.isFighterDisabled" />
 			<label for="fighter">
                 <img class="small" alt="fighter" src="../assets/Fighter.png"/>
                 <figcaption>{{ store.getFighterName }}</figcaption>
             </label>
 		</li>
 		<li>
-			<input type="radio" id="ranger" name="character" value="ranger" v-model="store.characterClass" :disabled="store.isPlayerAdded" />
+			<input type="radio" id="ranger" name="character" value="ranger" v-model="store.characterClass" :disabled="store.isRangerDisabled" />
 			<label for="ranger">
                 <img class="small" alt="ranger" src="../assets/Ranger.png" />
                 <figcaption>{{ store.getRangerName }}</figcaption>
             </label>
 		</li>
 		<li>
-			<input type="radio" id="mage" name="character" value="mage" v-model="store.characterClass" :disabled="store.isPlayerAdded" />
+			<input type="radio" id="mage" name="character" value="mage" v-model="store.characterClass" :disabled="store.isMageDisabled" />
 			<label for="mage">
                 <img class="small" alt="mage" src="../assets/Mage.png"/>
                 <figcaption>{{ store.getMageName }}</figcaption>
@@ -104,12 +104,16 @@ input[type=radio]:checked + label > img {
 	border: 4px solid #ff55ff;
 }
 
-input[type=radio] + label > img {
+input[type=radio] + label > img {  
 	border: 4px solid #000;
 }
 
-input[type=radio]:disabled:checked + label > img {
+input[type=radio]:disabled + label > img {
   border-color: #55ffff;
+}
+
+input[type=radio]:disabled:checked + label > img {
+  border-color: #fff;
 }
 
 .health {

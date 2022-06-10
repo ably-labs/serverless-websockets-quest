@@ -7,7 +7,7 @@ const store = gameStore();
 </script>
 
 <template>
-    <p>Connected: {{ store.isConnected }} | Players connected: {{ store.players.toString() }}</p>
+    <p v-if="store.isConnected"><span class="pink">Connected</span> | Players joined: {{ store.players.toString() }}</p>
 </template>
 
 <style scoped>

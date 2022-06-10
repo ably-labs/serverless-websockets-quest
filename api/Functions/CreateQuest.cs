@@ -30,9 +30,16 @@ namespace AblyLabs.ServerlessWebsocketsQuest
             var questId = await req.Content.ReadAsStringAsync();
             var channel = _realtime.Channels.Get(questId);
             var gameEngine = new GameEngine(durableClient, questId, channel);
-            var gamePhase = await gameEngine.CreateQuestAsync();
-
-            return new OkObjectResult(gamePhase);
+            try
+            {
+                var gamePhase = await gameEngine.CreateQuestAsync();
+                return new OkObjectResult(gamePhase);
+            }
+            catch (System.Exception ex)
+            {
+                return new ObjectResult(ex) { StatusCode = 500};
+            }
+            
         }
     }
 }

@@ -32,7 +32,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest
             var gameEngine = new GameEngine(durableClient, questData.QuestId, channel);
             try
             {
-                await gameEngine.AddPlayerAsync(questData.PlayerId, questData.CharacterClass);
+                await gameEngine.AddPlayerAsync(questData.PlayerName, questData.CharacterClass);
                 return new AcceptedResult();
             }
             catch (System.Exception ex)

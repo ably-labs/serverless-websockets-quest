@@ -3,7 +3,8 @@ import { Realtime } from "ably/promises";
 import { Player } from "./Player";
 
 export type GameState = RealtimeState & {
-    playerId: string;
+    clientId: string;
+    playerName: string;
     isHost: boolean;
     questId: string;
     phase: string;

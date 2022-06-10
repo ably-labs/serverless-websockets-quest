@@ -3,7 +3,7 @@ sequenceDiagram
   activate Function App
   Function App ->> Game Engine: AddPlayer
   activate Game Engine
-  Game Engine ->> GameState (Durable Entity): SignalEntity AddPlayerId
+  Game Engine ->> GameState (Durable Entity): SignalEntity AddPlayerName
   Game Engine ->> Player (Durable Entity): SignalEntity SetClassName
   Game Engine ->> Player (Durable Entity):  SignalEntity SetHealth
   Game Engine ->> Ably: PublishUpdatePlayer

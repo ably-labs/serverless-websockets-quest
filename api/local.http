@@ -6,4 +6,7 @@ GET http://localhost:7071/api/GetQuestExists/ratty-rude
 
 ### 
 
-GET http://localhost:4280/
+POST http://localhost:7071/api/CreateQuest
+Content-Type: application/text
+
+xyz

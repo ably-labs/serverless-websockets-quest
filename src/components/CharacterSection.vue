@@ -12,7 +12,7 @@ async function addPlayer() {
     const questExistsResponse = await window.fetch(`/api/GetQuestExists/${store.questId}`);
     const questExistsMessage = await questExistsResponse.text();
     if (questExistsResponse.ok) {
-        store.createRealtimeConnection(store.playerId, store.questId);
+        store.enterPresence(store.playerName);
         await window.fetch("/api/AddPlayer", {
         method: "POST",
         headers: {
@@ -20,7 +20,7 @@ async function addPlayer() {
         },
         body: JSON.stringify({
             questId: store.questId,
-            playerId: store.playerId,
+            playerName: store.playerName,
             characterClass: store.characterClass
             })
         })
@@ -38,7 +38,8 @@ async function addPlayer() {
     <h2>Select and name your character</h2>
     <p class="info" v-if="store.isHost">Quest ID has been copied to your clipboard! Send this to two other players so they can join.</p>
     <PlayersSection v-bind="{ useHealth:false, includeMonster:false, isPlayerSelect:true }" />
-    <input type="text" v-model="store.playerId" :disabled="store.isPlayerAdded" placeholder="Character name" />
+    <hr />
+    <input type="text" v-model="store.playerName" :disabled="store.isPlayerAdded" placeholder="Character name" />
     <button @click="addPlayer" :disabled="store.isPlayerAdded">Add player</button>
     <ErrorMessageSection :errorMessage=errorMessage />
 </template>

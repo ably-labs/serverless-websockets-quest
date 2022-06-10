@@ -29,6 +29,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
 
         public static class Monster
         {
+            public static string Name => "Monstarr";
             public static string CharacterClass => "monster";
             public static int InitialHealth => 100;
             public static int Damage => Randomizer.Next(5, 20);

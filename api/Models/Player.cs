@@ -18,7 +18,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
         public void ApplyDamage(int damage) => Health = damage > Health ? 0 : Health - damage;
         public bool IsDefeated => Health <= 0;
 
-        public static string GetEntityId(string questId, string playerId) => $"{questId}-{playerId}";
+        public static string GetEntityId(string questId, string playerName) => $"{questId}-{playerName}";
 
         [FunctionName(nameof(Player))]
         public static Task Run(

@@ -31,11 +31,10 @@ function isGameOver() {
 
 <template>
 
-    <!-- <StartSection v-if="isStart()" />
-    <CharacterSection v-if="isCharacterSelection()" /> -->
-    <!-- <PlayGameSection v-if="isPlayGame()" /> -->
-    <PlayGameSection />
-    <!-- <EndSection v-if="isGameOver()" /> -->
+    <StartSection v-if="isStart()" />
+    <CharacterSection v-if="isCharacterSelection()" />
+    <PlayGameSection v-if="isPlayGame()" />
+    <EndSection v-if="isGameOver()" />
     <StatusSection />
     <FooterSection />
 </template>
