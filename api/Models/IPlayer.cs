@@ -1,9 +1,10 @@
+using System.Threading.Tasks;
+
 namespace AblyLabs.ServerlessWebsocketsQuest.Models
 {
     public interface IPlayer
     {
-        public void SetCharacterClass(string className);
-        public void SetHealth(int health);
-        public void ApplyDamage(int damage);
+        public Task InitPlayer(object[] playerFields);
+        public Task ApplyDamage(int damage);
     }
 }
