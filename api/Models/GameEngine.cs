@@ -19,8 +19,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
 
         public async Task<string> CreateQuestAsync()
         {
-            await CreateMonsterAsync();
-            await SetPhaseAsync(GamePhases.Character);
+            await InitializeGameStateAsync(GamePhases.Character);
             return GamePhases.Character;
         }
 
@@ -45,22 +44,17 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             }
         }
 
-        private async Task SetPhaseAsync(string phaseId)
-        {
-            var gameStateEntityId = new EntityId(nameof(GameState), _questId);
-            await _durableClient.SignalEntityAsync<IGameState>(gameStateEntityId, proxy => proxy.SetPhase(phaseId));
-        }
-
-        private async Task CreateMonsterAsync()
+        private async Task InitializeGameStateAsync(string phase)
         {
             var monsterEntityId = new EntityId(nameof(Player), Player.GetEntityId(_questId, CharacterClassDefinitions.Monster.Name));
             await _durableClient.SignalEntityAsync<IPlayer>(monsterEntityId, proxy => proxy.SetCharacterClass(CharacterClassDefinitions.Monster.CharacterClass));
             var health = CharacterClassDefinitions.GetInitialHealthFor(CharacterClassDefinitions.Monster.CharacterClass);
             await _durableClient.SignalEntityAsync<IPlayer>(monsterEntityId, proxy => proxy.SetHealth(CharacterClassDefinitions.Monster.InitialHealth));
-            var monster = await _durableClient.ReadEntityStateAsync<Player>(monsterEntityId);
             await PublishAddPlayer(CharacterClassDefinitions.Monster.Name, CharacterClassDefinitions.Monster.CharacterClass, health);
 
             var gameStateEntityId = new EntityId(nameof(GameState), _questId);
+            await _durableClient.SignalEntityAsync<IGameState>(gameStateEntityId, proxy => proxy.SetQuestId(_questId));
+            await _durableClient.SignalEntityAsync<IGameState>(gameStateEntityId, proxy => proxy.SetPhase(phase));
             await _durableClient.SignalEntityAsync<IGameState>(gameStateEntityId, proxy => proxy.AddPlayerName(CharacterClassDefinitions.Monster.Name));
         }
 
@@ -77,11 +71,6 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
                 await PublishAddPlayer(playerName, characterClass, health);
 
                 await _durableClient.SignalEntityAsync<IGameState>(gameStateEntityId, proxy => proxy.AddPlayerName(playerName));
-                await _durableClient.ReadEntityStateAsync<GameState>(gameStateEntityId);
-                if (gameState.EntityState.IsPartyComplete)
-                {
-                    await PublishUpdatePhase(GamePhases.Play);
-                }
             }
             else
             {
@@ -135,7 +124,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             await PublishPlayerTurnAsync(nextPlayerName);
         }
 
-         private async Task PublishAddPlayer(string playerName, string characterClass, int health)
+        private async Task PublishAddPlayer(string playerName, string characterClass, int health)
         {
             if (_channel != null)
             {
@@ -162,21 +151,6 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
                             phase = phase
                         }
                 );
-            }
-        }
-
-        private async Task PublishUpdateMessage(string message, bool isError)
-        {
-            if (_channel != null)
-            {
-                await _channel.PublishAsync(
-                    "update-message",
-                        new
-                        {
-                            message = message,
-                            isError = isError
-                        }
-                    );
             }
         }
 
@@ -208,6 +182,21 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
                         name = playerName
                     }
                 );
+            }
+        }
+
+        private async Task PublishUpdateMessage(string message, bool isError)
+        {
+            if (_channel != null)
+            {
+                await _channel.PublishAsync(
+                    "update-message",
+                        new
+                        {
+                            message = message,
+                            isError = isError
+                        }
+                    );
             }
         }
     }

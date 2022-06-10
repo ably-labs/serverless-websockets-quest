@@ -64,8 +64,8 @@ export const gameStore = defineStore("game", {
         getMageName(state) {
             return state.characterClass === CharacterClass.Mage && state.playerName !== "" ? state.playerName : state.mage.name;
         },
-        havePlayersJoined: (state) => state.players.length > 1,
-        numberOfPlayersJoined: (state) => state.players.length - 1, //since there is 1 monster
+        numberOfPlayersJoined: (state) => state.players.length,
+        numberOfPlayersRemaining: (state) => 4 - state.players.length,
     },
     actions: {
         addPlayer(playerName: string, characterClass: CharacterClass, health: number) {
