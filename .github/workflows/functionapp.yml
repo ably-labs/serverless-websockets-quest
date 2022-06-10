@@ -5,6 +5,7 @@ on:
       - main
     paths:
     - '.github/workflows/functionapp.yml'
+    - 'api/*'
   workflow_dispatch:
 
 env:
