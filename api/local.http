@@ -6,7 +6,19 @@ GET http://localhost:7071/api/GetQuestExists/ratty-rude
 
 ### 
 
+@questId=a-test-again
+
 POST http://localhost:7071/api/CreateQuest
 Content-Type: application/text
 
-xyz
+{{questId}}
+
+###
+POST http://localhost:7071/api/AddPlayer
+Content-Type: application/json
+
+{
+    "questId": "{{questId}}",
+    "playerName": "Wiizzz",
+    "characterClass": "mage"
+}

@@ -41,6 +41,7 @@ async function addPlayer() {
     <hr />
     <input type="text" v-model="store.playerName" :disabled="store.isPlayerAdded" placeholder="Character name" />
     <button @click="addPlayer" :disabled="store.isPlayerAdded">Add player</button>
+    <p>Waiting for {{ store.numberOfPlayersRemaining }} player(s) to join.</p>
     <ErrorMessageSection :errorMessage=errorMessage />
 </template>
 

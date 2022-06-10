@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IO.Ably;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Newtonsoft.Json;
@@ -11,13 +12,25 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
     [JsonObject(MemberSerialization.OptIn)]
     public class GameState : IGameState
     {
+        private const int NumberOfPlayers = 4;
+        private readonly IRealtimeClient _realtimeClient;
+
+        public GameState(IRealtimeClient realtimeClient)
+        {
+            _realtimeClient = realtimeClient;
+        }
+        
+        [JsonProperty("questId")]
+        public string QuestId { get; set; }
+        public void SetQuestId(string questId) => QuestId = questId;
+
         [JsonProperty("phase")]
         public string Phase { get; set; }
         public void SetPhase(string phase) => Phase = phase;
 
         [JsonProperty("players")]
         public List<string> PlayerNames { get; set; }
-        public void AddPlayerName(string playerName)
+        public async Task AddPlayerName(string playerName)
         {
             if (PlayerNames == null)
             {
@@ -26,6 +39,12 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             else
             {
                 PlayerNames.Add(playerName);
+            }
+
+            if (IsPartyComplete)
+            {
+                SetPhase(GamePhases.Play);
+                await PublishUpdatePhase(GamePhases.Play);
             }
         }
 
@@ -58,6 +77,16 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
         public static Task Run([EntityTrigger] IDurableEntityContext ctx)
             => ctx.DispatchAsync<GameState>();
 
-        private const int NumberOfPlayers = 4;
+        private async Task PublishUpdatePhase(string phase)
+        {
+            var channel = _realtimeClient.Channels.Get(QuestId);
+            await channel.PublishAsync(
+                "update-phase",
+                    new
+                    {
+                        phase = phase
+                    }
+                );
+        }
     }
 }
