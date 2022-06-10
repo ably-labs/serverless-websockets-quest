@@ -23,7 +23,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest
         /// The Player Id & Health will be stored in a Durable Entity.
         [FunctionName(nameof(AddPlayer))]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequestMessage req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage req,
             [DurableClient] IDurableClient durableClient,
             ILogger log)
         {
