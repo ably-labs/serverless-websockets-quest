@@ -22,7 +22,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest
         /// The DoesQuestExist function is called when a player wants to join a quest created by the host.
         [FunctionName(nameof(GetQuestExists))]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "GetQuestExists/{questId}")] HttpRequestMessage req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "GetQuestExists/{questId}")] HttpRequestMessage req,
             [DurableClient] IDurableClient durableClient,
             string questId,
             ILogger log)
