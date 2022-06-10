@@ -18,18 +18,18 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Test.Models
 
         [Theory()]
         [MemberData(nameof(GetPlayers))]
-        public void GetNextPlayerId(List<string> playerIds, string? currentPlayerId, string expectedPlayerId)
+        public void GetNextPlayerName(List<string> playerNames, string? currentPlayerName, string expectedPlayerName)
         {
-            var gameState = new GameState() { PlayerIds = playerIds };
-            gameState.GetNextPlayerId(currentPlayerId).Should().Be(expectedPlayerId);
+            var gameState = new GameState() { PlayerNames = playerNames };
+            gameState.GetNextPlayerName(currentPlayerName).Should().Be(expectedPlayerName);
         }
 
         [Theory()]
         [MemberData(nameof(GetPlayers))]
-        public void GetRandomPlayerId(List<string> playerIds, string? currentPlayerId, string expectedPlayerId)
+        public void GetRandomPlayerName(List<string> playerNames, string? currentPlayerName, string expectedPlayerName)
         {
-            var gameState = new GameState() { PlayerIds = playerIds };
-            gameState.GetRandomPlayerId().Should().NotBe("monster");
+            var gameState = new GameState() { PlayerNames = playerNames };
+            gameState.GetRandomPlayerName().Should().NotBe("monster");
         }
     }
 }

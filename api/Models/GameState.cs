@@ -11,55 +11,53 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
     [JsonObject(MemberSerialization.OptIn)]
     public class GameState : IGameState
     {
-        [JsonProperty("phse")]
+        [JsonProperty("phase")]
         public string Phase { get; set; }
         public void SetPhase(string phase) => Phase = phase;
 
         [JsonProperty("players")]
-        public List<string> PlayerIds { get; set; }
-        public void AddPlayerId(string playerId)
+        public List<string> PlayerNames { get; set; }
+        public void AddPlayerName(string playerName)
         {
-            if (PlayerIds == null)
+            if (PlayerNames == null)
             {
-                PlayerIds =  new List<string> { playerId };
+                PlayerNames =  new List<string> { playerName };
             }
             else
             {
-                PlayerIds.Add(playerId);
+                PlayerNames.Add(playerName);
             }
         }
 
-        public string GetNextPlayerId(string? currentPlayerId)
+        public string GetNextPlayerName(string? currentPlayerName)
         {
             string nextPlayer;
-            if (string.IsNullOrEmpty(currentPlayerId))
+            if (string.IsNullOrEmpty(currentPlayerName))
             {
-                nextPlayer = PlayerIds[0];
+                nextPlayer = PlayerNames[0];
             }
             else
             {
-                var currentIndex = PlayerIds.FindIndex(0, PlayerIds.Count, p => p == currentPlayerId);
-                nextPlayer = currentIndex == PlayerIds.Count - 1 ? PlayerIds[0] : PlayerIds[currentIndex + 1];
+                var currentIndex = PlayerNames.FindIndex(0, PlayerNames.Count, p => p == currentPlayerName);
+                nextPlayer = currentIndex == PlayerNames.Count - 1 ? PlayerNames[0] : PlayerNames[currentIndex + 1];
             }
 
             return nextPlayer;
         }
 
-        public bool IsMonsterTurn(string currentPlayerId)
-        {
-            var currentIndex = PlayerIds.FindIndex(0, PlayerIds.Count, p => p == currentPlayerId);
-            return currentIndex == PlayerIds.Count - 1 ? true : false;
-        }
+        public bool IsPartyComplete => PlayerNames.Count == NumberOfPlayers;
 
-        public string GetRandomPlayerId()
+        public string GetRandomPlayerName()
         {
-            var playerIdsWithoutMonster = PlayerIds.Where(p => p != Monster.ID).ToList();
-            var index = new Random().Next(0, playerIdsWithoutMonster.Count - 1);
-            return playerIdsWithoutMonster[index];
+            var playerNamesWithoutMonster = PlayerNames.Where(p => p != CharacterClassDefinitions.Monster.Name).ToList();
+            var index = new Random().Next(0, playerNamesWithoutMonster.Count - 1);
+            return playerNamesWithoutMonster[index];
         }
 
         [FunctionName(nameof(GameState))]
         public static Task Run([EntityTrigger] IDurableEntityContext ctx)
             => ctx.DispatchAsync<GameState>();
+
+        private const int NumberOfPlayers = 4;
     }
 }
