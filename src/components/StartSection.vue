@@ -5,7 +5,6 @@ import { generateQuestId } from '../util/questIdGenerator';
 import PlayersSection from "./PlayersSection.vue";
 import { gameStore } from "../stores";
 import ErrorMessageSection from "./ErrorMessageSection.vue";
-import { GamePhase } from "../types/GamePhase";
 
 const store = gameStore();
 const errorMessage = ref<String>("");
