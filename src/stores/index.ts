@@ -16,10 +16,10 @@ export const gameStore = defineStore("game", {
             title: "You encounter a monster! Prepare for battle!",
             phase: GamePhase.Start,
             characterClass: CharacterClass.Fighter,
-            monster: { characterClass: CharacterClass.Monster, name: "Monstarrr", health: 100, damage: 20, isAvailable: true },
-            fighter: { characterClass: CharacterClass.Fighter, name: "Edge messaging fighter", health: 0, damage: 0, isAvailable: true },
-            ranger: { characterClass: CharacterClass.Ranger, name: "Realtime ranger", health: 0, damage: 0, isAvailable: true },
-            mage: { characterClass: CharacterClass.Mage, name: "Open sourcerer", health: 0, damage: 0, isAvailable: true },
+            monster: { characterClass: CharacterClass.Monster, name: "Monstarrr", health: 100, damage: 20, isAvailable: true, isAttacking: false, isUnderAttack: false },
+            fighter: { characterClass: CharacterClass.Fighter, name: "Edge messaging fighter", health: 0, damage: 0, isAvailable: true, isAttacking: false, isUnderAttack: false },
+            ranger: { characterClass: CharacterClass.Ranger, name: "Realtime ranger", health: 0, damage: 0, isAvailable: true, isAttacking: false, isUnderAttack: false },
+            mage: { characterClass: CharacterClass.Mage, name: "Open sourcerer", health: 0, damage: 0, isAvailable: true, isAttacking: false, isUnderAttack: false },
             isPlayerAdded: false,
             players: Array<string>(),
             currentPlayer: "",
@@ -29,44 +29,66 @@ export const gameStore = defineStore("game", {
             isConnected: false,
         }),
     getters: {
-        getChannelName(state) {
-            return state.questId;
+        getChannelName: (state) => state.questId,
+        getClientId: (state) => state.playerName,
+        isFighterDisabled: (state) => !state.fighter.isAvailable || state.isPlayerAdded,
+        isRangerDisabled: (state) => !state.ranger.isAvailable || state.isPlayerAdded,
+        isMageDisabled: (state) => !state.mage.isAvailable || state.isPlayerAdded,
+        getMonsterDamage: (state) => state.monster.damage > 0 ? `-${state.monster.damage}` : "",
+        getMonsterName: (state) => state.monster.name,
+        getFighterDamage: (state) => state.fighter.damage > 0 ? `-${state.fighter.damage}` : "",
+        getFighterName: (state) => state.characterClass === CharacterClass.Fighter && state.playerName !== "" ? state.playerName : state.fighter.name,
+        getRangerDamage: (state) => state.ranger.damage > 0 ? `-${state.ranger.damage}` : "",
+        getRangerName: (state) => state.characterClass === CharacterClass.Ranger && state.playerName !== "" ? state.playerName : state.ranger.name,
+        getMageDamage: (state) => state.mage.damage > 0 ? `-${state.mage.damage}` : "",
+        getMageName: (state) => state.characterClass === CharacterClass.Mage && state.playerName !== "" ? state.playerName : state.mage.name,
+        getMonsterAsset: (state) => {
+            let asset = "";
+            if (state.monster.health <= 0) {
+                asset = "monster_dead.png";
+            }
+            else if (state.monster.isAttacking) {
+                asset = "monster_attack.gif";
+            } else {
+                asset = "monster.png";
+            }
+            return `/src/assets/${asset}`;
         },
-        getClientId(state) {
-            return state.playerName;
+        getFighterAsset: (state) => {
+            let asset = "";
+            if (state.fighter.health <= 0) {
+                asset = "fighter.png";
+            }
+            else if (state.fighter.isAttacking) {
+                asset = "fighter_attack.gif";
+            } else {
+                asset = "fighter.png";
+            }
+            return `/src/assets/${asset}`;
         },
-        isFighterDisabled(state) {
-            return !state.fighter.isAvailable || state.isPlayerAdded;
+        getRangerAsset: (state) => {
+            let asset = "";
+            if (state.ranger.health <= 0) {
+                asset = "ranger.png";
+            }
+            else if (state.ranger.isAttacking) {
+                asset = "ranger_attack.gif";
+            } else {
+                asset = "ranger.png";
+            }
+            return `/src/assets/${asset}`;
         },
-        isRangerDisabled(state) {
-            return !state.ranger.isAvailable || state.isPlayerAdded;
-        },
-        isMageDisabled(state) {
-            return !state.mage.isAvailable || state.isPlayerAdded;
-        },
-        getMonsterDamage(state) {
-            return state.monster.damage > 0 ? `-${state.monster.damage}` : "";
-        },
-        getMonsterName(state) {
-            return state.monster.name;
-        },
-        getFighterDamage(state) {
-            return state.fighter.damage > 0 ? `-${state.fighter.damage}` : "";
-        },
-        getFighterName(state) {
-            return state.characterClass === CharacterClass.Fighter && state.playerName !== "" ? state.playerName : state.fighter.name;
-        },
-        getRangerDamage(state) {
-            return state.ranger.damage > 0 ? `-${state.ranger.damage}` : "";
-        },
-        getRangerName(state) {
-            return state.characterClass === CharacterClass.Ranger && state.playerName !== "" ? state.playerName : state.ranger.name;
-        },
-        getMageDamage(state) {
-            return state.mage.damage > 0 ? `-${state.mage.damage}` : "";
-        },
-        getMageName(state) {
-            return state.characterClass === CharacterClass.Mage && state.playerName !== "" ? state.playerName : state.mage.name;
+        getMageAsset: (state) => {
+            let asset = "";	
+            if (state.mage.health <= 0) {
+                asset = "ranger.png";
+            }
+            else if (state.mage.isAttacking) {
+                asset = "mage_attack.gif";
+            } else {
+                asset = "mage.png";
+            }
+            return `/src/assets/${asset}`;
         },
         isPlayerTurn: (state) => state.playerName === state.currentPlayer,
         isMonsterActive: (state) => state.monster.name === state.currentPlayer,
