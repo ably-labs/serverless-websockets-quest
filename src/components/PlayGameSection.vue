@@ -9,17 +9,15 @@ async function fight() {
     console.log("Fight");
 }
 
-let isPlayerTurn: Boolean = false;
-
 </script>
 
 <template>
     <h1>Quest: <span class="pink">{{ store.questId }}</span></h1>
-    <h2>You encouter a monster!</h2>
+    <h2>{{ store.title }}</h2>
     <PlayersSection v-bind="{ useHealth:true, includeMonster:true, isPlayerSelect:false }" />
     <div class=flex-container>
-        <button v-if="isPlayerTurn" @click="fight">Attack</button>
-        <p v-if="!isPlayerTurn" class="message">Waiting for your turn</p>
+        <button v-if="store.isPlayerTurn" @click="fight">Attack</button>
+        <p v-if="!store.isPlayerTurn" class="message">{{ store.message }}</p>
     </div> 
 </template>
 

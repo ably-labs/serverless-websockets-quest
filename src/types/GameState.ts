@@ -7,6 +7,8 @@ export type GameState = RealtimeState & {
     playerName: string;
     isHost: boolean;
     questId: string;
+    title: string;
+    message: string;
     phase: string;
     characterClass: string;
     monster: Player;
@@ -15,6 +17,7 @@ export type GameState = RealtimeState & {
     mage: Player;
     players: Array<string>;
     isPlayerAdded: boolean;
+    isPlayerTurn: boolean;
 };
 
 export type RealtimeState = {

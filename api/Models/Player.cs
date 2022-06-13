@@ -42,9 +42,9 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
         public async Task ApplyDamage(int damage)
         {
             Health = damage > Health ? 0 : Health - damage;
-            await _publisher.PublishUpdatePlayer(QuestId, PlayerName, CharacterClass, Health, damage);
-        } 
-        public bool IsDefeated => Health <= 0;
+            bool isDefeated = Health <= 0;
+            await _publisher.PublishUpdatePlayer(QuestId, PlayerName, CharacterClass, Health, damage, isDefeated);
+        }
 
         public static string GetEntityId(string questId, string playerName) => $"{questId}-{playerName}";
 

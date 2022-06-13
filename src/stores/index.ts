@@ -12,6 +12,8 @@ export const gameStore = defineStore("game", {
             playerName: "",
             isHost: false,
             questId: "",
+            title: "",
+            message: "",
             phase: GamePhase.Start,
             characterClass: CharacterClass.Fighter,
             monster: { name: "Monstarrr", health: 100, damage: 20, isAvailable: true },
@@ -20,6 +22,7 @@ export const gameStore = defineStore("game", {
             mage: { name: "Open sourcerer", health: 0, damage: 0, isAvailable: true },
             isPlayerAdded: false,
             players: Array<string>(),
+            isPlayerTurn: false,
             realtimeClient: undefined,
             channelInstance: undefined,
             isConnected: false,
@@ -164,6 +167,12 @@ export const gameStore = defineStore("game", {
                 }
             );
             this.channelInstance?.subscribe(
+                "update-message",
+                (message: Types.Message) => {
+                    this.handleUpdateMessage(message);
+                }
+            );
+            this.channelInstance?.subscribe(
                 "check-player-turn",
                 (message: Types.Message) => {
                     this.handleCheckPlayerTurn(message);
@@ -177,7 +186,12 @@ export const gameStore = defineStore("game", {
             this.addPlayer(playerName, characterClass, health);
         },
         handleUpdatePhase(message: Types.Message) {
+            this.title = message.data.title;
             this.phase = message.data.phase;
+        },
+        handleUpdateMessage(message: Types.Message) {
+            this.title = message.data.title;
+            this.message = message.data.phase;
         },
         handleUpdatePlayer(message: Types.Message) {
             const playerName: string = message.data.name;
@@ -187,11 +201,12 @@ export const gameStore = defineStore("game", {
             this.updatePlayer(playerName, characterClass, health, damage, false);
         },
         handleCheckPlayerTurn(message: Types.Message) {
+            this.title = message.data.title;
             const playerName = message.data.name;
             if (this.playerName === playerName) {
-                // It's the players turn, enable the buttons.
+                this.isPlayerTurn = true;
             } else {
-                // It's not the players turn, disable the buttons.
+                this.isPlayerTurn = false;
             }
         },
     },

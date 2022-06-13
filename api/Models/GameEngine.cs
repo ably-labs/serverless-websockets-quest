@@ -9,12 +9,14 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
         private readonly IDurableClient _durableClient;
         private readonly string _questId;
         private readonly IRealtimeChannel? _channel;
+        private readonly Publisher _publisher;
 
-        public GameEngine(IDurableClient durableClient, string questId, IRealtimeChannel? channel)
+        public GameEngine(IDurableClient durableClient, string questId, IRealtimeChannel channel)
         {
             _durableClient = durableClient;
             _questId = questId;
             _channel = channel;
+            _publisher = new Publisher(_channel);
         }
 
         public async Task<string> CreateQuestAsync()
@@ -79,7 +81,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             }
             else
             {
-                await PublishUpdateMessage("Quest reached maximum number of players", true);
+                await _publisher.PublishUpdateMessage(_questId, "Uh oh!", "Quest reached maximum number of players ¯\\_(ツ)_/¯");
             }
         }
 
@@ -107,7 +109,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             await _durableClient.SignalEntityAsync<IPlayer>(playerEntityId, proxy => proxy.ApplyDamage(damage));
 
             var nextPlayerName = gameState.GetNextPlayerName(null);
-            await PublishPlayerTurnAsync(nextPlayerName);
+            await _publisher.PublishPlayerTurnAsync(_questId, $"{nextPlayerName} attack!", nextPlayerName);
         }
 
         private async Task AttackByPlayerAsync(string playerName, GameState gameState)
@@ -120,36 +122,9 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             await _durableClient.SignalEntityAsync<IPlayer>(monsterEntityId, proxy => proxy.ApplyDamage(damage));
 
             var nextPlayerName = gameState.GetNextPlayerName(playerName);
-            await PublishPlayerTurnAsync(nextPlayerName);
+            await _publisher.PublishPlayerTurnAsync(_questId, $"{nextPlayerName} attack!", nextPlayerName);
         }
 
-        private async Task PublishPlayerTurnAsync(string playerName)
-        {
-            if (_channel != null)
-            {
-                await _channel.PublishAsync(
-                    "check-player-turn",
-                    new
-                    {
-                        name = playerName
-                    }
-                );
-            }
-        }
-
-        private async Task PublishUpdateMessage(string message, bool isError)
-        {
-            if (_channel != null)
-            {
-                await _channel.PublishAsync(
-                    "update-message",
-                        new
-                        {
-                            message = message,
-                            isError = isError
-                        }
-                    );
-            }
-        }
+        
     }
 }
