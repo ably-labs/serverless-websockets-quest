@@ -14,10 +14,12 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
     {
         private const int NumberOfPlayers = 4;
         private readonly IRealtimeClient _realtimeClient;
+        private readonly Publisher _publisher;
 
         public GameState(IRealtimeClient realtimeClient)
         {
             _realtimeClient = realtimeClient;
+            _publisher = new Publisher(_realtimeClient);
         }
         
         [JsonProperty("questId")]
@@ -26,7 +28,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
         {
             QuestId = gameStateFields[0];
             Phase = gameStateFields[1];
-            await PublishUpdatePhase(Phase);
+            await _publisher.PublishUpdatePhase(QuestId, Phase);
         }
 
         [JsonProperty("phase")]
@@ -34,7 +36,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
         public async Task UpdatePhase(string phase)
         {
             Phase = phase;
-            await PublishUpdatePhase(Phase);
+            await _publisher.PublishUpdatePhase(QuestId, Phase);
         }
 
         [JsonProperty("players")]
@@ -84,17 +86,5 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
         [FunctionName(nameof(GameState))]
         public static Task Run([EntityTrigger] IDurableEntityContext ctx)
             => ctx.DispatchAsync<GameState>();
-
-        private async Task PublishUpdatePhase(string phase)
-        {
-            var channel = _realtimeClient.Channels.Get(QuestId);
-            await channel.PublishAsync(
-                "update-phase",
-                    new
-                    {
-                        phase = phase
-                    }
-                );
-        }
     }
 }

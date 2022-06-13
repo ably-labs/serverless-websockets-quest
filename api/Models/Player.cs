@@ -11,10 +11,12 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
     public class Player : IPlayer
     {
         private readonly IRealtimeClient _realtimeClient;
+        private readonly Publisher _publisher;
 
         public Player(IRealtimeClient realtimeClient)
         {
             _realtimeClient = realtimeClient;
+            _publisher = new Publisher(_realtimeClient);
         }
 
         [JsonProperty("questId")]
@@ -34,13 +36,13 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             PlayerName = (string)playerFields[1];
             CharacterClass = (string)playerFields[2];
             Health = Convert.ToInt32(playerFields[3]);
-            await PublishAddPlayer(PlayerName, CharacterClass, Health);
+            await _publisher.PublishAddPlayer(QuestId, PlayerName, CharacterClass, Health);
         }
         
         public async Task ApplyDamage(int damage)
         {
             Health = damage > Health ? 0 : Health - damage;
-            await PublishUpdatePlayer(PlayerName, CharacterClass, Health, damage);
+            await _publisher.PublishUpdatePlayer(QuestId, PlayerName, CharacterClass, Health, damage);
         } 
         public bool IsDefeated => Health <= 0;
 
@@ -50,38 +52,5 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
         public static Task Run(
             [EntityTrigger] IDurableEntityContext ctx)
             => ctx.DispatchAsync<Player>();
-
-        private async Task PublishAddPlayer(string playerName, string characterClass, int health)
-        {
-            var channel = _realtimeClient.Channels.Get(QuestId);
-            {
-                await channel.PublishAsync(
-                    "add-player",
-                        new
-                        {
-                            name = playerName,
-                            characterClass = characterClass,
-                            health = health
-                        }
-                    );
-            }
-        }
-
-        private async Task PublishUpdatePlayer(string playerName, string characterClass, int health, int? damage)
-        {
-            var channel = _realtimeClient.Channels.Get(QuestId);
-            {
-                await channel.PublishAsync(
-                    "update-player",
-                        new
-                        {
-                            name = playerName,
-                            characterClass = characterClass,
-                            health = health,
-                            damage = damage
-                        }
-                    );
-            }
-        }
     }
 }
