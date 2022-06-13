@@ -2,7 +2,12 @@
     "version": "2.0",
     "extensions": {
         "durableTask": {
-          "hubName": "ServerlessWebsockets"
+          "hubName": "ServerlessWebsockets",
+          "extendedSessionsEnabled": true,
+          "extendedSessionIdleTimeoutInSeconds": 120,
+          "storageProvider" : {
+            "maxQueuePollingInterval": "00:00:01"
+          }
         }
     },
     "logging": {
