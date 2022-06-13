@@ -1,6 +1,7 @@
 import { Types } from "ably";
 import { Realtime } from "ably/promises";
 import { defineStore, storeToRefs } from "pinia";
+import { toHandlers } from "vue";
 import { CharacterClass } from "../types/CharacterClass";
 import { GamePhase } from "../types/GamePhase";
 import { GameState } from "../types/GameState";
@@ -12,17 +13,17 @@ export const gameStore = defineStore("game", {
             playerName: "",
             isHost: false,
             questId: "",
-            title: "",
-            message: "",
+            title: "You encounter a monster! Prepare for battle!",
             phase: GamePhase.Start,
             characterClass: CharacterClass.Fighter,
-            monster: { name: "Monstarrr", health: 100, damage: 20, isAvailable: true },
-            fighter: { name: "Edge messaging fighter", health: 0, damage: 0, isAvailable: true },
-            ranger: { name: "Realtime ranger", health: 0, damage: 0, isAvailable: true },
-            mage: { name: "Open sourcerer", health: 0, damage: 0, isAvailable: true },
+            monster: { characterClass: CharacterClass.Monster, name: "Monstarrr", health: 100, damage: 20, isAvailable: true },
+            fighter: { characterClass: CharacterClass.Fighter, name: "Edge messaging fighter", health: 0, damage: 0, isAvailable: true },
+            ranger: { characterClass: CharacterClass.Ranger, name: "Realtime ranger", health: 0, damage: 0, isAvailable: true },
+            mage: { characterClass: CharacterClass.Mage, name: "Open sourcerer", health: 0, damage: 0, isAvailable: true },
             isPlayerAdded: false,
             players: Array<string>(),
-            isPlayerTurn: false,
+            currentPlayer: "",
+            messages: Array<string>(),
             realtimeClient: undefined,
             channelInstance: undefined,
             isConnected: false,
@@ -67,8 +68,14 @@ export const gameStore = defineStore("game", {
         getMageName(state) {
             return state.characterClass === CharacterClass.Mage && state.playerName !== "" ? state.playerName : state.mage.name;
         },
+        isPlayerTurn: (state) => state.playerName === state.currentPlayer,
+        isMonsterActive: (state) => state.monster.name === state.currentPlayer,
+        isFighterActive: (state) => state.fighter.name === state.currentPlayer,
+        isRangerActive: (state) => state.ranger.name === state.currentPlayer,
+        isMageActive: (state) => state.mage.name === state.currentPlayer,
         numberOfPlayersJoined: (state) => state.players.length,
         numberOfPlayersRemaining: (state) => 4 - state.players.length,
+        getMessages: (state) => state.messages.reverse(),
     },
     actions: {
         addPlayer(playerName: string, characterClass: CharacterClass, health: number) {
@@ -140,13 +147,6 @@ export const gameStore = defineStore("game", {
             this.subscribeToMessages();
         },
 
-        async enterPresence(playerName: string) {
-            console.log("Entering presence!");
-            await this.channelInstance?.presence.enter({
-                name: this.playerName
-            });
-        },
-
         subscribeToMessages() {
             this.channelInstance?.subscribe(
                 "update-phase",
@@ -190,8 +190,8 @@ export const gameStore = defineStore("game", {
             this.phase = message.data.phase;
         },
         handleUpdateMessage(message: Types.Message) {
-            this.title = message.data.title;
-            this.message = message.data.phase;
+            this.title = message.data.title !== undefined ? message.data.title : this.title;
+            this.messages.push(message.data.message);
         },
         handleUpdatePlayer(message: Types.Message) {
             const playerName: string = message.data.name;
@@ -201,13 +201,25 @@ export const gameStore = defineStore("game", {
             this.updatePlayer(playerName, characterClass, health, damage, false);
         },
         handleCheckPlayerTurn(message: Types.Message) {
-            this.title = message.data.title;
+            this.messages.push(message.data.message);
             const playerName = message.data.name;
-            if (this.playerName === playerName) {
-                this.isPlayerTurn = true;
-            } else {
-                this.isPlayerTurn = false;
+            this.currentPlayer = message.data.name;
+            if (playerName === this.monster.name) {
+                this.monsterAttack();
             }
         },
+        async monsterAttack() {
+            await window.fetch("/api/ExecuteTurn", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    questId: this.questId,
+                    playerName: this.monster.name,
+                    characterClass: this.monster.characterClass,
+                    })
+                });
+        }
     },
 });

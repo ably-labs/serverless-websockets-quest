@@ -70,7 +70,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             }
         }
 
-        public async Task PublishUpdateMessage(string questId, string title, string message)
+        public async Task PublishUpdateMessage(string questId, string message, bool isError)
         {
             if (_realtimeClient != null)
             {
@@ -81,14 +81,14 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
                     "update-message",
                         new
                         {
-                            title = title,
-                            message = message
+                            message = message,
+                            isError = isError
                         }
                     );
             }
         }
 
-        public async Task PublishPlayerTurnAsync(string questId, string title, string playerName)
+        public async Task PublishPlayerTurnAsync(string questId, string message, string playerName)
         {
             if (_realtimeClient != null)
             {
@@ -100,7 +100,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
                     "check-player-turn",
                     new
                     {
-                        title = title,
+                        message = message,
                         name = playerName
                     }
                 );
