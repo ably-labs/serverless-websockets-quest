@@ -51,21 +51,21 @@ const props = defineProps({
         <li>
             <input type="radio" id="fighter" name="character" value="fighter" v-model="store.characterClass" @input="store.playerName=store.getFighterName" :disabled="store.isFighterDisabled" />
             <label for="fighter">
-                <img class="small" alt="fighter" src="../assets/fighter.png"/>
+                <img class="small" alt="fighter" src="../assets/fighter_idle.png"/>
                 <figcaption>{{ store.getFighterName }}</figcaption>
             </label>
         </li>
         <li>
             <input type="radio" id="ranger" name="character" value="ranger" v-model="store.characterClass" @input="store.playerName=store.getRangerName" :disabled="store.isRangerDisabled" />
             <label for="ranger">
-                <img class="small" alt="ranger" src="../assets/ranger.png" />
+                <img class="small" alt="ranger" src="../assets/ranger_idle.png" />
                 <figcaption>{{ store.getRangerName }}</figcaption>
             </label>
         </li>
         <li>
             <input type="radio" id="mage" name="character" value="mage" v-model="store.characterClass" @input="store.playerName=store.getMageName" :disabled="store.isMageDisabled" />
             <label for="mage">
-                <img class="small" alt="mage" src="../assets/mage.png"/>
+                <img class="small" alt="mage" src="../assets/mage_idle.png"/>
                 <figcaption>{{ store.getMageName }}</figcaption>
             </label>
         </li>

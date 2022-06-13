@@ -52,43 +52,43 @@ export const gameStore = defineStore("game", {
             } else if (state.monster.isUnderAttack) {
                 asset = "monster_damage.gif";
             } else {
-                asset = "monster.png";
+                asset = "monster_idle.png";
             }
             return `/src/assets/${asset}`;
         },
         getFighterAsset: (state) => {
             let asset = "";
             if (state.fighter.health <= 0) {
-                asset = "fighter.png";
+                asset = "fighter_idle.png";
             }
             else if (state.fighter.isAttacking) {
                 asset = "fighter_attack.gif";
             } else {
-                asset = "fighter.png";
+                asset = "fighter_idle.png";
             }
             return `/src/assets/${asset}`;
         },
         getRangerAsset: (state) => {
             let asset = "";
             if (state.ranger.health <= 0) {
-                asset = "ranger.png";
+                asset = "ranger_idle.png";
             }
             else if (state.ranger.isAttacking) {
                 asset = "ranger_attack.gif";
             } else {
-                asset = "ranger.png";
+                asset = "ranger_idle.png";
             }
             return `/src/assets/${asset}`;
         },
         getMageAsset: (state) => {
             let asset = "";	
             if (state.mage.health <= 0) {
-                asset = "mage.png";
+                asset = "mage_idle.png";
             }
             else if (state.mage.isAttacking) {
                 asset = "mage_attack.gif";
             } else {
-                asset = "mage.png";
+                asset = "mage_idle.png";
             }
             return `/src/assets/${asset}`;
         },
