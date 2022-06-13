@@ -6,7 +6,7 @@ GET http://localhost:7071/api/GetQuestExists/ratty-rude
 
 ### 
 
-@questId=a-test-again
+@questId=a-test-again-wow
 
 POST http://localhost:7071/api/CreateQuest
 Content-Type: application/text

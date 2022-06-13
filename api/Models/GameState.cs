@@ -14,19 +14,30 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
     {
         private const int NumberOfPlayers = 4;
         private readonly IRealtimeClient _realtimeClient;
+        private readonly Publisher _publisher;
 
         public GameState(IRealtimeClient realtimeClient)
         {
             _realtimeClient = realtimeClient;
+            _publisher = new Publisher(_realtimeClient);
         }
         
         [JsonProperty("questId")]
         public string QuestId { get; set; }
-        public void SetQuestId(string questId) => QuestId = questId;
+        public async Task InitGameState(string[] gameStateFields)
+        {
+            QuestId = gameStateFields[0];
+            Phase = gameStateFields[1];
+            await _publisher.PublishUpdatePhase(QuestId, Phase);
+        }
 
         [JsonProperty("phase")]
         public string Phase { get; set; }
-        public void SetPhase(string phase) => Phase = phase;
+        public async Task UpdatePhase(string phase)
+        {
+            Phase = phase;
+            await _publisher.PublishUpdatePhase(QuestId, Phase);
+        }
 
         [JsonProperty("players")]
         public List<string> PlayerNames { get; set; }
@@ -43,8 +54,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
 
             if (IsPartyComplete)
             {
-                SetPhase(GamePhases.Play);
-                await PublishUpdatePhase(GamePhases.Play);
+                await UpdatePhase(GamePhases.Play);
             }
         }
 
@@ -76,17 +86,5 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
         [FunctionName(nameof(GameState))]
         public static Task Run([EntityTrigger] IDurableEntityContext ctx)
             => ctx.DispatchAsync<GameState>();
-
-        private async Task PublishUpdatePhase(string phase)
-        {
-            var channel = _realtimeClient.Channels.Get(QuestId);
-            await channel.PublishAsync(
-                "update-phase",
-                    new
-                    {
-                        phase = phase
-                    }
-                );
-        }
     }
 }
