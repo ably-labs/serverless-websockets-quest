@@ -67,6 +67,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             var playerAttacking = CharacterClassDefinitions.Monster.Name;
             var playerUnderAttack = GetRandomPlayerName();
             var message = $"{playerAttacking} attacks {playerUnderAttack}!";
+            await _publisher.PublishPlayerAttacking(QuestId, playerAttacking, playerUnderAttack);
             await _publisher.PublishUpdateMessage(QuestId, message, false);
             Task.Delay(1500).Wait();
             var damage = CharacterClassDefinitions.GetDamageFor(CharacterClassDefinitions.Monster.CharacterClass);

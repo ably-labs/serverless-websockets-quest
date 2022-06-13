@@ -55,7 +55,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
                 var message = $"{PlayerName} received {damage} damage";
                 await _publisher.PublishUpdateMessage(QuestId, message, false);
             }
-            await _publisher.PublishUpdatePlayer(QuestId, PlayerName, CharacterClass, Health, damage, isDefeated);
+            await _publisher.PublishPlayerUnderAttack(QuestId, PlayerName, CharacterClass, Health, damage, isDefeated);
         }
 
         public static string GetEntityId(string questId, string playerName) => $"{questId}-{playerName}";

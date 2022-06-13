@@ -49,6 +49,8 @@ export const gameStore = defineStore("game", {
             }
             else if (state.monster.isAttacking) {
                 asset = "monster_attack.gif";
+            } else if (state.monster.isUnderAttack) {
+                asset = "monster_damage.gif";
             } else {
                 asset = "monster.png";
             }
@@ -81,7 +83,7 @@ export const gameStore = defineStore("game", {
         getMageAsset: (state) => {
             let asset = "";	
             if (state.mage.health <= 0) {
-                asset = "ranger.png";
+                asset = "mage.png";
             }
             else if (state.mage.isAttacking) {
                 asset = "mage_attack.gif";
@@ -102,7 +104,7 @@ export const gameStore = defineStore("game", {
         addPlayer(playerName: string, characterClass: CharacterClass, health: number) {
             if (!this.players.includes(playerName)) {
                 this.players.push(playerName);
-                this.updatePlayer(playerName, characterClass, health, 0, false);
+                this.updatePlayer(playerName, characterClass, health, 0, false, false, false);
             }
         },
         removePlayer(playerName: string) {
@@ -111,28 +113,47 @@ export const gameStore = defineStore("game", {
                 1
             );
         },
-        updatePlayer(playerName: string, characterClass: CharacterClass, health: number, damage: number, isAvailable: boolean) {
+        updatePlayer(playerName: string, characterClass: CharacterClass, health: number, damage: number, isDefeated: boolean, isAvailable: boolean, isUnderAttack: boolean) {
             if (characterClass === CharacterClass.Fighter) {
-                this.fighter.name = playerName;
-                this.fighter.health = health;
-                this.fighter.damage = damage;
-                this.fighter.isAvailable = isAvailable;
+                this.$patch({
+                    fighter: { 
+                        name: playerName,
+                        health: health,
+                        damage: damage,
+                        isAvailable: isAvailable,
+                        isUnderAttack: isUnderAttack
+                        },
+                  });
             } else if (characterClass === CharacterClass.Ranger) {
-                this.ranger.name = playerName;
-                this.ranger.health = health;
-                this.ranger.damage = damage;
-                this.ranger.isAvailable = isAvailable;
+                this.$patch({
+                    ranger: { 
+                        name: playerName,
+                        health: health,
+                        damage: damage,
+                        isAvailable: isAvailable,
+                        isUnderAttack: isUnderAttack
+                        },
+                  });
             } else if (characterClass === CharacterClass.Mage) {
-                this.mage.name = playerName;
-                this.mage.health = health;
-                this.mage.damage = damage;
-                this.mage.isAvailable = isAvailable;
-                
+                this.$patch({
+                    mage: { 
+                        name: playerName,
+                        health: health,
+                        damage: damage,
+                        isAvailable: isAvailable,
+                        isUnderAttack: isUnderAttack
+                        },
+                  });
             } else if (characterClass === CharacterClass.Monster) {
-                this.monster.name = playerName;
-                this.monster.health = health;
-                this.monster.damage = damage;
-                this.monster.isAvailable = isAvailable;
+                this.$patch({
+                    monster: { 
+                        name: playerName,
+                        health: health,
+                        damage: damage,
+                        isAvailable: isAvailable,
+                        isUnderAttack: isUnderAttack
+                        },
+                  });
             }
         },
         async createRealtimeConnection(clientId: string, questId: string) {
@@ -143,13 +164,15 @@ export const gameStore = defineStore("game", {
                 });
                 this.realtimeClient = realtimeClient;
                 realtimeClient.connection.on("connected", async (message: Types.ConnectionStateChange) => {
-                    console.log(`Connection state ${realtimeClient.connection.state}`);
                     this.isConnected = true;
+                    this.messages.unshift(`Ably connection status: ${realtimeClient.connection.state}`)
                     await this.attachToChannel(questId);
                 });
 
                 realtimeClient.connection.on("disconnected", () => {
                     this.isConnected = false;
+                    this.messages.unshift(`Ably connection status: ${realtimeClient.connection.state}`)
+
                 });
             }
         },
@@ -182,9 +205,15 @@ export const gameStore = defineStore("game", {
                 }
             );
             this.channelInstance?.subscribe(
-                "update-player",
+                "player-attacking",
                 (message: Types.Message) => {
-                    this.handleUpdatePlayer(message);
+                    this.handlePlayerIsAttacking(message);
+                }
+            );
+            this.channelInstance?.subscribe(
+                "player-under-attack",
+                (message: Types.Message) => {
+                    this.handlePlayerIsUnderAttack(message);
                 }
             );
             this.channelInstance?.subscribe(
@@ -204,6 +233,7 @@ export const gameStore = defineStore("game", {
             const playerName: string = message.data.name;
             const characterClass: CharacterClass = message.data.characterClass as CharacterClass;
             const health: number = message.data.health;
+            this.messages.unshift(`Player added: ${playerName} (${characterClass})`);
             this.addPlayer(playerName, characterClass, health);
         },
         handleUpdatePhase(message: Types.Message) {
@@ -214,12 +244,51 @@ export const gameStore = defineStore("game", {
             this.title = message.data.title !== undefined ? message.data.title : this.title;
             this.messages.unshift(message.data.message);
         },
-        handleUpdatePlayer(message: Types.Message) {
+        handlePlayerIsAttacking(message: Types.Message) {
+            const playerAttacking: string = message.data.playerAttacking;
+            const playerUnderAttack: string = message.data.playerUnderAttack;
+            // TODO
+            if (playerAttacking === this.monster.name) {
+                this.$patch({
+                    monster: { isAttacking: true },
+                    fighter: { isAttacking: false },
+                    ranger: { isAttacking: false },
+                    mage: { isAttacking: false },
+                  });
+            }
+            if (playerAttacking === this.fighter.name) {
+                this.$patch({
+                    monster: { isAttacking: false },
+                    fighter: {isAttacking: true },
+                    ranger: { isAttacking: false },
+                    mage: { isAttacking: false },
+                });
+            }
+            if (playerAttacking === this.ranger.name) {
+                this.$patch({
+                    monster: { isAttacking: false },
+                    fighter: { isAttacking: false },
+                    ranger: { isAttacking: true },
+                    mage: { isAttacking: false },
+                });
+            }
+            if (playerAttacking === this.mage.name) {
+                this.$patch({
+                    monster: { isAttacking: false },
+                    fighter: { isAttacking: false },
+                    ranger: { isAttacking: false },
+                    mage: { isAttacking: true },
+                });
+            }
+            
+        },
+        handlePlayerIsUnderAttack(message: Types.Message) {
             const playerName: string = message.data.name;
             const characterClass: CharacterClass = message.data.characterClass as CharacterClass;
             const health: number = message.data.health;
             const damage: number = message.data.damage;
-            this.updatePlayer(playerName, characterClass, health, damage, false);
+            const isDefeated: boolean = message.data.isDefeated;
+            this.updatePlayer(playerName, characterClass, health, damage, isDefeated, false, true);
         },
         handleCheckPlayerTurn(message: Types.Message) {
             this.messages.unshift(message.data.message);

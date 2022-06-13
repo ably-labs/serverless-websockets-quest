@@ -36,13 +36,13 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             }
         }
 
-        public async Task PublishUpdatePlayer(string questId, string playerName, string characterClass, int health, int? damage, bool isDefeated)
+        public async Task PublishPlayerUnderAttack(string questId, string playerName, string characterClass, int health, int? damage, bool isDefeated)
         {
             if (_realtimeClient != null)
             {
                 var channel = _realtimeClient.Channels.Get(questId);
                 await channel.PublishAsync(
-                    "update-player",
+                    "player-under-attack",
                         new
                         {
                             name = playerName,
@@ -50,6 +50,26 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
                             health = health,
                             damage = damage,
                             isDefeated = isDefeated
+                        }
+                    );
+            }
+        }
+
+        public async Task PublishPlayerAttacking(string questId, string playerAttacking, string playerUnderAttack )
+        {
+             if (_realtimeClient != null)
+            {
+                _realtimeChannel = _realtimeClient.Channels.Get(questId);
+            }
+            if (_realtimeChannel != null)
+            {
+                await _realtimeChannel.PublishAsync(
+                    "player-attacking",
+                        new
+                        {
+                            playerAttacking = playerAttacking,
+                            playerUnderAttack = playerUnderAttack
+
                         }
                     );
             }
