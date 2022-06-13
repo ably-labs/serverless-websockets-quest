@@ -65,7 +65,7 @@ export const gameStore = defineStore("game", {
             return state.characterClass === CharacterClass.Mage && state.playerName !== "" ? state.playerName : state.mage.name;
         },
         numberOfPlayersJoined: (state) => state.players.length,
-        numberOfPlayersRemaining: (state) => 4 - state.players.length,
+        numberOfPlayersRemaining: (state) => 4 - state.players.length
     },
     actions: {
         addPlayer(playerName: string, characterClass: CharacterClass, health: number) {
@@ -179,6 +179,10 @@ export const gameStore = defineStore("game", {
         handleUpdatePhase(message: Types.Message) {
             this.phase = message.data.phase;
         },
+        handleUpdateMessage(message: Types.Message) {
+            this.title = message.data.title !== undefined ? message.data.title : this.title;
+            this.messages.unshift(message.data.message);
+        },
         handleUpdatePlayer(message: Types.Message) {
             const playerName: string = message.data.name;
             const characterClass: CharacterClass = message.data.characterClass as CharacterClass;
@@ -187,6 +191,7 @@ export const gameStore = defineStore("game", {
             this.updatePlayer(playerName, characterClass, health, damage, false);
         },
         handleCheckPlayerTurn(message: Types.Message) {
+            this.messages.unshift(message.data.message);
             const playerName = message.data.name;
             if (this.playerName === playerName) {
                 // It's the players turn, enable the buttons.

@@ -17,10 +17,13 @@ let isPlayerTurn: Boolean = false;
     <h1>Quest: <span class="pink">{{ store.questId }}</span></h1>
     <h2>You encouter a monster!</h2>
     <PlayersSection v-bind="{ useHealth:true, includeMonster:true, isPlayerSelect:false }" />
-    <div class=flex-container>
-        <button v-if="isPlayerTurn" @click="fight">Attack</button>
-        <p v-if="!isPlayerTurn" class="message">Waiting for your turn</p>
-    </div> 
+    <button v-if="store.isPlayerTurn" @click="fight">Attack</button>
+    <p v-if="!store.isPlayerTurn" class="message">Wait for your turn</p>
+    <div class="container">
+        <ul class="messages">
+            <li v-for="message in store.messages">{{ message }}</li>
+        </ul>
+    </div>
 </template>
 
 <style scoped>
