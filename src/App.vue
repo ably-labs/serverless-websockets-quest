@@ -88,4 +88,17 @@ hr {
     background-color: #55ffff;
 }
 
+.message {
+    color: #55ffff;
+    margin: 10px;
+    padding: 10px;
+}
+.message::before {
+    content: "<< ";
+}
+
+.message::after {
+    content: " >>";
+}
+
 </style>
