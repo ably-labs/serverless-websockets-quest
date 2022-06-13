@@ -55,21 +55,29 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             if (IsPartyComplete)
             {
                 await UpdatePhase(GamePhases.Play);
+                await Task.Delay(2000);
+                await AttackByMonster();
+                var nextPlayerName = GetNextPlayerName(CharacterClassDefinitions.Monster.Name);
+                await _publisher.PublishPlayerTurnAsync(QuestId, $"Next turn: {nextPlayerName}", nextPlayerName);
             }
         }
 
-        public string GetNextPlayerName(string? currentPlayerName)
+        private async Task AttackByMonster()
         {
-            string nextPlayer;
-            if (string.IsNullOrEmpty(currentPlayerName))
-            {
-                nextPlayer = PlayerNames[0];
-            }
-            else
-            {
-                var currentIndex = PlayerNames.FindIndex(0, PlayerNames.Count, p => p == currentPlayerName);
-                nextPlayer = currentIndex == PlayerNames.Count - 1 ? PlayerNames[0] : PlayerNames[currentIndex + 1];
-            }
+            var playerAttacking = CharacterClassDefinitions.Monster.Name;
+            var playerUnderAttack = GetRandomPlayerName();
+            var message = $"{playerAttacking} attacks {playerUnderAttack}!";
+            await _publisher.PublishUpdateMessage(QuestId, message, false);
+            Task.Delay(1500).Wait();
+            var damage = CharacterClassDefinitions.GetDamageFor(CharacterClassDefinitions.Monster.CharacterClass);
+            var playerEntityId = new EntityId(nameof(Player), Player.GetEntityId(QuestId, playerUnderAttack));
+            Entity.Current.SignalEntity<IPlayer>(playerEntityId, proxy => proxy.ApplyDamage(damage));
+        }
+
+        public string GetNextPlayerName(string currentPlayerName)
+        {
+            var currentIndex = PlayerNames.FindIndex(0, PlayerNames.Count, p => p == currentPlayerName);
+            string nextPlayer = currentIndex == PlayerNames.Count - 1 ? PlayerNames[0] : PlayerNames[currentIndex + 1];
 
             return nextPlayer;
         }

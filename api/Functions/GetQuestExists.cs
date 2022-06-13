@@ -37,7 +37,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest
             }
             else
             {
-                return new BadRequestObjectResult(result.Message);        
+                return new BadRequestObjectResult(result.Message);
             }
         }
     }

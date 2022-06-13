@@ -10,15 +10,6 @@ const props = defineProps({
     isPlayerSelect: Boolean
 });
 
-async function fight() {
-    console.log("Fight");
-}
-
-let isMonsterActive: Boolean = false;
-let isFighterActive: Boolean = false;
-let isRangerActive: Boolean = false;
-let isMageActive: Boolean = false;
-
 </script>
 
 <template>
@@ -28,51 +19,51 @@ let isMageActive: Boolean = false;
                 <span class="health">{{ store.monster.health }}</span>
                 <span class="damage">{{ store.getMonsterDamage }}</span>
             </p>
-            <img class="small" alt="monster" src="../assets/Monster.png" />
-            <figcaption v-bind:class="{ isActive: isMonsterActive }">{{ store.monster.name }}</figcaption>
+            <img v-bind:class="{ isActive: store.isMonsterActive }" class="small" alt="monster" src="../assets/Monster.png" />
+            <figcaption>{{ store.monster.name }}</figcaption>
         </li>
         <li>
             <p v-if="props.useHealth">
                 <span class="health">{{ store.fighter.health }}</span>
                 <span class="damage">{{ store.getFighterDamage }}</span>
             </p>
-            <img class="small" alt="fighter" src="../assets/Fighter.png" />
-            <figcaption v-bind:class="{ isActive: isFighterActive }">{{ store.fighter.name }}</figcaption>
+            <img v-bind:class="{ isActive: store.isFighterActive }" class="small" alt="fighter" src="../assets/Fighter.png" />
+            <figcaption>{{ store.fighter.name }}</figcaption>
         </li>
         <li>
             <p v-if="props.useHealth">
                 <span class="health">{{ store.ranger.health }}</span>
                 <span class="damage">{{ store.getRangerDamage }}</span>
             </p>
-            <img class="small" alt="ranger" src="../assets/Ranger.png" />
-            <figcaption v-bind:class="{ isActive: isRangerActive }">{{ store.ranger.name }}</figcaption>
+            <img v-bind:class="{ isActive: store.isRangerActive }" class="small" alt="ranger" src="../assets/Ranger.png" />
+            <figcaption>{{ store.ranger.name }}</figcaption>
         </li>
         <li>
             <p v-if="props.useHealth">
                 <span class="health">{{ store.mage.health }}</span>
                 <span class="damage">{{ store.getMageDamage }}</span>
             </p>
-            <img class="small" alt="mage" src="../assets/Mage.png" />
-            <figcaption v-bind:class="{ isActive: isMageActive }">{{ store.mage.name }}</figcaption>
+            <img v-bind:class="{ isActive: store.isMageActive }" class="small" alt="mage" src="../assets/Mage.png" />
+            <figcaption>{{ store.mage.name }}</figcaption>
         </li>
     </ul>
     <ul v-if="props.isPlayerSelect" class="flex-container">
         <li>
-            <input type="radio" id="fighter" name="character" value="fighter" v-model="store.characterClass" :disabled="store.isFighterDisabled" />
+            <input type="radio" id="fighter" name="character" value="fighter" v-model="store.characterClass" @input="store.playerName=store.getFighterName" :disabled="store.isFighterDisabled" />
             <label for="fighter">
                 <img class="small" alt="fighter" src="../assets/Fighter.png"/>
                 <figcaption>{{ store.getFighterName }}</figcaption>
             </label>
         </li>
         <li>
-            <input type="radio" id="ranger" name="character" value="ranger" v-model="store.characterClass" :disabled="store.isRangerDisabled" />
+            <input type="radio" id="ranger" name="character" value="ranger" v-model="store.characterClass" @input="store.playerName=store.getRangerName" :disabled="store.isRangerDisabled" />
             <label for="ranger">
                 <img class="small" alt="ranger" src="../assets/Ranger.png" />
                 <figcaption>{{ store.getRangerName }}</figcaption>
             </label>
         </li>
         <li>
-            <input type="radio" id="mage" name="character" value="mage" v-model="store.characterClass" :disabled="store.isMageDisabled" />
+            <input type="radio" id="mage" name="character" value="mage" v-model="store.characterClass" @input="store.playerName=store.getMageName" :disabled="store.isMageDisabled" />
             <label for="mage">
                 <img class="small" alt="mage" src="../assets/Mage.png"/>
                 <figcaption>{{ store.getMageName }}</figcaption>
@@ -94,6 +85,7 @@ let isMageActive: Boolean = false;
 figcaption, img {
     display: flex;
     justify-content: center;
+    padding: 5px
 }
 
 input[type=radio] {
@@ -105,16 +97,16 @@ input[type=radio]:checked + label > img {
 }
 
 input[type=radio] + label > img {  
-    border: 4px solid #000;
+    border: 4px solid #55ffff;
 }
 
 input[type=radio]:disabled + label > img {
-  border-color: #55ffff;
+  border-color: #000;
 }
 
-input[type=radio]:disabled:checked + label > img {
+/* input[type=radio]:disabled:checked + label > img {
   border-color: #fff;
-}
+} */
 
 .health {
     color: #ff55ff;
@@ -130,7 +122,7 @@ input[type=radio]:disabled:checked + label > img {
 }
 
 .isActive {
-    color: #ff55ff;
+    border: 4px solid #55ffff;
 }
 
 </style>

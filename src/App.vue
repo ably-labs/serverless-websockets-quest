@@ -49,7 +49,7 @@ button {
   color: #000;
   background-color: #ff55ff;
   border-color: #fff;
-  padding: 10px;
+  padding: 20px;
   margin: 10px;
 }
 

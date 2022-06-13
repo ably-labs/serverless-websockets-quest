@@ -41,24 +41,6 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Test.Models
         }
 
         [Fact]
-        public async Task CreateQuestShouldUpdateMonsterEntity()
-        {
-            // Arrange
-            var durableClient = Substitute.For<IDurableClient>();
-            var realtimeChannel = Substitute.For<IRealtimeChannel>();
-            string questId = _fixture.Create<string>();
-            var gameEngine = new GameEngine(durableClient, questId, realtimeChannel);
-
-            // Act
-            await gameEngine.CreateQuestAsync();
-
-            // Assert
-            await durableClient.Received(1).SignalEntityAsync<IMonster>(
-                Arg.Any<EntityId>(), 
-                Arg.Any<Action<IMonster>>());
-        }
-
-        [Fact]
         public async Task JoinQuestShouldUpdateGameStateEntity()
         {
             // Arrange
@@ -127,7 +109,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Test.Models
             var gameEngine = new GameEngine(durableClient, questId, realtimeChannel);
             
             // Act
-            await gameEngine.ExecuteTurnAsync(Monster.ID);
+            await gameEngine.ExecuteTurnAsync(CharacterClassDefinitions.Monster.Name);
 
             // Assert
             await durableClient.Received(1).SignalEntityAsync<IPlayer>(

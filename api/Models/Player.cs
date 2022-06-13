@@ -42,9 +42,21 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
         public async Task ApplyDamage(int damage)
         {
             Health = damage > Health ? 0 : Health - damage;
-            await _publisher.PublishUpdatePlayer(QuestId, PlayerName, CharacterClass, Health, damage);
-        } 
-        public bool IsDefeated => Health <= 0;
+            bool isDefeated = Health <= 0;
+            if (isDefeated) {
+                var message = $"{PlayerName} is defeated!";
+                await _publisher.PublishUpdateMessage(QuestId, message, false);
+                if (PlayerName == CharacterClassDefinitions.Monster.Name)
+                {
+                    Task.Delay(1500).Wait();
+                    await _publisher.PublishUpdatePhase(QuestId, GamePhases.End);
+                }
+            } else {
+                var message = $"{PlayerName} received {damage} damage";
+                await _publisher.PublishUpdateMessage(QuestId, message, false);
+            }
+            await _publisher.PublishUpdatePlayer(QuestId, PlayerName, CharacterClass, Health, damage, isDefeated);
+        }
 
         public static string GetEntityId(string questId, string playerName) => $"{questId}-{playerName}";
 
