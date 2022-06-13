@@ -5,7 +5,6 @@ import { generateQuestId } from '../util/questIdGenerator';
 import PlayersSection from "./PlayersSection.vue";
 import { gameStore } from "../stores";
 import ErrorMessageSection from "./ErrorMessageSection.vue";
-import { GamePhase } from "../types/GamePhase";
 
 const store = gameStore();
 const errorMessage = ref<String>("");
@@ -58,7 +57,6 @@ function clearError()
 <template>
     <h1>Serverless Websockets Quest</h1>
     <PlayersSection v-bind="{ useHealth:false, includeMonster:true, isPlayerSelect:false }" />
-    <hr />
     <button @click="createQuest">Create quest</button>
     <br>or<br>
     <input type="text" v-model="store.questId" placeholder="quest ID" @input="clearError" />
