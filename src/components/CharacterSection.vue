@@ -12,7 +12,6 @@ async function addPlayer() {
     const questExistsResponse = await window.fetch(`/api/GetQuestExists/${store.questId}`);
     const questExistsMessage = await questExistsResponse.text();
     if (questExistsResponse.ok) {
-        store.enterPresence(store.playerName);
         await window.fetch("/api/AddPlayer", {
         method: "POST",
         headers: {
@@ -23,7 +22,7 @@ async function addPlayer() {
             playerName: store.playerName,
             characterClass: store.characterClass
             })
-        })
+        });
         // Function will publish a gamePhase message which the client responds to.
     }
     else {

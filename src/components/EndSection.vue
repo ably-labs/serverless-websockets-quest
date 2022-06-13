@@ -9,8 +9,6 @@ async function playAgain() {
     console.log("Play Again");
 }
 
-
-
 </script>
 
 <template>

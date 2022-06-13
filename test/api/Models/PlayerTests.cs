@@ -1,6 +1,9 @@
 using Xunit;
 using AblyLabs.ServerlessWebsocketsQuest.Models;
 using FluentAssertions;
+using NSubstitute;
+using IO.Ably;
+using System.Threading.Tasks;
 
 namespace AblyLabs.ServerlessWebsocketsQuest.Test.Models
 {
@@ -12,10 +15,11 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Test.Models
         [InlineData(100, 90, 10)]
         [InlineData(100, 100, 0)]
         [InlineData(100, 110, 0)]
-        public void ApplyDamageToPlayer(int health, int damage, int result)
+        public async Task ApplyDamageToPlayer(int health, int damage, int result)
         {
-            var player = new Player() { Health = health };
-            player.ApplyDamage(damage);
+            var realtimeClient = Substitute.For<IRealtimeClient>();
+            var player = new Player(realtimeClient) { Health = health };
+            await player.ApplyDamage(damage);
             player.Health.Should().Be(result);
         }
 
@@ -23,10 +27,11 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Test.Models
         [InlineData(100, 90, false)]
         [InlineData(100, 100, true)]
         [InlineData(100, 110, true)]
-        public void IsGameOver(int health, int damage, bool isGameOver)
+        public async Task IsGameOver(int health, int damage, bool isGameOver)
         {
-            var monster = new Player() { Health = health };
-            monster.ApplyDamage(damage);
+            var realtimeClient = Substitute.For<IRealtimeClient>();
+            var monster = new Player(realtimeClient) { Health = health };
+            await monster.ApplyDamage(damage);
             monster.IsDefeated.Should().Be(isGameOver);
         }
     }
