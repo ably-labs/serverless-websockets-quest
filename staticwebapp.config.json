@@ -13,7 +13,7 @@
     ],
     "navigationFallback": {
       "rewrite": "index.html",
-      "exclude": ["/assets/*.{png,jpg,gif}", "/css/*"]
+      "exclude": ["/og.png","/assets/*.{png,jpg,gif}", "/css/*"]
     },
     "globalHeaders": {
         "Access-Control-Allow-Origin": "*",
