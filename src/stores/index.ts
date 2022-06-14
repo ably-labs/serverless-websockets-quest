@@ -5,6 +5,16 @@ import { toHandlers } from "vue";
 import { CharacterClass } from "../types/CharacterClass";
 import { GamePhase } from "../types/GamePhase";
 import { GameState } from "../types/GameState";
+import monsterIdle from "../assets/monster_idle.png"
+import monsterAttack from "../assets/monster_attack.gif"
+import monsterDead from "../assets/monster_dead.png"
+import monsterDamage from "../assets/monster_damage.gif"
+import fighterIdle from "../assets/fighter_idle.png"
+import fighterAttack from "../assets/fighter_attack.gif"
+import rangerIdle from "../assets/ranger_idle.png"
+import rangerAttack from "../assets/ranger_attack.gif"
+import mageIdle from "../assets/mage_idle.png"
+import mageAttack from "../assets/mage_attack.gif"
 
 export const gameStore = defineStore("game", {
     state: (): GameState =>
@@ -43,54 +53,46 @@ export const gameStore = defineStore("game", {
         getMageDamage: (state) => state.mage.damage > 0 ? `-${state.mage.damage}` : "",
         getMageName: (state) => state.characterClass === CharacterClass.Mage && state.playerName !== "" ? state.playerName : state.mage.name,
         getMonsterAsset: (state) => {
-            let asset = "";
             if (state.monster.health <= 0) {
-                asset = "monster_dead.png";
+                return monsterDead;
             }
             else if (state.monster.isAttacking) {
-                asset = "monster_attack.gif";
+                return monsterAttack;
             } else if (state.monster.isUnderAttack) {
-                asset = "monster_damage.gif";
+                return monsterDamage;
             } else {
-                asset = "monster_idle.png";
+                return monsterIdle;
             }
-            return require(`src/assets/${asset}`);
         },
         getFighterAsset: (state) => {
-            let asset = "";
             if (state.fighter.health <= 0) {
-                asset = "fighter_idle.png";
+                return fighterIdle;
             }
             else if (state.fighter.isAttacking) {
-                asset = "fighter_attack.gif";
+                return fighterAttack;
             } else {
-                asset = "fighter_idle.png";
+                return fighterIdle;
             }
-            return require(`src/assets/${asset}`);
         },
         getRangerAsset: (state) => {
-            let asset = "";
             if (state.ranger.health <= 0) {
-                asset = "ranger_idle.png";
+                return rangerIdle;
             }
             else if (state.ranger.isAttacking) {
-                asset = "ranger_attack.gif";
+                return rangerAttack;
             } else {
-                asset = "ranger_idle.png";
+                return rangerIdle;
             }
-            return require(`src/assets/${asset}`);
         },
         getMageAsset: (state) => {
-            let asset = "";	
             if (state.mage.health <= 0) {
-                asset = "mage_idle.png";
+                return mageIdle;
             }
             else if (state.mage.isAttacking) {
-                asset = "mage_attack.gif";
+                return mageAttack;
             } else {
-                asset = "mage_idle.png";
+                return mageIdle;
             }
-            return require(`src/assets/${asset}`);
         },
         isPlayerTurn: (state) => state.playerName === state.currentPlayer,
         isMonsterActive: (state) => state.monster.name === state.currentPlayer,
