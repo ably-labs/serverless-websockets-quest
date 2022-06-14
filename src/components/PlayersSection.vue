@@ -49,21 +49,21 @@ const props = defineProps({
     </ul>
     <ul v-if="props.isPlayerSelect" class="flex-container">
         <li>
-            <input type="radio" id="fighter" name="character" value="fighter" v-model="store.characterClass" @input="store.playerName=store.getFighterName" :disabled="store.isFighterDisabled" />
+            <input type="radio" id="fighter" name="character" value="fighter" v-model="store.characterClass" @click="store.playerName=store.getFighterName" :disabled="store.isFighterDisabled" />
             <label for="fighter">
                 <img class="small" alt="fighter" :src="store.getFighterAsset" />
                 <figcaption>{{ store.getFighterName }}</figcaption>
             </label>
         </li>
         <li>
-            <input type="radio" id="ranger" name="character" value="ranger" v-model="store.characterClass" @input="store.playerName=store.getRangerName" :disabled="store.isRangerDisabled" />
+            <input type="radio" id="ranger" name="character" value="ranger" v-model="store.characterClass" @click="store.playerName=store.getRangerName" :disabled="store.isRangerDisabled" />
             <label for="ranger">
                 <img class="small" alt="ranger" :src="store.getRangerAsset" />
                 <figcaption>{{ store.getRangerName }}</figcaption>
             </label>
         </li>
         <li>
-            <input type="radio" id="mage" name="character" value="mage" v-model="store.characterClass" @input="store.playerName=store.getMageName" :disabled="store.isMageDisabled" />
+            <input type="radio" id="mage" name="character" value="mage" v-model="store.characterClass" @click="store.playerName=store.getMageName" :disabled="store.isMageDisabled" />
             <label for="mage">
                 <img class="small" alt="mage" :src="store.getMageAsset"/>
                 <figcaption>{{ store.getMageName }}</figcaption>
