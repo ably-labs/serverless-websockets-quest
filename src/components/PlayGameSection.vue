@@ -10,7 +10,8 @@ function isPlayerTurn(): boolean {
 }
 
 async function fight() {
-     await window.fetch("/api/ExecuteTurn", {
+    store.currentPlayer = "";
+    await window.fetch("/api/ExecuteTurn", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

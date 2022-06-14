@@ -57,8 +57,6 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
                 await UpdatePhase(GamePhases.Play);
                 await Task.Delay(2000);
                 await AttackByMonster();
-                var nextPlayerName = GetNextPlayerName(CharacterClassDefinitions.Monster.Name);
-                await _publisher.PublishPlayerTurnAsync(QuestId, $"Next turn: {nextPlayerName}", nextPlayerName);
             }
         }
 
@@ -77,10 +75,13 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             var playerAttacking = CharacterClassDefinitions.Monster.Name;
             var playerUnderAttack = GetRandomPlayerName();
             await _publisher.PublishPlayerAttacking(QuestId, playerAttacking, playerUnderAttack);
-            await Task.Delay(1500);
+            await Task.Delay(1000);
             var damage = CharacterClassDefinitions.GetDamageFor(CharacterClassDefinitions.Monster.CharacterClass);
             var playerEntityId = new EntityId(nameof(Player), Player.GetEntityId(QuestId, playerUnderAttack));
             Entity.Current.SignalEntity<IPlayer>(playerEntityId, proxy => proxy.ApplyDamage(damage));
+            await Task.Delay(1000);
+            var nextPlayerName = GetNextPlayerName(CharacterClassDefinitions.Monster.Name);
+            await _publisher.PublishPlayerTurnAsync(QuestId, $"Next turn: {nextPlayerName}", nextPlayerName);
         }
 
         public string GetNextPlayerName(string currentPlayerName)

@@ -10,7 +10,6 @@ const store = gameStore();
 const errorMessage = ref<String>("");
 
 async function createQuest() {
-    console.log("Start new Quest");
     store.questId = generateQuestId();
     store.clientId = uuidv4();
     store.isHost = true;
@@ -29,10 +28,8 @@ async function createQuest() {
 }
 
 async function joinQuest() {
-    console.log("Join a Quest");
     if (store.questId)
     {
-        console.log(`GetsQuestExist${store.questId}`);
         const response = await window.fetch(`/api/GetQuestExists/${store.questId}`);
         const data = await response.text();
         if (response.ok) {
@@ -61,7 +58,7 @@ function clearError()
     <br>or<br>
     <input type="text" v-model="store.questId" placeholder="quest ID" @input="clearError" />
     <button @click="joinQuest">Join quest</button>
-    <ErrorMessageSection :errorMessage=errorMessage />
+    <ErrorMessageSection :errorMessage="errorMessage" />
 </template>
 
 <style scoped></style>

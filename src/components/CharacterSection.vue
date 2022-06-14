@@ -24,7 +24,6 @@ async function addPlayer() {
             characterClass: store.characterClass
             })
         });
-        // Function will publish a gamePhase message which the client responds to.
     }
     else {
         errorMessage.value = questExistsMessage;

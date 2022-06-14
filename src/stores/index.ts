@@ -170,14 +170,15 @@ export const gameStore = defineStore("game", {
                 this.realtimeClient = realtimeClient;
                 realtimeClient.connection.on("connected", async (message: Types.ConnectionStateChange) => {
                     this.isConnected = true;
-                    this.messages.unshift(`Ably connection status: ${realtimeClient.connection.state}`)
+                    const messageText = `Ably connection status: ${realtimeClient.connection.state}`;
+                    this.writeMessage(messageText);
                     await this.attachToChannel(questId);
                 });
 
                 realtimeClient.connection.on("disconnected", () => {
                     this.isConnected = false;
-                    this.messages.unshift(`Ably connection status: ${realtimeClient.connection.state}`)
-
+                    const messageText = `Ably connection status: ${realtimeClient.connection.state}`;
+                    this.writeMessage(messageText);
                 });
             }
         },
@@ -185,7 +186,6 @@ export const gameStore = defineStore("game", {
             this.realtimeClient?.connection.close();
         },
         async attachToChannel(channelName: string) {
-            console.log("Attaching to channel!");
             const channelInstance = this.realtimeClient?.channels.get(
                 channelName,
                 {
@@ -238,7 +238,8 @@ export const gameStore = defineStore("game", {
             const playerName: string = message.data.name;
             const characterClass: CharacterClass = message.data.characterClass as CharacterClass;
             const health: number = message.data.health;
-            this.messages.unshift(`Player added: ${playerName} (${characterClass})`);
+            const messageText = `Player added: ${playerName} (${characterClass})`;
+            this.writeMessage(messageText);
             this.addPlayer(playerName, characterClass, health);
         },
         handleUpdatePhase(message: Types.Message) {
@@ -246,12 +247,14 @@ export const gameStore = defineStore("game", {
             this.teamHasWon = this.teamHasWon ? this.teamHasWon : message.data.teamHasWon;
         },
         handleUpdateMessage(message: Types.Message) {
-            this.messages.unshift(message.data.message);
+            this.writeMessage(message.data.message);
         },
         handlePlayerIsAttacking(message: Types.Message) {
+            if (this.teamHasWon !== undefined) return;
             const playerAttacking: string = message.data.playerAttacking;
             const playerUnderAttack: string = message.data.playerUnderAttack;
-            this.messages.unshift(`${playerAttacking} is attacking ${playerUnderAttack}`);
+            const messageText = `${playerAttacking} is attacking ${playerUnderAttack}`;
+            this.writeMessage(messageText);
             if (playerAttacking === this.monster.name) {
                 this.$patch({
                     monster: { isAttacking: true },
@@ -287,34 +290,24 @@ export const gameStore = defineStore("game", {
             
         },
         handlePlayerIsUnderAttack(message: Types.Message) {
+            if (this.teamHasWon !== undefined) return;
             const playerName: string = message.data.name;
             const characterClass: CharacterClass = message.data.characterClass as CharacterClass;
             const health: number = message.data.health;
             const damage: number = message.data.damage;
             const isDefeated: boolean = message.data.isDefeated;
-            this.messages.unshift(`${playerName} received ${damage} damage`);
+            const messageText = `${playerName} received ${damage} damage`;
+            this.writeMessage(messageText);
             this.updatePlayer(playerName, characterClass, health, damage, isDefeated, false, true);
         },
-        handleCheckPlayerTurn(message: Types.Message) {
-            this.messages.unshift(message.data.message);
-            const playerName = message.data.name;
+        async handleCheckPlayerTurn(message: Types.Message) {
+            if (this.teamHasWon !== undefined) return;
+            this.writeMessage(message.data.message);
             this.currentPlayer = message.data.name;
-            if (playerName === this.monster.name) {
-                this.monsterAttack();
-            }
         },
-        async monsterAttack() {
-            await window.fetch("/api/ExecuteTurn", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    questId: this.questId,
-                    playerName: this.monster.name,
-                    characterClass: this.monster.characterClass,
-                    })
-                });
+        writeMessage(message: string) {
+            this.messages.unshift(message);
+            console.log(message);
         },
         reset() {
             this.$reset();

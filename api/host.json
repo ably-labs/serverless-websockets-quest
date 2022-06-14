@@ -3,8 +3,6 @@
     "extensions": {
         "durableTask": {
           "hubName": "ServerlessWebsockets",
-          "extendedSessionsEnabled": true,
-          "extendedSessionIdleTimeoutInSeconds": 120,
           "storageProvider" : {
             "maxQueuePollingInterval": "00:00:01"
           },
