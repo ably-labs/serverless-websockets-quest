@@ -1,16 +1,69 @@
-# Vue 3 + TypeScript + Vite
+# Serverless Websockets Quest
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+![Serverless websockets start screen](./media/serverless-websockets-quest.png)
 
-## Recommended IDE Setup
+## Description
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
+This repository contains the code for a game that shows how to use serverless websockets with Ably & Azure Functions.
 
-## Type Support For `.vue` Imports in TS
+## Tech Stack
 
-Since TypeScript cannot handle type information for `.vue` imports, they are shimmed to be a generic Vue component type by default. In most cases this is fine if you don't really care about component prop types outside of templates. However, if you wish to get actual prop types in `.vue` imports (for example to get props validation when using manual `h(...)` calls), you can enable Volar's Take Over mode by following these steps:
+- [Azure Functions](https://docs.microsoft.com/azure/azure-functions/functions-overview), used as serverless compute to manage the game flow.
+  - [Entity functions](https://docs.microsoft.com/azure/azure-functions/durable/durable-functions-entities?tabs=csharp), used to persist the overall game & player state.
+- [Ably](https://ably.com/), used as the serverless websockets to broadcast the game & player state in realtime.
+- [VueJS](https://vuejs.org/), used as the front-end framework for the game.
+- [Azure Static Web Apps](https://docs.microsoft.com/azure/static-web-apps/overview), used as the hosting solution in the cloud.
 
-1. Run `Extensions: Show Built-in Extensions` from VS Code's command palette, look for `TypeScript and JavaScript Language Features`, then right click and select `Disable (Workspace)`. By default, Take Over mode will enable itself if the default TypeScript extension is disabled.
-2. Reload the VS Code window by running `Developer: Reload Window` from the command palette.
 
-You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/volar/discussions/471).
+## Running locally
+
+You require the following dependencies:
+
+- [.NET 6](https://dotnet.microsoft.com/download/dotnet/6.0). The .NET runtime required for the C# Azure Functions.
+- [Node 16](https://nodejs.org/en/). The JavaScript runtime required for the Vue front-end.
+- [Azure Functions Core Tools](https://docs.microsoft.com/azure/azure-functions/functions-run-local?tabs=v4%2Cwindows%2Ccsharp%2Cportal%2Cbash). This is part of Azure Functions extensions for VSCode that should be recommended for installation when this repo is opened in VSCode.
+- [Azurite](https://marketplace.visualstudio.com/items?itemName=Azurite.azurite). This is an local storage emulator that is required for Durable Functions.
+- [Azure Static Web Apps CLI](https://github.com/Azure/static-web-apps-cli). This is part of the devDependencies of this project and will be installed when running `npm install` later.
+- A free Ably Account, [sign up](https://ably.com/signup) or [log in](https://ably.com/login) to ably.com, and [create a new app and copy the API key](https://faqs.ably.com/setting-up-and-managing-api-keys).
+
+### Steps
+
+1. Clone this repo.
+2. Run `npm install` in the root folder.
+3. Rename the `local.settings.json.example` to `local.settings.json`.
+4. Copy/paste the Ably API key in the `ABLY_APIKEY` field in the `local.settings.json` file.
+5. Start Azurite (VSCode: `CTRL+SHIFT+P -> Azurite Start`)
+6. Run `swa start` in the root folder.
+
+<details>
+    <summary>Open the browser and navigate to <code>http://localhost:4280/</code>.</summary>
+
+You'll see this error message but you can ignore it as long as you're running the solution locally:
+
+```cmd
+Function app contains non-HTTP triggered functions. Azure Static Web Apps managed functions only support HTTP functions. To use this function app with Static Web Apps, see 'Bring your own function app'.
+```
+
+The terminal will eventually output this message that indicates the emulated Static Web App is running:
+
+```cmd
+Azure Static Web Apps emulator started at http://localhost:4280. Press CTRL+C to exit.
+```
+
+</details>
+
+## Contributing
+
+Want to help contributing to this project? Have a look at our [contributing guide](CONTRIBUTING.md)!
+
+## More info
+
+For more questions or comments, please contact me on [Twitter](https://twitter.com/marcduiker) on our Ably Discord.
+
+- [Join our Discord server](https://discord.gg/q89gDHZcBK)
+- [Follow us on Twitter](https://twitter.com/ablyrealtime)
+- [Use our SDKs](https://github.com/ably/)
+- [Visit our website](https://ably.com)
+
+---
+[![Ably logo](https://static.ably.dev/badge-black.svg?serverless-websockets-quest)](https://ably.com)
