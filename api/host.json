@@ -3,11 +3,10 @@
     "extensions": {
         "durableTask": {
           "hubName": "ServerlessWebsockets",
-          "extendedSessionsEnabled": true,
-          "extendedSessionIdleTimeoutInSeconds": 120,
           "storageProvider" : {
             "maxQueuePollingInterval": "00:00:01"
-          }
+          },
+          "maxEntityOperationBatchSize": 1
         }
     },
     "logging": {
