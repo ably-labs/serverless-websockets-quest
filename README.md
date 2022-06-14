@@ -6,6 +6,8 @@
 
 This repository contains the code for a game that shows how to use serverless websockets with Ably & Azure Functions.
 
+The game can be played online at [Serverless Websockets Quest](https://agreeable-pebble-0afe10803.1.azurestaticapps.net/).
+
 ## Tech Stack
 
 - [Azure Functions](https://docs.microsoft.com/azure/azure-functions/functions-overview), used as serverless compute to manage the game flow.
