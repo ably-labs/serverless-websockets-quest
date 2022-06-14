@@ -10,7 +10,7 @@ This repository contains the code for a game that shows how to use serverless we
 
 - [Azure Functions](https://docs.microsoft.com/azure/azure-functions/functions-overview), used as serverless compute to manage the game flow.
   - [Entity functions](https://docs.microsoft.com/azure/azure-functions/durable/durable-functions-entities?tabs=csharp), used to persist the overall game & player state.
-- [Ably](https://ably.com/), used as the serverless websockets to broadcast the game & player state in realtime.
+- [Ably](https://ably.com/), used as the serverless websockets to broadcast the game & player state to the clients in realtime.
 - [VueJS](https://vuejs.org/), used as the front-end framework for the game.
 - [Azure Static Web Apps](https://docs.microsoft.com/azure/static-web-apps/overview), used as the hosting solution in the cloud.
 
@@ -30,9 +30,9 @@ You require the following dependencies:
 
 1. Clone this repo.
 2. Run `npm install` in the root folder.
-3. Rename the `local.settings.json.example` to `local.settings.json`.
+3. Rename the `api\local.settings.json.example` file to `api\local.settings.json`.
 4. Copy/paste the Ably API key in the `ABLY_APIKEY` field in the `local.settings.json` file.
-5. Start Azurite (VSCode: `CTRL+SHIFT+P -> Azurite Start`)
+5. Start Azurite (VSCode: `CTRL+SHIFT+P -> Azurite: Start`)
 6. Run `swa start` in the root folder.
 
 <details>
