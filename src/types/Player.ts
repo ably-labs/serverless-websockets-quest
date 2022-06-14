@@ -8,4 +8,5 @@ export type Player = {
     isAvailable: boolean,
     isAttacking: boolean,
     isUnderAttack: boolean,
+    isDefeated: boolean,
   }

@@ -5,6 +5,10 @@ import PlayersSection from "./PlayersSection.vue";
 
 const store = gameStore();
 
+function isPlayerTurn(): boolean {
+    return store.playerName === store.currentPlayer;
+}
+
 async function fight() {
      await window.fetch("/api/ExecuteTurn", {
         method: "POST",
@@ -25,8 +29,8 @@ async function fight() {
     <h1>Quest: <span class="pink">{{ store.questId }}</span></h1>
     <h2>You encounter a monster! Prepare for battle!</h2>
     <PlayersSection v-bind="{ useHealth:true, includeMonster:true, isPlayerSelect:false }" />
-    <button v-if="store.isPlayerTurn" @click="fight">Attack</button>
-    <p v-if="!store.isPlayerTurn" class="message">Wait for your turn</p>
+    <button v-if="isPlayerTurn()" @click="fight">Attack</button>
+    <p v-if="!isPlayerTurn()" class="message">Wait for your turn</p>
 </template>
 
 <style scoped></style>
