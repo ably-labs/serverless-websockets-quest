@@ -18,7 +18,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest
         {
             _realtime = realtime;
         }
-        
+
         /// The CreateQuest function is called by the host (the first player).
         /// The function creates the initial GameState and stores this as a Durable Entity.
         [FunctionName(nameof(CreateQuest))]
@@ -27,19 +27,18 @@ namespace AblyLabs.ServerlessWebsocketsQuest
             [DurableClient] IDurableClient durableClient,
             ILogger log)
         {
-            var questId = await req.Content.ReadAsStringAsync();
-            var channel = _realtime.Channels.Get(questId);
-            var gameEngine = new GameEngine(durableClient, questId, channel);
-            try
+            if (req.Content != null)
             {
+                var questId = await req.Content.ReadAsStringAsync();
+                var channel = _realtime.Channels.Get(questId);
+                var gameEngine = new GameEngine(durableClient, questId, channel);
                 var gamePhase = await gameEngine.CreateQuestAsync();
                 return new OkObjectResult(gamePhase);
             }
-            catch (System.Exception ex)
+            else
             {
-                return new ObjectResult(ex) { StatusCode = 500};
+                return new BadRequestObjectResult("QuestId is required");
             }
-            
         }
     }
 }

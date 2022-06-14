@@ -17,6 +17,9 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
         {
             _realtimeClient = realtimeClient;
             _publisher = new Publisher(_realtimeClient);
+            QuestId = string.Empty;
+            PlayerName = string.Empty;
+            CharacterClass = string.Empty;
         }
 
         [JsonProperty("questId")]
