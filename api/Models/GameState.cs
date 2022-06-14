@@ -62,9 +62,14 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             }
         }
 
-         public void RemovePlayerName(string playerName)
+         public async Task RemovePlayerName(string playerName)
          {
             PlayerNames.Remove(playerName);
+
+            if (PlayerNames.Count == 0){
+                var teamHasWon = false;
+                await _publisher.PublishUpdatePhase(QuestId, GamePhases.End, teamHasWon);
+            }
          }
 
         private async Task AttackByMonster()

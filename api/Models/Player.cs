@@ -43,6 +43,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
         {
             Health = damage > Health ? 0 : Health - damage;
             bool isDefeated = Health <= 0;
+            await _publisher.PublishPlayerUnderAttack(QuestId, PlayerName, CharacterClass, Health, damage, isDefeated);
             if (isDefeated) {
                 var gameStateEntityId = new EntityId(nameof(GameState), QuestId);
                 Entity.Current.SignalEntity<IGameState>(gameStateEntityId, proxy => proxy.RemovePlayerName(PlayerName));
@@ -51,10 +52,10 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
                 if (PlayerName == CharacterClassDefinitions.Monster.Name)
                 {
                     await Task.Delay(1500);
-                    await _publisher.PublishUpdatePhase(QuestId, GamePhases.End);
+                    var teamHasWon = true;
+                    await _publisher.PublishUpdatePhase(QuestId, GamePhases.End, teamHasWon);
                 }
             }
-            await _publisher.PublishPlayerUnderAttack(QuestId, PlayerName, CharacterClass, Health, damage, isDefeated);
         }
 
         public static string GetEntityId(string questId, string playerName) => $"{questId}-{playerName}";

@@ -75,7 +75,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             }
         }
 
-        public async Task PublishUpdatePhase(string questId, string phase)
+        public async Task PublishUpdatePhase(string questId, string phase, bool? teamHasWon = null)
         {
             if (_realtimeClient != null)
             {
@@ -84,7 +84,8 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
                     "update-phase",
                     new
                     {
-                        phase = phase
+                        phase = phase,
+                        teamHasWon = teamHasWon
                     }
                 );
             }

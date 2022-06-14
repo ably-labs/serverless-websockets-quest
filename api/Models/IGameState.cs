@@ -7,6 +7,6 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
         public Task InitGameState(string[] gameStateFields);
         public Task UpdatePhase(string phase);
         public Task AddPlayerName(string playerName);
-        public void RemovePlayerName(string playerName);
+        public Task RemovePlayerName(string playerName);
     }
 }
