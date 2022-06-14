@@ -22,17 +22,5 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Test.Models
             await player.ApplyDamage(damage);
             player.Health.Should().Be(result);
         }
-
-        [Theory()]
-        [InlineData(100, 90, false)]
-        [InlineData(100, 100, true)]
-        [InlineData(100, 110, true)]
-        public async Task IsGameOver(int health, int damage, bool isGameOver)
-        {
-            var realtimeClient = Substitute.For<IRealtimeClient>();
-            var monster = new Player(realtimeClient) { Health = health };
-            await monster.ApplyDamage(damage);
-            monster.IsDefeated.Should().Be(isGameOver);
-        }
     }
 }

@@ -62,14 +62,17 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             }
         }
 
+         public void RemovePlayerName(string playerName)
+         {
+            PlayerNames.Remove(playerName);
+         }
+
         private async Task AttackByMonster()
         {
             var playerAttacking = CharacterClassDefinitions.Monster.Name;
             var playerUnderAttack = GetRandomPlayerName();
-            var message = $"{playerAttacking} attacks {playerUnderAttack}!";
             await _publisher.PublishPlayerAttacking(QuestId, playerAttacking, playerUnderAttack);
-            await _publisher.PublishUpdateMessage(QuestId, message, false);
-            Task.Delay(1500).Wait();
+            await Task.Delay(1500);
             var damage = CharacterClassDefinitions.GetDamageFor(CharacterClassDefinitions.Monster.CharacterClass);
             var playerEntityId = new EntityId(nameof(Player), Player.GetEntityId(QuestId, playerUnderAttack));
             Entity.Current.SignalEntity<IPlayer>(playerEntityId, proxy => proxy.ApplyDamage(damage));
@@ -88,7 +91,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
         public string GetRandomPlayerName()
         {
             var playerNamesWithoutMonster = PlayerNames.Where(p => p != CharacterClassDefinitions.Monster.Name).ToList();
-            var index = new Random().Next(0, playerNamesWithoutMonster.Count - 1);
+            var index = new Random().Next(0, playerNamesWithoutMonster.Count);
             return playerNamesWithoutMonster[index];
         }
 

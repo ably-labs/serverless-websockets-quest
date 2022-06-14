@@ -26,10 +26,10 @@ export const gameStore = defineStore("game", {
             title: "You encounter a monster! Prepare for battle!",
             phase: GamePhase.Start,
             characterClass: CharacterClass.Fighter,
-            monster: { characterClass: CharacterClass.Monster, name: "Monstarrr", health: 100, damage: 20, isAvailable: true, isAttacking: false, isUnderAttack: false },
-            fighter: { characterClass: CharacterClass.Fighter, name: "Edge messaging fighter", health: 0, damage: 0, isAvailable: true, isAttacking: false, isUnderAttack: false },
-            ranger: { characterClass: CharacterClass.Ranger, name: "Realtime ranger", health: 0, damage: 0, isAvailable: true, isAttacking: false, isUnderAttack: false },
-            mage: { characterClass: CharacterClass.Mage, name: "Open sourcerer", health: 0, damage: 0, isAvailable: true, isAttacking: false, isUnderAttack: false },
+            monster: { characterClass: CharacterClass.Monster, name: "Monstarrr", health: 100, damage: 20, isAvailable: true, isAttacking: false, isUnderAttack: false, isDefeated: false },
+            fighter: { characterClass: CharacterClass.Fighter, name: "Edge messaging fighter", health: 0, damage: 0, isAvailable: true, isAttacking: false, isUnderAttack: false, isDefeated: false },
+            ranger: { characterClass: CharacterClass.Ranger, name: "Realtime ranger", health: 0, damage: 0, isAvailable: true, isAttacking: false, isUnderAttack: false, isDefeated: false },
+            mage: { characterClass: CharacterClass.Mage, name: "Open sourcerer", health: 0, damage: 0, isAvailable: true, isAttacking: false, isUnderAttack: false, isDefeated: false },
             isPlayerAdded: false,
             players: Array<string>(),
             currentPlayer: "",
@@ -94,7 +94,6 @@ export const gameStore = defineStore("game", {
                 return mageIdle;
             }
         },
-        isPlayerTurn: (state) => state.playerName === state.currentPlayer,
         isMonsterActive: (state) => state.monster.name === state.currentPlayer,
         isFighterActive: (state) => state.fighter.name === state.currentPlayer,
         isRangerActive: (state) => state.ranger.name === state.currentPlayer,
@@ -123,7 +122,8 @@ export const gameStore = defineStore("game", {
                         health: health,
                         damage: damage,
                         isAvailable: isAvailable,
-                        isUnderAttack: isUnderAttack
+                        isUnderAttack: isUnderAttack,
+                        isDefeated: isDefeated
                         },
                   });
             } else if (characterClass === CharacterClass.Ranger) {
@@ -133,7 +133,8 @@ export const gameStore = defineStore("game", {
                         health: health,
                         damage: damage,
                         isAvailable: isAvailable,
-                        isUnderAttack: isUnderAttack
+                        isUnderAttack: isUnderAttack,
+                        isDefeated: isDefeated
                         },
                   });
             } else if (characterClass === CharacterClass.Mage) {
@@ -143,7 +144,8 @@ export const gameStore = defineStore("game", {
                         health: health,
                         damage: damage,
                         isAvailable: isAvailable,
-                        isUnderAttack: isUnderAttack
+                        isUnderAttack: isUnderAttack,
+                        isDefeated: isDefeated
                         },
                   });
             } else if (characterClass === CharacterClass.Monster) {
@@ -153,7 +155,8 @@ export const gameStore = defineStore("game", {
                         health: health,
                         damage: damage,
                         isAvailable: isAvailable,
-                        isUnderAttack: isUnderAttack
+                        isUnderAttack: isUnderAttack,
+                        isDefeated: isDefeated
                         },
                   });
             }
@@ -249,7 +252,7 @@ export const gameStore = defineStore("game", {
         handlePlayerIsAttacking(message: Types.Message) {
             const playerAttacking: string = message.data.playerAttacking;
             const playerUnderAttack: string = message.data.playerUnderAttack;
-            // TODO
+            this.messages.unshift(`${playerAttacking} is attacking ${playerUnderAttack}`);
             if (playerAttacking === this.monster.name) {
                 this.$patch({
                     monster: { isAttacking: true },
@@ -290,6 +293,7 @@ export const gameStore = defineStore("game", {
             const health: number = message.data.health;
             const damage: number = message.data.damage;
             const isDefeated: boolean = message.data.isDefeated;
+            this.messages.unshift(`${playerName} received ${damage} damage`);
             this.updatePlayer(playerName, characterClass, health, damage, isDefeated, false, true);
         },
         handleCheckPlayerTurn(message: Types.Message) {
@@ -312,6 +316,9 @@ export const gameStore = defineStore("game", {
                     characterClass: this.monster.characterClass,
                     })
                 });
+        },
+        reset() {
+            this.$reset();
         }
     },
 });

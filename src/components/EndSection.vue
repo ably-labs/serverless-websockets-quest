@@ -6,7 +6,7 @@ import { gameStore } from "../stores";
 const store = gameStore();
 
 async function playAgain() {
-    console.log("Play Again");
+    store.reset();
 }
 
 </script>

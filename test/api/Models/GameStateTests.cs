@@ -12,10 +12,10 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Test.Models
     {
         public static IEnumerable<object[]> GetPlayers()
         {
-            yield return new object[] { new List<string> { "monster", "abc" }, "abc", "monster" };
-            yield return new object[] { new List<string> { "monster", "abc", "def" }, "monster", "abc" };
-            yield return new object[] { new List<string> { "monster", "abc", "def" }, "abc", "def" };
-            yield return new object[] { new List<string> { "monster", "abc" }, null, "monster" };
+            yield return new object[] { new List<string> { CharacterClassDefinitions.Monster.Name, "abc" }, "abc", CharacterClassDefinitions.Monster.Name };
+            yield return new object[] { new List<string> { CharacterClassDefinitions.Monster.Name, "abc", "def" }, CharacterClassDefinitions.Monster.Name, "abc" };
+            yield return new object[] { new List<string> { CharacterClassDefinitions.Monster.Name, "abc", "def" }, "abc", "def" };
+            yield return new object[] { new List<string> { CharacterClassDefinitions.Monster.Name, "abc" }, null, CharacterClassDefinitions.Monster.Name };
         }
 
         [Theory()]
@@ -33,7 +33,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Test.Models
         {
             var realtimeClient = Substitute.For<IRealtimeClient>();
             var gameState = new GameState(realtimeClient) { PlayerNames = playerNames };
-            gameState.GetRandomPlayerName().Should().NotBe("monster");
+            gameState.GetRandomPlayerName().Should().NotBe(CharacterClassDefinitions.Monster.Name);
         }
     }
 }
