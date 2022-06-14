@@ -127,6 +127,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             await _publisher.PublishPlayerTurnAsync(_questId, $"Next turn: {nextPlayerName}", nextPlayerName);
             if (nextPlayerName == CharacterClassDefinitions.Monster.Name)
             {
+                await Task.Delay(1000);
                 await ExecuteTurnAsync(CharacterClassDefinitions.Monster.Name);
             }
         }
