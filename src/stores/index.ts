@@ -54,7 +54,7 @@ export const gameStore = defineStore("game", {
             } else {
                 asset = "monster_idle.png";
             }
-            return `/assets/${asset}`;
+            return `src/assets/${asset}`;
         },
         getFighterAsset: (state) => {
             let asset = "";
@@ -66,7 +66,7 @@ export const gameStore = defineStore("game", {
             } else {
                 asset = "fighter_idle.png";
             }
-            return `/assets/${asset}`;
+            return `src/assets/${asset}`;
         },
         getRangerAsset: (state) => {
             let asset = "";
@@ -78,7 +78,7 @@ export const gameStore = defineStore("game", {
             } else {
                 asset = "ranger_idle.png";
             }
-            return `/assets/${asset}`;
+            return `src/assets/${asset}`;
         },
         getMageAsset: (state) => {
             let asset = "";	
@@ -90,7 +90,7 @@ export const gameStore = defineStore("game", {
             } else {
                 asset = "mage_idle.png";
             }
-            return `/assets/${asset}`;
+            return `src/assets/${asset}`;
         },
         isPlayerTurn: (state) => state.playerName === state.currentPlayer,
         isMonsterActive: (state) => state.monster.name === state.currentPlayer,
