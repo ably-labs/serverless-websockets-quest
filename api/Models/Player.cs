@@ -45,7 +45,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             bool isDefeated = Health <= 0;
             if (isDefeated) {
                 var gameStateEntityId = new EntityId(nameof(GameState), QuestId);
-                Entity.Current.SignalEntity<IGameState>(gameStateEntityId, async proxy => await proxy.RemovePlayerName(PlayerName));
+                Entity.Current.SignalEntity<IGameState>(gameStateEntityId, proxy => proxy.RemovePlayerName(PlayerName));
                 var message = $"{PlayerName} is defeated!";
                 await _publisher.PublishUpdateMessage(QuestId, message, false);
                 if (PlayerName == CharacterClassDefinitions.Monster.Name)
