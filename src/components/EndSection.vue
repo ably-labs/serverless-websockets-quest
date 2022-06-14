@@ -5,6 +5,10 @@ import { gameStore } from "../stores";
 
 const store = gameStore();
 
+function getGameResult() {
+    return store.teamHasWon ? "Your team defeated the monster!" : "The monster won! Better luck next time!";
+}
+
 async function playAgain() {
     store.reset();
 }
@@ -13,8 +17,8 @@ async function playAgain() {
 
 <template>
     <h1>Quest: <span class="pink">{{ store.questId }}</span></h1>
-    <h2>You won!</h2>
-    <PlayersSection v-bind="{ useHealth:false, includeMonster:false, isPlayerSelect:false }" />
+    <h2>{{ getGameResult() }} </h2>
+    <PlayersSection v-bind="{ useHealth:false, includeMonster:true, isPlayerSelect:false }" />
     <button @click="playAgain">Play again</button>
 
 </template>

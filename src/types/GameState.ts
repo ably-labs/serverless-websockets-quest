@@ -1,5 +1,4 @@
 import { Types } from "ably";
-import { Realtime } from "ably/promises";
 import { Player } from "./Player";
 
 export type GameState = RealtimeState & {
@@ -7,7 +6,6 @@ export type GameState = RealtimeState & {
     playerName: string;
     isHost: boolean;
     questId: string;
-    title: string;
     phase: string;
     characterClass: string;
     monster: Player;
@@ -18,6 +16,7 @@ export type GameState = RealtimeState & {
     isPlayerAdded: boolean;
     currentPlayer: string;
     messages: Array<string>;
+    teamHasWon?: boolean;
 };
 
 export type RealtimeState = {

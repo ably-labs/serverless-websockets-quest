@@ -23,7 +23,6 @@ export const gameStore = defineStore("game", {
             playerName: "",
             isHost: false,
             questId: "",
-            title: "You encounter a monster! Prepare for battle!",
             phase: GamePhase.Start,
             characterClass: CharacterClass.Fighter,
             monster: { characterClass: CharacterClass.Monster, name: "Monstarrr", health: 100, damage: 20, isAvailable: true, isAttacking: false, isUnderAttack: false, isDefeated: false },
@@ -34,6 +33,7 @@ export const gameStore = defineStore("game", {
             players: Array<string>(),
             currentPlayer: "",
             messages: Array<string>(),
+            teamHasWon: undefined,
             realtimeClient: undefined,
             channelInstance: undefined,
             isConnected: false,
@@ -242,11 +242,10 @@ export const gameStore = defineStore("game", {
             this.addPlayer(playerName, characterClass, health);
         },
         handleUpdatePhase(message: Types.Message) {
-            this.title = message.data.title;
             this.phase = message.data.phase;
+            this.teamHasWon = this.teamHasWon ? this.teamHasWon : message.data.teamHasWon;
         },
         handleUpdateMessage(message: Types.Message) {
-            this.title = message.data.title !== undefined ? message.data.title : this.title;
             this.messages.unshift(message.data.message);
         },
         handlePlayerIsAttacking(message: Types.Message) {
