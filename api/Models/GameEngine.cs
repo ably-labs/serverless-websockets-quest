@@ -37,12 +37,12 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
                 }
                 else
                 {
-                    return(false, GamePhases.Start, "Quest reached maximum number of players ¯\\_(ツ)_/¯");
+                    return(false, GamePhases.Start, Texts.MaxNumberOfPlayers);
                 }
             }
             else
             {
-                return (false, GamePhases.Start, "No quest was found with this ID (╥﹏╥)");
+                return (false, GamePhases.Start, Texts.NoQuestFound );
             }
         }
 
