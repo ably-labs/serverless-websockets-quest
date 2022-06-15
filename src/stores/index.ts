@@ -289,7 +289,7 @@ export const gameStore = defineStore("game", {
                     monster: { isAttacking: false },
                     fighter: { isAttacking: false },
                     ranger: { isAttacking: false },
-                    mage: { isAttacking: true, totalDamageApplied: this.ranger.totalDamageApplied + damage },
+                    mage: { isAttacking: true, totalDamageApplied: this.mage.totalDamageApplied + damage },
                 });
             }
             
