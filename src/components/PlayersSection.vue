@@ -7,7 +7,8 @@ const store = gameStore();
 const props = defineProps({
     useHealth: Boolean,
     includeMonster: Boolean,
-    isPlayerSelect: Boolean
+    isPlayerSelect: Boolean,
+    showStats: Boolean,
 });
 
 </script>
@@ -17,7 +18,11 @@ const props = defineProps({
         <li v-if="includeMonster">
             <p v-if="props.useHealth">
                 <span class="health">{{ store.monster.health }} HP</span>
-                <span class="damage">{{ store.getMonsterDamage }}</span>
+                <span class="damage" v-if="store.showMonsterDamage">-{{ store.monster.damage }}</span>
+            </p>
+            <p class="stats" v-if="props.showStats">
+                <span></span>Damage caused:
+                <span class="info">{{ store.monster.totalDamageApplied }}</span>
             </p>
             <img v-bind:class="{ isActive: store.isMonsterActive, isDefeated: store.monster.isDefeated }" alt="monster" :src="store.getMonsterAsset" />
             <figcaption>{{ store.monster.name }}</figcaption>
@@ -25,7 +30,11 @@ const props = defineProps({
         <li>
             <p v-if="props.useHealth">
                 <span class="health">{{ store.fighter.health }} HP</span>
-                <span class="damage">{{ store.getFighterDamage }}</span>
+                <span class="damage" v-if="store.showFighterDamage">-{{ store.fighter.damage }}</span>
+            </p>
+            <p class="stats" v-if="props.showStats">
+                <span></span>Damage caused:
+                <span class="info">{{ store.fighter.totalDamageApplied }}</span>
             </p>
             <img v-bind:class="{ isActive: store.isFighterActive, isDefeated: store.fighter.isDefeated }" alt="fighter" :src="store.getFighterAsset" />
             <figcaption>{{ store.fighter.name }}</figcaption>
@@ -33,7 +42,11 @@ const props = defineProps({
         <li>
             <p v-if="props.useHealth">
                 <span class="health">{{ store.ranger.health }} HP</span>
-                <span class="damage">{{ store.getRangerDamage }}</span>
+                <span class="damage" v-if="store.showRangerDamage">-{{ store.ranger.damage }}</span>
+            </p>
+            <p class="stats" v-if="props.showStats">
+                <span></span>Damage caused:
+                <span class="info">{{ store.ranger.totalDamageApplied }}</span>
             </p>
             <img v-bind:class="{ isActive: store.isRangerActive, isDefeated: store.ranger.isDefeated }" alt="ranger" :src="store.getRangerAsset" />
             <figcaption>{{ store.ranger.name }}</figcaption>
@@ -41,7 +54,11 @@ const props = defineProps({
         <li>
             <p v-if="props.useHealth">
                 <span class="health">{{ store.mage.health }} HP</span>
-                <span class="damage">{{ store.getMageDamage }}</span>
+                <span class="damage" v-if="store.showMageDamage">-{{ store.mage.damage }}</span>
+            </p>
+            <p class="stats" v-if="props.showStats">
+                <span></span>Damage caused:
+                <span class="info">{{ store.mage.totalDamageApplied }}</span>
             </p>
             <img v-bind:class="{ isActive: store.isMageActive, isDefeated: store.mage.isDefeated }" alt="mage" :src="store.getMageAsset" />
             <figcaption>{{ store.mage.name }}</figcaption>
@@ -73,8 +90,10 @@ const props = defineProps({
 </template>
 
 <style scoped>
+
 .flex-container{
     padding: 0;
+    gap: 20px;
     margin: 10px;
     list-style: none;
     display: flex;
@@ -102,7 +121,7 @@ input[type=radio] + label > img {
 }
 
 input[type=radio]:disabled + label > img {
-  border-color: #000;
+    border: 4px solid #000;
 }
 
 /* input[type=radio]:disabled:checked + label > img {
@@ -120,6 +139,10 @@ input[type=radio]:disabled + label > img {
     color: #000;
     padding: 5px;
     margin: 5px;
+}
+
+.stats {
+    font-size: smaller;
 }
 
 .isActive {

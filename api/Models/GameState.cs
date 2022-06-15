@@ -77,9 +77,9 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
         {
             var playerAttacking = CharacterClassDefinitions.Monster.Name;
             var playerUnderAttack = GetRandomPlayerName();
-            await _publisher.PublishPlayerAttacking(QuestId, playerAttacking, playerUnderAttack);
-            await Task.Delay(1000);
             var damage = CharacterClassDefinitions.GetDamageFor(CharacterClassDefinitions.Monster.CharacterClass);
+            await _publisher.PublishPlayerAttacking(QuestId, playerAttacking, playerUnderAttack, damage);
+            await Task.Delay(1000);
             var playerEntityId = new EntityId(nameof(Player), Player.GetEntityId(QuestId, playerUnderAttack));
             Entity.Current.SignalEntity<IPlayer>(playerEntityId, proxy => proxy.ApplyDamage(damage));
             await Task.Delay(1000);
