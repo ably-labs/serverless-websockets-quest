@@ -47,6 +47,9 @@ label {
   figcaption {
     width: 258px;
   }
+  button {
+    padding: 20px;
+  }
 }
 
 @media screen and (max-width: 1200px)  {
@@ -58,6 +61,9 @@ label {
   }
   figcaption {
     width: 168px;
+  }
+   button {
+    padding: 15px;
   }
 }
 
@@ -71,19 +77,19 @@ label {
   figcaption {
     width: 118px;
   }
+  button {
+    padding: 10px;
+  }
 }
 
 img {
   margin: 10px;
 }
 
-
-
 button {
   color: #000;
   background-color: #ff55ff;
   border-color: #fff;
-  padding: 20px;
   margin: 10px;
 }
 
@@ -98,7 +104,6 @@ input[type=text] {
   border-color: #ff55ff;
   padding: 10px;
   margin: 10px;
-  width: 300px;
 }
 
 .pink {
