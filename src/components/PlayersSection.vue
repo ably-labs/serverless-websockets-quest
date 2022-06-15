@@ -19,7 +19,7 @@ const props = defineProps({
                 <span class="health">{{ store.monster.health }}</span>
                 <span class="damage">{{ store.getMonsterDamage }}</span>
             </p>
-            <img v-bind:class="{ isActive: store.isMonsterActive, isDefeated: store.monster.isDefeated }" class="small" alt="monster" :src="store.getMonsterAsset" />
+            <img v-bind:class="{ isActive: store.isMonsterActive, isDefeated: store.monster.isDefeated }" alt="monster" :src="store.getMonsterAsset" />
             <figcaption>{{ store.monster.name }}</figcaption>
         </li>
         <li>
@@ -27,7 +27,7 @@ const props = defineProps({
                 <span class="health">{{ store.fighter.health }}</span>
                 <span class="damage">{{ store.getFighterDamage }}</span>
             </p>
-            <img v-bind:class="{ isActive: store.isFighterActive, isDefeated: store.fighter.isDefeated }" class="small" alt="fighter" :src="store.getFighterAsset" />
+            <img v-bind:class="{ isActive: store.isFighterActive, isDefeated: store.fighter.isDefeated }" alt="fighter" :src="store.getFighterAsset" />
             <figcaption>{{ store.fighter.name }}</figcaption>
         </li>
         <li>
@@ -35,7 +35,7 @@ const props = defineProps({
                 <span class="health">{{ store.ranger.health }}</span>
                 <span class="damage">{{ store.getRangerDamage }}</span>
             </p>
-            <img v-bind:class="{ isActive: store.isRangerActive, isDefeated: store.ranger.isDefeated }" class="small" alt="ranger" :src="store.getRangerAsset" />
+            <img v-bind:class="{ isActive: store.isRangerActive, isDefeated: store.ranger.isDefeated }" alt="ranger" :src="store.getRangerAsset" />
             <figcaption>{{ store.ranger.name }}</figcaption>
         </li>
         <li>
@@ -43,7 +43,7 @@ const props = defineProps({
                 <span class="health">{{ store.mage.health }}</span>
                 <span class="damage">{{ store.getMageDamage }}</span>
             </p>
-            <img v-bind:class="{ isActive: store.isMageActive, isDefeated: store.mage.isDefeated }" class="small" alt="mage" :src="store.getMageAsset" />
+            <img v-bind:class="{ isActive: store.isMageActive, isDefeated: store.mage.isDefeated }" alt="mage" :src="store.getMageAsset" />
             <figcaption>{{ store.mage.name }}</figcaption>
         </li>
     </ul>
@@ -51,21 +51,21 @@ const props = defineProps({
         <li>
             <input type="radio" id="fighter" name="character" value="fighter" v-model="store.characterClass" @click="store.playerName=store.getFighterName" :disabled="store.isFighterDisabled" />
             <label for="fighter">
-                <img class="small" alt="fighter" :src="store.getFighterAsset" />
+                <img alt="fighter" :src="store.getFighterAsset" />
                 <figcaption>{{ store.getFighterName }}</figcaption>
             </label>
         </li>
         <li>
             <input type="radio" id="ranger" name="character" value="ranger" v-model="store.characterClass" @click="store.playerName=store.getRangerName" :disabled="store.isRangerDisabled" />
             <label for="ranger">
-                <img class="small" alt="ranger" :src="store.getRangerAsset" />
+                <img alt="ranger" :src="store.getRangerAsset" />
                 <figcaption>{{ store.getRangerName }}</figcaption>
             </label>
         </li>
         <li>
             <input type="radio" id="mage" name="character" value="mage" v-model="store.characterClass" @click="store.playerName=store.getMageName" :disabled="store.isMageDisabled" />
             <label for="mage">
-                <img class="small" alt="mage" :src="store.getMageAsset"/>
+                <img alt="mage" :src="store.getMageAsset"/>
                 <figcaption>{{ store.getMageName }}</figcaption>
             </label>
         </li>
@@ -80,6 +80,7 @@ const props = defineProps({
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
+    align-items: flex-start ;
 }
 
 figcaption, img {
