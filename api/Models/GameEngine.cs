@@ -118,7 +118,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
 
         private async Task AttackAsync(string playerAttacking, string playerUnderAttack, GameState gameState, int damage)
         {
-            await _publisher.PublishPlayerAttacking(_questId, playerAttacking, playerUnderAttack);
+            await _publisher.PublishPlayerAttacking(_questId, playerAttacking, playerUnderAttack, damage);
             await Task.Delay(1000);
             var playerEntityId = new EntityId(nameof(Player), Player.GetEntityId(_questId, playerUnderAttack));
             await _durableClient.SignalEntityAsync<IPlayer>(playerEntityId, proxy => proxy.ApplyDamage(damage));

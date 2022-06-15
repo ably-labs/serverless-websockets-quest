@@ -55,7 +55,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             }
         }
 
-        public async Task PublishPlayerAttacking(string questId, string playerAttacking, string playerUnderAttack )
+        public async Task PublishPlayerAttacking(string questId, string playerAttacking, string playerUnderAttack, int damage)
         {
              if (_realtimeClient != null)
             {
@@ -68,8 +68,8 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
                         new
                         {
                             playerAttacking = playerAttacking,
-                            playerUnderAttack = playerUnderAttack
-
+                            playerUnderAttack = playerUnderAttack,
+                            damage = damage
                         }
                     );
             }
