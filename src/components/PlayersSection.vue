@@ -16,7 +16,7 @@ const props = defineProps({
     <ul v-if="!props.isPlayerSelect" class="flex-container">
         <li v-if="includeMonster">
             <p v-if="props.useHealth">
-                <span class="health">{{ store.monster.health }}</span>
+                <span class="health">{{ store.monster.health }} HP</span>
                 <span class="damage">{{ store.getMonsterDamage }}</span>
             </p>
             <img v-bind:class="{ isActive: store.isMonsterActive, isDefeated: store.monster.isDefeated }" alt="monster" :src="store.getMonsterAsset" />
@@ -24,7 +24,7 @@ const props = defineProps({
         </li>
         <li>
             <p v-if="props.useHealth">
-                <span class="health">{{ store.fighter.health }}</span>
+                <span class="health">{{ store.fighter.health }} HP</span>
                 <span class="damage">{{ store.getFighterDamage }}</span>
             </p>
             <img v-bind:class="{ isActive: store.isFighterActive, isDefeated: store.fighter.isDefeated }" alt="fighter" :src="store.getFighterAsset" />
@@ -32,7 +32,7 @@ const props = defineProps({
         </li>
         <li>
             <p v-if="props.useHealth">
-                <span class="health">{{ store.ranger.health }}</span>
+                <span class="health">{{ store.ranger.health }} HP</span>
                 <span class="damage">{{ store.getRangerDamage }}</span>
             </p>
             <img v-bind:class="{ isActive: store.isRangerActive, isDefeated: store.ranger.isDefeated }" alt="ranger" :src="store.getRangerAsset" />
@@ -40,7 +40,7 @@ const props = defineProps({
         </li>
         <li>
             <p v-if="props.useHealth">
-                <span class="health">{{ store.mage.health }}</span>
+                <span class="health">{{ store.mage.health }} HP</span>
                 <span class="damage">{{ store.getMageDamage }}</span>
             </p>
             <img v-bind:class="{ isActive: store.isMageActive, isDefeated: store.mage.isDefeated }" alt="mage" :src="store.getMageAsset" />
