@@ -5,6 +5,7 @@ export type Player = {
     name: string,
     health: number,
     damage: number,
+    totalDamageApplied: number,
     isAvailable: boolean,
     isAttacking: boolean,
     isUnderAttack: boolean,
