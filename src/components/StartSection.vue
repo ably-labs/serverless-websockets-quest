@@ -54,10 +54,15 @@ function clearError()
 <template>
     <h1>Serverless Websockets Quest</h1>
     <PlayersSection v-bind="{ useHealth:false, includeMonster:true, isPlayerSelect:false, showStats:false }" />
-    <button @click="createQuest">Start quest</button>
-    <br>or<br>
-    <input type="text" v-model="store.questId" placeholder="quest ID" @input="clearError" />
-    <button @click="joinQuest">Join quest</button>
+    <div v-if="!store.isHost">
+        <button @click="createQuest">Start quest</button>
+        <br>or<br>
+        <input type="text" v-model="store.questId" placeholder="quest ID" @input="clearError" />
+        <button @click="joinQuest">Join quest</button>
+    </div>
+    <div v-if="store.isHost">
+        <p class="message">The dungeon master is rolling the dice...</p>
+    </div>
     <ErrorMessageSection :errorMessage="errorMessage" />
 </template>
 

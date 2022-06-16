@@ -25,7 +25,7 @@ export const gameStore = defineStore("game", {
             questId: "",
             phase: GamePhase.Start,
             characterClass: CharacterClass.Fighter,
-            monster: { characterClass: CharacterClass.Monster, name: "Monstarrr", health: 100, damage: 0, totalDamageApplied: 0, isAvailable: true, isAttacking: false, isUnderAttack: false, isDefeated: false },
+            monster: { characterClass: CharacterClass.Monster, name: "Monstarrr", health: 0, damage: 0, totalDamageApplied: 0, isAvailable: true, isAttacking: false, isUnderAttack: false, isDefeated: false },
             fighter: { characterClass: CharacterClass.Fighter, name: "Edge messaging fighter", health: 0, damage: 0, totalDamageApplied: 0, isAvailable: true, isAttacking: false, isUnderAttack: false, isDefeated: false },
             ranger: { characterClass: CharacterClass.Ranger, name: "Realtime ranger", health: 0, damage: 0, totalDamageApplied: 0, isAvailable: true, isAttacking: false, isUnderAttack: false, isDefeated: false },
             mage: { characterClass: CharacterClass.Mage, name: "Open sourcerer", health: 0, damage: 0, totalDamageApplied: 0, isAvailable: true, isAttacking: false, isUnderAttack: false, isDefeated: false },
@@ -53,7 +53,7 @@ export const gameStore = defineStore("game", {
         showMageDamage: (state) => state.mage.damage > 0,
         getMageName: (state) => state.characterClass === CharacterClass.Mage && state.playerName !== "" ? state.playerName : state.mage.name,
         getMonsterAsset: (state) => {
-            if (state.monster.health <= 0) {
+            if (state.monster.isDefeated) {
                 return monsterDead;
             }
             else if (state.monster.isAttacking) {
@@ -65,7 +65,7 @@ export const gameStore = defineStore("game", {
             }
         },
         getFighterAsset: (state) => {
-            if (state.fighter.health <= 0) {
+            if (state.fighter.isDefeated) {
                 return fighterIdle;
             }
             else if (state.fighter.isAttacking) {
@@ -75,7 +75,7 @@ export const gameStore = defineStore("game", {
             }
         },
         getRangerAsset: (state) => {
-            if (state.ranger.health <= 0) {
+            if (state.ranger.isDefeated) {
                 return rangerIdle;
             }
             else if (state.ranger.isAttacking) {
@@ -85,7 +85,7 @@ export const gameStore = defineStore("game", {
             }
         },
         getMageAsset: (state) => {
-            if (state.mage.health <= 0) {
+            if (state.mage.isDefeated) {
                 return mageIdle;
             }
             else if (state.mage.isAttacking) {
