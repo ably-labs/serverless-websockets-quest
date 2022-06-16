@@ -10,10 +10,14 @@ The players trigger HTTP based serverless functions to play the game. The functi
 
 ```mermaid
 flowchart BT
+  P1[Player 1 browser] & P2[Player 2 browser] & P3[Player 3 browser]
   subgraph Azure
-    P1[Player 1] & P2[Player 2] & P3[Player 3] -- HTTP --> AF[Azure Functions]
-  end  
-  AF -. Websocket .-> AblyApp[Ably App]
+    SWA[Static Web Apps]
+    AF[Azure Functions]
+  end
+  AblyApp[Ably]
+  P1 & P2 & P3 -- HTTP --> SWA --> AF
+  AF -. Websocket .-> AblyApp[Ably]
   AblyApp -. Websocket .-> P1 & P2 & P3
 ```
 
