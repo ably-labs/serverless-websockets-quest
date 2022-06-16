@@ -61,7 +61,7 @@ function clearError()
         <button @click="joinQuest">Join quest</button>
     </div>
     <div v-if="store.isHost">
-        <p class="message">The dungeon master is rolling the dice...</p>
+        <p class="message">We're rolling the dice to setup your quest...</p>
     </div>
     <ErrorMessageSection :errorMessage="errorMessage" />
 </template>
