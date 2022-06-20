@@ -89,7 +89,7 @@ function getMageAsset(): string {
                 <span class="damage" v-if="showMonsterDamage()">-{{ store.monster.damage }}</span>
             </p>
             <p class="stats" v-if="props.showStats">
-                <span></span>Damage caused:
+                <span>Damage caused:</span>
                 <span class="info">{{ store.monster.totalDamageApplied }}</span>
             </p>
             <img v-bind:class="{ isActive: isMonsterActive(), isDefeated: store.monster.isDefeated }" alt="monster" :src="getMonsterAsset()" />
@@ -101,7 +101,7 @@ function getMageAsset(): string {
                 <span class="damage" v-if="showFighterDamage()">-{{ store.fighter.damage }}</span>
             </p>
             <p class="stats" v-if="props.showStats">
-                <span></span>Damage caused:
+                <span>Damage caused:</span>
                 <span class="info">{{ store.fighter.totalDamageApplied }}</span>
             </p>
             <img v-bind:class="{ isActive: isFighterActive(), isDefeated: store.fighter.isDefeated }" alt="fighter" :src="getFighterAsset()" />
@@ -113,7 +113,7 @@ function getMageAsset(): string {
                 <span class="damage" v-if="showRangerDamage()">-{{ store.ranger.damage }}</span>
             </p>
             <p class="stats" v-if="props.showStats">
-                <span></span>Damage caused:
+                <span>Damage caused:</span>
                 <span class="info">{{ store.ranger.totalDamageApplied }}</span>
             </p>
             <img v-bind:class="{ isActive: isRangerActive(), isDefeated: store.ranger.isDefeated }" alt="ranger" :src="getRangerAsset()" />
@@ -125,7 +125,7 @@ function getMageAsset(): string {
                 <span class="damage" v-if="showMageDamage()">-{{ store.mage.damage }}</span>
             </p>
             <p class="stats" v-if="props.showStats">
-                <span></span>Damage caused:
+                <span>Damage caused:</span>
                 <span class="info">{{ store.mage.totalDamageApplied }}</span>
             </p>
             <img v-bind:class="{ isActive: isMageActive(), isDefeated: store.mage.isDefeated }" alt="mage" :src="getMageAsset()" />
