@@ -17,7 +17,3 @@ import { defineComponent } from "@vue/runtime-core";
         👩‍💻.
     </p>
 </template>
-
-<style scoped>
-
-</style>

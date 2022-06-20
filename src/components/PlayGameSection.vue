@@ -33,5 +33,3 @@ async function fight() {
     <button v-if="isPlayerTurn()" @click="fight">Attack</button>
     <p v-if="!isPlayerTurn()" class="message">Wait for your turn</p>
 </template>
-
-<style scoped></style>
