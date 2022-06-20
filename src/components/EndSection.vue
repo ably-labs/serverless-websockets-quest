@@ -22,5 +22,3 @@ async function playAgain() {
     <button @click="playAgain">Play again</button>
 
 </template>
-
-<style scoped></style>

@@ -40,5 +40,3 @@ function isGameOver() {
     <!-- <StatusSection /> -->
     <FooterSection />
 </template>
-
-<style scoped></style>
