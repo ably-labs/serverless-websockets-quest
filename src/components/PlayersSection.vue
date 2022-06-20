@@ -6,12 +6,16 @@ import monsterIdle from "../assets/monster_idle.png"
 import monsterAttack from "../assets/monster_attack.gif"
 import monsterDead from "../assets/monster_dead.png"
 import monsterDamage from "../assets/monster_damage.gif"
+import monsterWin from "../assets/monster_win.gif"
 import fighterIdle from "../assets/fighter_idle.png"
 import fighterAttack from "../assets/fighter_attack.gif"
+import fighterWin from "../assets/fighter_win.gif"
 import rangerIdle from "../assets/ranger_idle.png"
 import rangerAttack from "../assets/ranger_attack.gif"
+import rangerWin from "../assets/ranger_win.gif"
 import mageIdle from "../assets/mage_idle.png"
 import mageAttack from "../assets/mage_attack.gif"
+import mageWin from "../assets/mage_win.gif"
 
 const store = gameStore();
 
@@ -22,10 +26,10 @@ const props = defineProps({
     showStats: Boolean,
 });
 
-function isMonsterActive(): boolean { return store.monster.name === store.currentPlayer; }
-function isFighterActive(): boolean { return store.fighter.name === store.currentPlayer; }
-function isRangerActive(): boolean { return store.ranger.name === store.currentPlayer; }
-function isMageActive(): boolean { return store.mage.name === store.currentPlayer; }
+function isMonsterActive(): boolean { return store.monster.name === store.currentPlayer && store.teamHasWon === undefined; }
+function isFighterActive(): boolean { return store.fighter.name === store.currentPlayer && store.teamHasWon === undefined; }
+function isRangerActive(): boolean { return store.ranger.name === store.currentPlayer && store.teamHasWon === undefined; }
+function isMageActive(): boolean { return store.mage.name === store.currentPlayer && store.teamHasWon === undefined; }
 function isFighterDisabled(): boolean { return !store.fighter.isAvailable || store.isPlayerAdded; }
 function isRangerDisabled(): boolean { return !store.ranger.isAvailable || store.isPlayerAdded; }
 function isMageDisabled(): boolean { return !store.mage.isAvailable || store.isPlayerAdded; }
@@ -37,42 +41,47 @@ function getRangerName(): string { return store.characterClass === CharacterClas
 function showMageDamage(): boolean { return store.mage.damage > 0; }
 function getMageName(): string { return store.characterClass === CharacterClass.Mage && store.playerName !== "" ? store.playerName : store.mage.name; }
 function getMonsterAsset(): string {
-    if (store.monster.isDefeated) {
+     if (store.teamHasWon === false) {
+        return monsterWin;
+    } else if (store.monster.isDefeated) {
         return monsterDead;
-    }
-    else if (store.monster.isAttacking) {
+    } else if (store.monster.isAttacking) {
         return monsterAttack;
     } else if (store.monster.isUnderAttack) {
         return monsterDamage;
+   
     } else {
         return monsterIdle;
     }
 };
 function getFighterAsset(): string {
-    if (store.fighter.isDefeated) {
+    if (store.teamHasWon) {
+        return fighterWin;
+    } else if (store.fighter.isDefeated) {
         return fighterIdle;
-    }
-    else if (store.fighter.isAttacking) {
+    } else if (store.fighter.isAttacking) {
         return fighterAttack;
     } else {
         return fighterIdle;
     }
 };
 function getRangerAsset(): string {
-    if (store.ranger.isDefeated) {
+    if (store.teamHasWon) {
+        return rangerWin;
+    } else if (store.ranger.isDefeated) {
         return rangerIdle;
-    }
-    else if (store.ranger.isAttacking) {
+    } else if (store.ranger.isAttacking) {
         return rangerAttack;
     } else {
         return rangerIdle;
     }
 };
 function getMageAsset(): string {
-    if (store.mage.isDefeated) {
+     if (store.teamHasWon) {
+        return mageWin;
+    } else if (store.mage.isDefeated) {
         return mageIdle;
-    }
-    else if (store.mage.isAttacking) {
+    } else if (store.mage.isAttacking) {
         return mageAttack;
     } else {
         return mageIdle;
