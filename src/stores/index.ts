@@ -27,12 +27,6 @@ export const gameStore = defineStore("game", {
             channelInstance: undefined,
             isConnected: false,
         }),
-    getters: {
-        getChannelName: (state) => state.questId,
-        getClientId: (state) => state.playerName,
-        numberOfPlayersJoined: (state) => state.players.length,
-        numberOfPlayersRemaining: (state) => 4 - state.players.length
-    },
     actions: {
         addPlayer(playerName: string, characterClass: CharacterClass, health: number) {
             if (!this.players.includes(playerName)) {
