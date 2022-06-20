@@ -111,7 +111,8 @@ input[type=text] {
 }
 
 .info {
-  color: #55ffff;
+  color: #fff;
+  font-size: smaller;
 }
 
 .lighter {
@@ -138,10 +139,6 @@ hr {
 
 .message::after {
     content: " >>";
-}
-
-.small {
-    font-size: smaller;
 }
 
 </style>
