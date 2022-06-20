@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { defineComponent, ref } from "vue";
-import { gameStore } from "../stores";
+    import { gameStore } from "../stores";
 
-const store = gameStore();
-
+    const store = gameStore();
 </script>
 
 <template>
@@ -15,22 +13,20 @@ const store = gameStore();
 </template>
 
 <style scoped>
+    ul {
+        display: inline-block;
+        max-width: 500px;
+        min-width: 200px;
+        height: 100px;
+        padding: 20px;
+        overflow: auto;
+        background-color: #55ffff;
+    }
 
-ul {
-    display: inline-block;
-    max-width: 500px;
-    min-width: 200px;
-    background-color: #55ffff;
-    padding: 20px;
-    height: 100px;
-    overflow: auto;
-}
-
-li {
-    list-style: none;
-    color: #000;
-    font-size: smaller;
-    text-align: left;
-}
-
+    li {
+        font-size: smaller;
+        text-align: left;
+        list-style: none;
+        color: #000;
+    }
 </style>

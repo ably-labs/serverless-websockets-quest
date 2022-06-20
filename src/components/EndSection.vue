@@ -1,18 +1,16 @@
 <script setup lang="ts">
-import { defineComponent, ref } from "vue";
-import PlayersSection from "./PlayersSection.vue";
-import { gameStore } from "../stores";
+    import PlayersSection from "./PlayersSection.vue";
+    import { gameStore } from "../stores";
 
-const store = gameStore();
+    const store = gameStore();
 
-function getGameResult() {
-    return store.teamHasWon ? "Your team defeated the monster!" : "The monster won! Better luck next time!";
-}
+    function getGameResult() {
+        return store.teamHasWon ? "Your team defeated the monster!" : "The monster won! Better luck next time!";
+    }
 
-async function playAgain() {
-    store.reset();
-}
-
+    async function playAgain() {
+        store.reset();
+    }
 </script>
 
 <template>
@@ -20,5 +18,4 @@ async function playAgain() {
     <h2>{{ getGameResult() }} </h2>
     <PlayersSection v-bind="{ useHealth:false, includeMonster:true, isPlayerSelect:false, showStats:true }" />
     <button @click="playAgain">Play again</button>
-
 </template>

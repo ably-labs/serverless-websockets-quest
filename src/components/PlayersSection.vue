@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { defineComponent, onMounted, ref } from "vue";
 import { gameStore } from "../stores";
 import { CharacterClass } from "../types/CharacterClass";
 import monsterIdle from "../assets/monster_idle.png"
