@@ -60,8 +60,9 @@ function clearError()
         <input type="text" v-model="store.questId" placeholder="quest ID" @input="clearError" />
         <button @click="joinQuest">Join quest</button>
     </div>
+    <p class="small">This game requires 3 people to play. You can simulate multiple players yourself by opening more tabs, one for each player.</p>
     <div v-if="store.isHost">
-        <p class="message">We're rolling the dice to setup your quest...</p>
+        <p class="message" >We're rolling the dice to setup your quest...</p>
     </div>
     <ErrorMessageSection :errorMessage="errorMessage" />
 </template>

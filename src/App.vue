@@ -140,4 +140,8 @@ hr {
     content: " >>";
 }
 
+.small {
+    font-size: smaller;
+}
+
 </style>
