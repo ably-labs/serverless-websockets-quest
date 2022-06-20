@@ -36,7 +36,7 @@ async function addPlayer() {
     <h1>Quest: <span class="pink">{{ store.questId }}</span></h1>
     <h2>Select and name your character</h2>
     <p class="info" v-if="store.isHost">Quest ID has been copied to your clipboard! Send this to two other players so they can join.</p>
-    <PlayersSection v-bind="{ useHealth:false, includeMonster:false, isPlayerSelect:true }" />
+    <PlayersSection v-bind="{ useHealth:false, includeMonster:false, isPlayerSelect:true, showStats:false }" />
     <div v-if="!store.isPlayerAdded">
         <input type="text" v-model="store.playerName" :disabled="store.isPlayerAdded" placeholder="Character name" />
         <button @click="addPlayer" :disabled="store.isPlayerAdded">Add player</button>

@@ -4,9 +4,24 @@
 
 ## Description
 
-This repository contains the code for a game that shows how to use serverless websockets with Ably & Azure Functions.
+This repository contains the code for the Serverless Websockets Quest, an ADND style game that demonstrates how to use serverless websockets with Ably & Azure Functions.
 
-The game can be played online at [Serverless Websockets Quest](https://quest.ably.dev/).
+The players trigger HTTP based serverless functions to play the game. The functions manage the global game state (stored as Durable Entities) and use Ably to send messages to the connected clients to update the local game state in realtime. The functions only publish messages, the players only subscribe to them.
+
+```mermaid
+flowchart BT
+  P1[Player 1 browser] & P2[Player 2 browser] & P3[Player 3 browser]
+  subgraph Azure
+    SWA[Static Web Apps]
+    AF[Azure Functions]
+  end
+  AblyApp[Ably]
+  P1 & P2 & P3 -- HTTP --> SWA --> AF
+  AF -. Websocket .-> AblyApp[Ably]
+  AblyApp -. Websocket .-> P1 & P2 & P3
+```
+
+The game can be played online at [Serverless Websockets Quest](https://quest.ably.dev).
 
 ## Tech Stack
 

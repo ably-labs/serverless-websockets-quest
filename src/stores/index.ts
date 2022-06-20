@@ -25,10 +25,10 @@ export const gameStore = defineStore("game", {
             questId: "",
             phase: GamePhase.Start,
             characterClass: CharacterClass.Fighter,
-            monster: { characterClass: CharacterClass.Monster, name: "Monstarrr", health: 100, damage: 20, isAvailable: true, isAttacking: false, isUnderAttack: false, isDefeated: false },
-            fighter: { characterClass: CharacterClass.Fighter, name: "Edge messaging fighter", health: 0, damage: 0, isAvailable: true, isAttacking: false, isUnderAttack: false, isDefeated: false },
-            ranger: { characterClass: CharacterClass.Ranger, name: "Realtime ranger", health: 0, damage: 0, isAvailable: true, isAttacking: false, isUnderAttack: false, isDefeated: false },
-            mage: { characterClass: CharacterClass.Mage, name: "Open sourcerer", health: 0, damage: 0, isAvailable: true, isAttacking: false, isUnderAttack: false, isDefeated: false },
+            monster: { characterClass: CharacterClass.Monster, name: "Monstarrr", health: 0, damage: 0, totalDamageApplied: 0, isAvailable: true, isAttacking: false, isUnderAttack: false, isDefeated: false },
+            fighter: { characterClass: CharacterClass.Fighter, name: "Edge messaging fighter", health: 0, damage: 0, totalDamageApplied: 0, isAvailable: true, isAttacking: false, isUnderAttack: false, isDefeated: false },
+            ranger: { characterClass: CharacterClass.Ranger, name: "Realtime ranger", health: 0, damage: 0, totalDamageApplied: 0, isAvailable: true, isAttacking: false, isUnderAttack: false, isDefeated: false },
+            mage: { characterClass: CharacterClass.Mage, name: "Open sourcerer", health: 0, damage: 0, totalDamageApplied: 0, isAvailable: true, isAttacking: false, isUnderAttack: false, isDefeated: false },
             isPlayerAdded: false,
             players: Array<string>(),
             currentPlayer: "",
@@ -44,16 +44,16 @@ export const gameStore = defineStore("game", {
         isFighterDisabled: (state) => !state.fighter.isAvailable || state.isPlayerAdded,
         isRangerDisabled: (state) => !state.ranger.isAvailable || state.isPlayerAdded,
         isMageDisabled: (state) => !state.mage.isAvailable || state.isPlayerAdded,
-        getMonsterDamage: (state) => state.monster.damage > 0 ? `-${state.monster.damage}` : "",
+        showMonsterDamage: (state) => state.monster.damage > 0,
         getMonsterName: (state) => state.monster.name,
-        getFighterDamage: (state) => state.fighter.damage > 0 ? `-${state.fighter.damage}` : "",
+        showFighterDamage: (state) => state.fighter.damage > 0,
         getFighterName: (state) => state.characterClass === CharacterClass.Fighter && state.playerName !== "" ? state.playerName : state.fighter.name,
-        getRangerDamage: (state) => state.ranger.damage > 0 ? `-${state.ranger.damage}` : "",
+        showRangerDamage: (state) => state.ranger.damage > 0,
         getRangerName: (state) => state.characterClass === CharacterClass.Ranger && state.playerName !== "" ? state.playerName : state.ranger.name,
-        getMageDamage: (state) => state.mage.damage > 0 ? `-${state.mage.damage}` : "",
+        showMageDamage: (state) => state.mage.damage > 0,
         getMageName: (state) => state.characterClass === CharacterClass.Mage && state.playerName !== "" ? state.playerName : state.mage.name,
         getMonsterAsset: (state) => {
-            if (state.monster.health <= 0) {
+            if (state.monster.isDefeated) {
                 return monsterDead;
             }
             else if (state.monster.isAttacking) {
@@ -65,7 +65,7 @@ export const gameStore = defineStore("game", {
             }
         },
         getFighterAsset: (state) => {
-            if (state.fighter.health <= 0) {
+            if (state.fighter.isDefeated) {
                 return fighterIdle;
             }
             else if (state.fighter.isAttacking) {
@@ -75,7 +75,7 @@ export const gameStore = defineStore("game", {
             }
         },
         getRangerAsset: (state) => {
-            if (state.ranger.health <= 0) {
+            if (state.ranger.isDefeated) {
                 return rangerIdle;
             }
             else if (state.ranger.isAttacking) {
@@ -85,7 +85,7 @@ export const gameStore = defineStore("game", {
             }
         },
         getMageAsset: (state) => {
-            if (state.mage.health <= 0) {
+            if (state.mage.isDefeated) {
                 return mageIdle;
             }
             else if (state.mage.isAttacking) {
@@ -126,6 +126,7 @@ export const gameStore = defineStore("game", {
                         isDefeated: isDefeated
                         },
                   });
+                setTimeout(() => this.fighter.damage = 0, 3000);
             } else if (characterClass === CharacterClass.Ranger) {
                 this.$patch({
                     ranger: { 
@@ -137,6 +138,7 @@ export const gameStore = defineStore("game", {
                         isDefeated: isDefeated
                         },
                   });
+                  setTimeout(() => this.ranger.damage = 0, 3000);
             } else if (characterClass === CharacterClass.Mage) {
                 this.$patch({
                     mage: { 
@@ -148,6 +150,7 @@ export const gameStore = defineStore("game", {
                         isDefeated: isDefeated
                         },
                   });
+                  setTimeout(() => this.mage.damage = 0, 3000);
             } else if (characterClass === CharacterClass.Monster) {
                 this.$patch({
                     monster: { 
@@ -159,6 +162,7 @@ export const gameStore = defineStore("game", {
                         isDefeated: isDefeated
                         },
                   });
+                  setTimeout(() => this.monster.damage = 0, 3000);
             }
         },
         async createRealtimeConnection(clientId: string, questId: string) {
@@ -253,11 +257,12 @@ export const gameStore = defineStore("game", {
             if (this.teamHasWon !== undefined) return;
             const playerAttacking: string = message.data.playerAttacking;
             const playerUnderAttack: string = message.data.playerUnderAttack;
+            const damage: number = message.data.damage;
             const messageText = `${playerAttacking} is attacking ${playerUnderAttack}`;
             this.writeMessage(messageText);
             if (playerAttacking === this.monster.name) {
                 this.$patch({
-                    monster: { isAttacking: true },
+                    monster: { isAttacking: true, totalDamageApplied: this.monster.totalDamageApplied + damage },
                     fighter: { isAttacking: false },
                     ranger: { isAttacking: false },
                     mage: { isAttacking: false },
@@ -266,7 +271,7 @@ export const gameStore = defineStore("game", {
             if (playerAttacking === this.fighter.name) {
                 this.$patch({
                     monster: { isAttacking: false },
-                    fighter: {isAttacking: true },
+                    fighter: {isAttacking: true, totalDamageApplied: this.fighter.totalDamageApplied + damage },
                     ranger: { isAttacking: false },
                     mage: { isAttacking: false },
                 });
@@ -275,7 +280,7 @@ export const gameStore = defineStore("game", {
                 this.$patch({
                     monster: { isAttacking: false },
                     fighter: { isAttacking: false },
-                    ranger: { isAttacking: true },
+                    ranger: { isAttacking: true, totalDamageApplied: this.ranger.totalDamageApplied + damage },
                     mage: { isAttacking: false },
                 });
             }
@@ -284,7 +289,7 @@ export const gameStore = defineStore("game", {
                     monster: { isAttacking: false },
                     fighter: { isAttacking: false },
                     ranger: { isAttacking: false },
-                    mage: { isAttacking: true },
+                    mage: { isAttacking: true, totalDamageApplied: this.mage.totalDamageApplied + damage },
                 });
             }
             

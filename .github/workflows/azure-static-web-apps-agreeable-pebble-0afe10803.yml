@@ -6,12 +6,16 @@ on:
       - main
     paths-ignore:
       - '**/*.md'
+      - '**/*.mmd'
+      - 'media/*'
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
       - main
     paths-ignore:
       - '**/*.md'
+      - '**/*.mmd'
+      - 'media/*'
 
 jobs:
   build_and_deploy_job:

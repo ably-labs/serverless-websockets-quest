@@ -1,15 +1,22 @@
 sequenceDiagram
+  participant Client
+  participant Function App
+  participant Game Engine
+  participant GameState (Durable Entity)
+  participant Player (Durable Entity)
+  participant Ably
+
   Client ->> Function App: AddPlayer
   activate Function App
   Function App ->> Game Engine: AddPlayer
   activate Game Engine
+  Game Engine ->> Player (Durable Entity): SignalEntity InitPlayer
+  Player (Durable Entity) ->> Ably: PublishAddPlayer
   Game Engine ->> GameState (Durable Entity): SignalEntity AddPlayerName
-  Game Engine ->> Player (Durable Entity): SignalEntity SetClassName
-  Game Engine ->> Player (Durable Entity):  SignalEntity SetHealth
-  Game Engine ->> Ably: PublishUpdatePlayer
-  Game Engine ->> GameState (Durable Entity): ReadEntity
+  GameState (Durable Entity) ->> GameState (Durable Entity): IsPartyComplete
   alt IS PARTY COMPLETE = TRUE
-    Game Engine ->> Ably: PublishPhase Play
+  GameState (Durable Entity) ->> GameState (Durable Entity): SetPhase
+    GameState (Durable Entity) ->> Ably: PublishPhase Play
   end
   deactivate Game Engine
   Function App -->> Client: Accepted
