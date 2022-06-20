@@ -26,10 +26,10 @@ const props = defineProps({
     showStats: Boolean,
 });
 
-function isMonsterActive(): boolean { return store.monster.name === store.currentPlayer; }
-function isFighterActive(): boolean { return store.fighter.name === store.currentPlayer; }
-function isRangerActive(): boolean { return store.ranger.name === store.currentPlayer; }
-function isMageActive(): boolean { return store.mage.name === store.currentPlayer; }
+function isMonsterActive(): boolean { return store.monster.name === store.currentPlayer && store.teamHasWon === undefined; }
+function isFighterActive(): boolean { return store.fighter.name === store.currentPlayer && store.teamHasWon === undefined; }
+function isRangerActive(): boolean { return store.ranger.name === store.currentPlayer && store.teamHasWon === undefined; }
+function isMageActive(): boolean { return store.mage.name === store.currentPlayer && store.teamHasWon === undefined; }
 function isFighterDisabled(): boolean { return !store.fighter.isAvailable || store.isPlayerAdded; }
 function isRangerDisabled(): boolean { return !store.ranger.isAvailable || store.isPlayerAdded; }
 function isMageDisabled(): boolean { return !store.mage.isAvailable || store.isPlayerAdded; }
