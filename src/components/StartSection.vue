@@ -65,5 +65,3 @@ function clearError()
     </div>
     <ErrorMessageSection :errorMessage="errorMessage" />
 </template>
-
-<style scoped></style>

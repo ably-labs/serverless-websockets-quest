@@ -1,20 +1,9 @@
 import { Types } from "ably";
 import { Realtime } from "ably/promises";
 import { defineStore, storeToRefs } from "pinia";
-import { toHandlers } from "vue";
 import { CharacterClass } from "../types/CharacterClass";
 import { GamePhase } from "../types/GamePhase";
 import { GameState } from "../types/GameState";
-import monsterIdle from "../assets/monster_idle.png"
-import monsterAttack from "../assets/monster_attack.gif"
-import monsterDead from "../assets/monster_dead.png"
-import monsterDamage from "../assets/monster_damage.gif"
-import fighterIdle from "../assets/fighter_idle.png"
-import fighterAttack from "../assets/fighter_attack.gif"
-import rangerIdle from "../assets/ranger_idle.png"
-import rangerAttack from "../assets/ranger_attack.gif"
-import mageIdle from "../assets/mage_idle.png"
-import mageAttack from "../assets/mage_attack.gif"
 
 export const gameStore = defineStore("game", {
     state: (): GameState =>
@@ -41,63 +30,6 @@ export const gameStore = defineStore("game", {
     getters: {
         getChannelName: (state) => state.questId,
         getClientId: (state) => state.playerName,
-        isFighterDisabled: (state) => !state.fighter.isAvailable || state.isPlayerAdded,
-        isRangerDisabled: (state) => !state.ranger.isAvailable || state.isPlayerAdded,
-        isMageDisabled: (state) => !state.mage.isAvailable || state.isPlayerAdded,
-        showMonsterDamage: (state) => state.monster.damage > 0,
-        getMonsterName: (state) => state.monster.name,
-        showFighterDamage: (state) => state.fighter.damage > 0,
-        getFighterName: (state) => state.characterClass === CharacterClass.Fighter && state.playerName !== "" ? state.playerName : state.fighter.name,
-        showRangerDamage: (state) => state.ranger.damage > 0,
-        getRangerName: (state) => state.characterClass === CharacterClass.Ranger && state.playerName !== "" ? state.playerName : state.ranger.name,
-        showMageDamage: (state) => state.mage.damage > 0,
-        getMageName: (state) => state.characterClass === CharacterClass.Mage && state.playerName !== "" ? state.playerName : state.mage.name,
-        getMonsterAsset: (state) => {
-            if (state.monster.isDefeated) {
-                return monsterDead;
-            }
-            else if (state.monster.isAttacking) {
-                return monsterAttack;
-            } else if (state.monster.isUnderAttack) {
-                return monsterDamage;
-            } else {
-                return monsterIdle;
-            }
-        },
-        getFighterAsset: (state) => {
-            if (state.fighter.isDefeated) {
-                return fighterIdle;
-            }
-            else if (state.fighter.isAttacking) {
-                return fighterAttack;
-            } else {
-                return fighterIdle;
-            }
-        },
-        getRangerAsset: (state) => {
-            if (state.ranger.isDefeated) {
-                return rangerIdle;
-            }
-            else if (state.ranger.isAttacking) {
-                return rangerAttack;
-            } else {
-                return rangerIdle;
-            }
-        },
-        getMageAsset: (state) => {
-            if (state.mage.isDefeated) {
-                return mageIdle;
-            }
-            else if (state.mage.isAttacking) {
-                return mageAttack;
-            } else {
-                return mageIdle;
-            }
-        },
-        isMonsterActive: (state) => state.monster.name === state.currentPlayer,
-        isFighterActive: (state) => state.fighter.name === state.currentPlayer,
-        isRangerActive: (state) => state.ranger.name === state.currentPlayer,
-        isMageActive: (state) => state.mage.name === state.currentPlayer,
         numberOfPlayersJoined: (state) => state.players.length,
         numberOfPlayersRemaining: (state) => 4 - state.players.length
     },

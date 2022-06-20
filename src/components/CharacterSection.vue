@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { defineComponent, ref, onMounted } from "vue";
+import { defineComponent, ref } from "vue";
 import PlayersSection from "./PlayersSection.vue";
 import { gameStore } from "../stores";
 import ErrorMessageSection from "./ErrorMessageSection.vue";
-import MessagesSection from "./MessagesSection.vue";
 
 const store = gameStore();
 const errorMessage = ref<string>("");
@@ -44,5 +43,3 @@ async function addPlayer() {
     <p class="message">Waiting for {{ store.numberOfPlayersRemaining }} player(s) to join.</p>
     <ErrorMessageSection :errorMessage=errorMessage />
 </template>
-
-<style scoped></style>
