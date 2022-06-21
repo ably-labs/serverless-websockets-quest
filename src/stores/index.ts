@@ -119,6 +119,7 @@ export const gameStore = defineStore("game", {
             );
         },
         updatePlayer(playerName: string, characterClass: CharacterClass, health: number, damage: number, isDefeated: boolean, isAvailable: boolean, isUnderAttack: boolean) {
+            const damageTimeOut = 2000;
             if (characterClass === CharacterClass.Fighter) {
                 this.$patch({
                     fighter: {
@@ -130,7 +131,7 @@ export const gameStore = defineStore("game", {
                         isDefeated: isDefeated
                         },
                   });
-                setTimeout(() => this.fighter.damage = 0, 3000);
+                setTimeout(() => this.fighter.damage = 0, damageTimeOut);
             } else if (characterClass === CharacterClass.Ranger) {
                 this.$patch({
                     ranger: {
@@ -142,7 +143,7 @@ export const gameStore = defineStore("game", {
                         isDefeated: isDefeated
                         },
                   });
-                  setTimeout(() => this.ranger.damage = 0, 3000);
+                  setTimeout(() => this.ranger.damage = 0, damageTimeOut);
             } else if (characterClass === CharacterClass.Mage) {
                 this.$patch({
                     mage: {
@@ -154,7 +155,7 @@ export const gameStore = defineStore("game", {
                         isDefeated: isDefeated
                         },
                   });
-                  setTimeout(() => this.mage.damage = 0, 3000);
+                  setTimeout(() => this.mage.damage = 0, damageTimeOut);
             } else if (characterClass === CharacterClass.Monster) {
                 this.$patch({
                     monster: {
@@ -166,7 +167,7 @@ export const gameStore = defineStore("game", {
                         isDefeated: isDefeated
                         },
                   });
-                  setTimeout(() => this.monster.damage = 0, 3000);
+                  setTimeout(() => this.monster.damage = 0, damageTimeOut);
             }
         },
         async createRealtimeConnection(clientId: string, questId: string) {
@@ -183,7 +184,12 @@ export const gameStore = defineStore("game", {
                     await this.attachToChannel(questId);
                 });
 
-                realtimeClient.connection.on("disconnected", () => {
+                this.realtimeClient.connection.on("disconnected", () => {
+                    this.isConnected = false;
+                    const messageText = `Ably connection status: ${realtimeClient.connection.state}`;
+                    this.writeMessage(messageText);
+                });
+                this.realtimeClient.connection.on("closed", () => {
                     this.isConnected = false;
                     const messageText = `Ably connection status: ${realtimeClient.connection.state}`;
                     this.writeMessage(messageText);

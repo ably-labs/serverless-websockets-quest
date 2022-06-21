@@ -5,6 +5,7 @@
     const store = gameStore();
 
     function getGameResult() {
+        store.disconnect();
         return store.teamHasWon ? "Your team defeated the monster!" : "The monster won! Better luck next time!";
     }
 
