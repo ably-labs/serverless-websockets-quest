@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { defineComponent, ref } from "vue";
-import { gameStore } from "../stores";
+    import { gameStore } from "../stores";
 
-const store = gameStore();
-
+    const store = gameStore();
 </script>
 
 <template>
@@ -11,10 +9,8 @@ const store = gameStore();
 </template>
 
 <style scoped>
-
-p {
-    font-size: smaller;
-    color: #55ffff 
-}
-
+    p {
+        font-size: smaller;
+        color: #55ffff 
+    }
 </style>

@@ -4,6 +4,20 @@ import { defineStore, storeToRefs } from "pinia";
 import { CharacterClass } from "../types/CharacterClass";
 import { GamePhase } from "../types/GamePhase";
 import { GameState } from "../types/GameState";
+import monsterIdle from "../assets/monster_idle.png"
+import monsterAttack from "../assets/monster_attack.gif"
+import monsterDead from "../assets/monster_dead.png"
+import monsterDamage from "../assets/monster_damage.gif"
+import monsterWin from "../assets/monster_win.gif"
+import fighterIdle from "../assets/fighter_idle.png"
+import fighterAttack from "../assets/fighter_attack.gif"
+import fighterWin from "../assets/fighter_win.gif"
+import rangerIdle from "../assets/ranger_idle.png"
+import rangerAttack from "../assets/ranger_attack.gif"
+import rangerWin from "../assets/ranger_win.gif"
+import mageIdle from "../assets/mage_idle.png"
+import mageAttack from "../assets/mage_attack.gif"
+import mageWin from "../assets/mage_win.gif"
 
 export const gameStore = defineStore("game", {
     state: (): GameState =>
@@ -14,10 +28,74 @@ export const gameStore = defineStore("game", {
             questId: "",
             phase: GamePhase.Start,
             characterClass: CharacterClass.Fighter,
-            monster: { characterClass: CharacterClass.Monster, name: "Monstarrr", health: 0, damage: 0, totalDamageApplied: 0, isAvailable: true, isAttacking: false, isUnderAttack: false, isDefeated: false },
-            fighter: { characterClass: CharacterClass.Fighter, name: "Edge messaging fighter", health: 0, damage: 0, totalDamageApplied: 0, isAvailable: true, isAttacking: false, isUnderAttack: false, isDefeated: false },
-            ranger: { characterClass: CharacterClass.Ranger, name: "Realtime ranger", health: 0, damage: 0, totalDamageApplied: 0, isAvailable: true, isAttacking: false, isUnderAttack: false, isDefeated: false },
-            mage: { characterClass: CharacterClass.Mage, name: "Open sourcerer", health: 0, damage: 0, totalDamageApplied: 0, isAvailable: true, isAttacking: false, isUnderAttack: false, isDefeated: false },
+            monster: {
+                characterClass: CharacterClass.Monster,
+                name: "Monstarrr",
+                health: 0,
+                damage: 0,
+                totalDamageApplied: 0,
+                isAvailable: true,
+                isAttacking: false,
+                isUnderAttack: false,
+                isDefeated: false,
+                assets: {
+                    idle: monsterIdle,
+                    attack: monsterAttack,
+                    damage: monsterDamage,
+                    dead: monsterDead,
+                    win: monsterWin
+                }},
+            fighter: {
+                characterClass: CharacterClass.Fighter,
+                name: "Edge messaging fighter",
+                health: 0,
+                damage: 0,
+                totalDamageApplied: 0,
+                isAvailable: true,
+                isAttacking: false,
+                isUnderAttack: false,
+                isDefeated: false,
+                assets: {
+                    idle: fighterIdle,
+                    attack: fighterAttack,
+                    damage: fighterIdle,
+                    dead: fighterIdle,
+                    win: fighterWin
+                }},
+            ranger: {
+                characterClass: CharacterClass.Ranger,
+                name: "Realtime ranger",
+                health: 0,
+                damage: 0,
+                totalDamageApplied: 0,
+                isAvailable: true,
+                isAttacking: false,
+                isUnderAttack: false,
+                isDefeated: false,
+                assets: {
+                    idle: rangerIdle,
+                    attack: rangerAttack,
+                    damage: rangerIdle,
+                    dead: rangerIdle,
+                    win: rangerWin
+                }},
+            mage: {
+                characterClass: CharacterClass.Mage,
+                name: "Open sourcerer",
+                health: 0,
+                damage: 0,
+                totalDamageApplied: 0,
+                isAvailable: true,
+                isAttacking: false,
+                isUnderAttack: false,
+                isDefeated: false,
+                assets: {
+                    idle: mageIdle,
+                    attack: mageAttack,
+                    damage: mageIdle,
+                    dead: mageIdle,
+                    win: mageWin
+                }},
             isPlayerAdded: false,
             players: Array<string>(),
             currentPlayer: "",
@@ -43,7 +121,7 @@ export const gameStore = defineStore("game", {
         updatePlayer(playerName: string, characterClass: CharacterClass, health: number, damage: number, isDefeated: boolean, isAvailable: boolean, isUnderAttack: boolean) {
             if (characterClass === CharacterClass.Fighter) {
                 this.$patch({
-                    fighter: { 
+                    fighter: {
                         name: playerName,
                         health: health,
                         damage: damage,
@@ -55,7 +133,7 @@ export const gameStore = defineStore("game", {
                 setTimeout(() => this.fighter.damage = 0, 3000);
             } else if (characterClass === CharacterClass.Ranger) {
                 this.$patch({
-                    ranger: { 
+                    ranger: {
                         name: playerName,
                         health: health,
                         damage: damage,
@@ -67,7 +145,7 @@ export const gameStore = defineStore("game", {
                   setTimeout(() => this.ranger.damage = 0, 3000);
             } else if (characterClass === CharacterClass.Mage) {
                 this.$patch({
-                    mage: { 
+                    mage: {
                         name: playerName,
                         health: health,
                         damage: damage,
@@ -79,7 +157,7 @@ export const gameStore = defineStore("game", {
                   setTimeout(() => this.mage.damage = 0, 3000);
             } else if (characterClass === CharacterClass.Monster) {
                 this.$patch({
-                    monster: { 
+                    monster: {
                         name: playerName,
                         health: health,
                         damage: damage,
@@ -218,7 +296,7 @@ export const gameStore = defineStore("game", {
                     mage: { isAttacking: true, totalDamageApplied: this.mage.totalDamageApplied + damage },
                 });
             }
-            
+
         },
         handlePlayerIsUnderAttack(message: Types.Message) {
             if (this.teamHasWon !== undefined) return;

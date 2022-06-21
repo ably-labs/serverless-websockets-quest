@@ -1,29 +1,27 @@
 <script setup lang="ts">
-import { defineComponent, ref } from "vue";
-import { gameStore } from "../stores";
-import PlayersSection from "./PlayersSection.vue";
+    import { gameStore } from "../stores";
+    import PlayersSection from "./PlayersSection.vue";
 
-const store = gameStore();
+    const store = gameStore();
 
-function isPlayerTurn(): boolean {
-    return store.playerName === store.currentPlayer;
-}
+    function isPlayerTurn(): boolean {
+        return store.playerName === store.currentPlayer;
+    }
 
-async function fight() {
-    store.currentPlayer = "";
-    await window.fetch("/api/ExecuteTurn", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            questId: store.questId,
-            playerName: store.playerName,
-            characterClass: store.characterClass
-            })
-        });
-}
-
+    async function fight() {
+        store.currentPlayer = "";
+        await window.fetch("/api/ExecuteTurn", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                questId: store.questId,
+                playerName: store.playerName,
+                characterClass: store.characterClass
+                })
+            });
+    }
 </script>
 
 <template>
