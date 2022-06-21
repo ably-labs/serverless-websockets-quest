@@ -9,7 +9,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
         public static int MaxPlayerDamage => 20;
         public static int MaxMonsterDamage => 25;
 
-        
+
         public static class Fighter
         {
             public static string CharacterClass => "fighter";

@@ -21,7 +21,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
 
         public async Task PublishAddPlayer(string questId, string playerName, string characterClass, int health)
         {
-           if (_realtimeClient != null)
+            if (_realtimeClient != null)
             {
                 var channel = _realtimeClient.Channels.Get(questId);
                 await channel.PublishAsync(
@@ -57,7 +57,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
 
         public async Task PublishPlayerAttacking(string questId, string playerAttacking, string playerUnderAttack, int damage)
         {
-             if (_realtimeClient != null)
+            if (_realtimeClient != null)
             {
                 _realtimeChannel = _realtimeClient.Channels.Get(questId);
             }
@@ -97,7 +97,8 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             {
                 _realtimeChannel = _realtimeClient.Channels.Get(questId);
             }
-            if (_realtimeChannel != null) {
+            if (_realtimeChannel != null)
+            {
                 await _realtimeChannel.PublishAsync(
                     "update-message",
                         new

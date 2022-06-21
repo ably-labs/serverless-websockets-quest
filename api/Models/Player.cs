@@ -24,10 +24,10 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
 
         [JsonProperty("questId")]
         public string QuestId { get; set; }
-        
+
         [JsonProperty("playerName")]
         public string PlayerName { get; set; }
-        
+
         [JsonProperty("characterClass")]
         public string CharacterClass { get; set; }
 
@@ -41,13 +41,14 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             Health = Convert.ToInt32(playerFields[3]);
             await _publisher.PublishAddPlayer(QuestId, PlayerName, CharacterClass, Health);
         }
-        
+
         public async Task ApplyDamage(int damage)
         {
             Health = damage > Health ? 0 : Health - damage;
             bool isDefeated = Health <= 0;
             await _publisher.PublishPlayerUnderAttack(QuestId, PlayerName, CharacterClass, Health, damage, isDefeated);
-            if (isDefeated) {
+            if (isDefeated)
+            {
                 var gameStateEntityId = new EntityId(nameof(GameState), QuestId);
                 Entity.Current.SignalEntity<IGameState>(gameStateEntityId, proxy => proxy.RemovePlayerName(PlayerName));
                 var message = $"{PlayerName} is defeated!";

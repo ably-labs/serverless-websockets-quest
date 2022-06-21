@@ -1,7 +1,3 @@
-<script setup lang="ts">
-import { defineComponent } from "@vue/runtime-core";
-</script>
-
 <template>
     <hr />
     <p class="lighter">
