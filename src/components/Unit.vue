@@ -20,13 +20,13 @@ function getName(): string { return targetUnit.characterClass === store.characte
 
 function getAsset(): string {
     const assetPrefix = `/src/assets/${targetUnit.characterClass}`;
-
-    if (targetUnit.isDefeated) {
+    if (store.teamHasWon || (store.teamHasWon === false && targetUnit.characterClass === CharacterClass.Monster)) {
+        return `${assetPrefix}_win.png`;
+    } else if (targetUnit.isDefeated) {
         return `${assetPrefix}_dead.png`;
-    }
-    else if (targetUnit.isAttacking) {
+    } else if (targetUnit.isAttacking) {
         return `${assetPrefix}_attack.gif`;
-    } else if (targetUnit.isUnderAttack && targetUnit.characterClass === "monster") {
+    } else if (targetUnit.isUnderAttack && targetUnit.characterClass === CharacterClass.Monster) {
         return `${assetPrefix}_damage.gif`;
     } else {
         return `${assetPrefix}_idle.png`;
@@ -54,7 +54,7 @@ function getAsset(): string {
         <label :for="targetUnit.characterClass">
             <img :alt="targetUnit.characterClass" :src="getAsset()" />
             <figcaption>{{ getName() }}</figcaption>
-        </label> 
+        </label>
     </div>
 
 </template>
@@ -89,7 +89,7 @@ input[type=radio]:checked + label > img {
     border: 4px solid #ff55ff;
 }
 
-input[type=radio] + label > img {  
+input[type=radio] + label > img {
     border: 4px solid #55ffff;
 }
 
