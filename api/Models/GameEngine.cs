@@ -34,7 +34,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             {
                 return (false, GamePhases.Start, Texts.NoQuestFound );
             }
-        
+
             if (!gameState.EntityState.IsPartyComplete)
             {
                 return (true, GamePhases.Character, "");
@@ -42,13 +42,13 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             else
             {
                 return(false, GamePhases.Start, Texts.MaxNumberOfPlayers);
-            }            
+            }
         }
 
         private async Task InitializeGameStateAsync(string phase)
         {
             var monsterEntityId = new EntityId(nameof(Player), Player.GetEntityId(_questId, CharacterClassDefinitions.Monster.Name));
-            
+
             await _durableClient.SignalEntityAsync<IPlayer>(monsterEntityId, proxy => proxy.InitPlayer(
                 new object[] {
                     _questId,
@@ -67,7 +67,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
         {
             var gameStateEntityId = new EntityId(nameof(GameState), _questId);
             var gameState = await _durableClient.ReadEntityStateAsync<GameState>(gameStateEntityId);
-            
+
             if (gameState.EntityState.IsPartyComplete)
             {
                 await _publisher.PublishUpdateMessage(_questId, Texts.MaxNumberOfPlayers, true);
@@ -75,7 +75,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             }
 
             var playerEntityId = new EntityId(nameof(Player), Player.GetEntityId(_questId, playerName));
-                
+
             await _durableClient.SignalEntityAsync<IPlayer>(playerEntityId, proxy => proxy.InitPlayer(
                 new object[] {
                     _questId,
@@ -107,7 +107,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             var playerAttacking = CharacterClassDefinitions.Monster.Name;
             var playerUnderAttack = gameState.GetRandomPlayerName();
             var damage = CharacterClassDefinitions.GetDamageFor(CharacterClassDefinitions.Monster.CharacterClass);
-            
+
             await AttackAsync(playerAttacking, playerUnderAttack, gameState, damage);
         }
 
@@ -116,7 +116,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             var playerEntityId = new EntityId(nameof(Player), Player.GetEntityId(_questId, playerAttacking));
             var player = await _durableClient.ReadEntityStateAsync<Player>(playerEntityId);
             var damage = CharacterClassDefinitions.GetDamageFor(player.EntityState.CharacterClass);
-            
+
             await AttackAsync(playerAttacking, CharacterClassDefinitions.Monster.Name, gameState, damage);
         }
 
@@ -124,7 +124,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
         {
             await _publisher.PublishPlayerAttacking(_questId, playerAttacking, playerUnderAttack, damage);
             await Task.Delay(1000);
-            
+
             var playerEntityId = new EntityId(nameof(Player), Player.GetEntityId(_questId, playerUnderAttack));
             await _durableClient.SignalEntityAsync<IPlayer>(playerEntityId, proxy => proxy.ApplyDamage(damage));
             await Task.Delay(1000);

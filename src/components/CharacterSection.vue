@@ -3,11 +3,27 @@ import { ref } from "vue";
 import PlayersSection from "./PlayersSection.vue";
 import { gameStore } from "../stores";
 import ErrorMessageSection from "./ErrorMessageSection.vue";
+import { CharacterClass } from "../types/CharacterClass";
 
 const store = gameStore();
 const errorMessage = ref<string>("");
 
 async function addPlayer() {
+    let selectedCharacter: string = "";
+    if (store.characterClass === CharacterClass.Fighter && !store.fighter.isAvailable) {
+        selectedCharacter = CharacterClass.Fighter;
+    } else if (store.characterClass === CharacterClass.Ranger && !store.ranger.isAvailable) {
+        selectedCharacter = CharacterClass.Ranger;
+    } else if (store.characterClass === CharacterClass.Mage && !store.mage.isAvailable) {
+        selectedCharacter = CharacterClass.Mage;
+    }
+    if (selectedCharacter) {
+        errorMessage.value = `The ${selectedCharacter} is already chosen by another player. Please select another character.`;
+        return;
+    } else {
+        errorMessage.value = "";
+    }
+
     store.isPlayerAdded = true;
     const questExistsResponse = await window.fetch(`/api/GetQuestExists/${store.questId}`);
     const questExistsMessage = await questExistsResponse.text();
