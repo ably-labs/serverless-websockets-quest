@@ -12,8 +12,8 @@ namespace AblyLabs.ServerlessWebsocketsQuest
         public override void Configure(IFunctionsHostBuilder builder)
         {
             var ablyApiKey = Environment.GetEnvironmentVariable("ABLY_APIKEY");
-            var ablyClient = new AblyRealtime(ablyApiKey);
-            builder.Services.AddSingleton<IRealtimeClient>(ablyClient);
+            var ablyClient = new AblyRest(ablyApiKey);
+            builder.Services.AddSingleton<IRestClient>(ablyClient);
         }
     }
 }

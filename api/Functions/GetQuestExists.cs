@@ -12,13 +12,13 @@ namespace AblyLabs.ServerlessWebsocketsQuest
 {
     public class GetQuestExists
     {
-        private IRealtimeClient _realtime;
+        private IRestClient _ablyClient;
 
-        public GetQuestExists(IRealtimeClient realtime)
+        public GetQuestExists(IRestClient ablyClient)
         {
-            _realtime = realtime;
+            _ablyClient = ablyClient;
         }
-        
+
         /// The DoesQuestExist function is called when a player wants to join a quest created by the host.
         [FunctionName(nameof(GetQuestExists))]
         public async Task<IActionResult> Run(
@@ -27,7 +27,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest
             string questId,
             ILogger log)
         {
-            var channel = _realtime.Channels.Get(questId);
+            var channel = _ablyClient.Channels.Get(questId);
             var gameEngine = new GameEngine(durableClient, questId, channel);
             var result = await gameEngine.DoesQuestExistAsync();
 

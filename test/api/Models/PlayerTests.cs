@@ -17,8 +17,8 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Test.Models
         [InlineData(100, 110, 0)]
         public async Task ApplyDamageToPlayer(int health, int damage, int result)
         {
-            var realtimeClient = Substitute.For<IRealtimeClient>();
-            var player = new Player(realtimeClient) { Health = health };
+            var ablyClient = Substitute.For<IRestClient>();
+            var player = new Player(ablyClient) { Health = health };
             await player.ApplyDamage(damage);
             player.Health.Should().Be(result);
         }

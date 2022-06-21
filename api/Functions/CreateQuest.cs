@@ -12,11 +12,11 @@ namespace AblyLabs.ServerlessWebsocketsQuest
 {
     public class CreateQuest
     {
-        private IRealtimeClient _realtime;
+        private IRestClient _ablyClient;
 
-        public CreateQuest(IRealtimeClient realtime)
+        public CreateQuest(IRestClient ablyClient)
         {
-            _realtime = realtime;
+            _ablyClient = ablyClient;
         }
 
         /// The CreateQuest function is called by the host (the first player).
@@ -30,7 +30,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest
             if (req.Content != null)
             {
                 var questId = await req.Content.ReadAsStringAsync();
-                var channel = _realtime.Channels.Get(questId);
+                var channel = _ablyClient.Channels.Get(questId);
                 var gameEngine = new GameEngine(durableClient, questId, channel);
                 var gamePhase = await gameEngine.CreateQuestAsync();
                 return new OkObjectResult(gamePhase);
