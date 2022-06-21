@@ -32,7 +32,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
 
             if (!gameState.EntityExists)
             {
-                return (false, GamePhases.Start, Texts.NoQuestFound );
+                return (false, GamePhases.Start, Texts.NoQuestFound);
             }
 
             if (!gameState.EntityState.IsPartyComplete)
@@ -41,7 +41,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             }
             else
             {
-                return(false, GamePhases.Start, Texts.MaxNumberOfPlayers);
+                return (false, GamePhases.Start, Texts.MaxNumberOfPlayers);
             }
         }
 

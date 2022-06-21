@@ -24,11 +24,11 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             Phase = string.Empty;
             PlayerNames = new List<string>();
         }
-        
+
         [JsonProperty("questId")]
         public string QuestId { get; set; }
         public async Task InitGameState(string[] gameStateFields)
-        {            
+        {
             QuestId = gameStateFields[0];
             Phase = gameStateFields[1];
             await _publisher.PublishUpdatePhase(QuestId, Phase);
@@ -48,7 +48,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
         {
             if (PlayerNames == null)
             {
-                PlayerNames =  new List<string> { playerName };
+                PlayerNames = new List<string> { playerName };
             }
             else
             {
@@ -63,15 +63,16 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             }
         }
 
-         public async Task RemovePlayerName(string playerName)
-         {
+        public async Task RemovePlayerName(string playerName)
+        {
             PlayerNames.Remove(playerName);
 
-            if (PlayerNames.Count == 0){
+            if (PlayerNames.Count == 0)
+            {
                 var teamHasWon = false;
                 await _publisher.PublishUpdatePhase(QuestId, GamePhases.End, teamHasWon);
             }
-         }
+        }
 
         private async Task AttackByMonster()
         {
