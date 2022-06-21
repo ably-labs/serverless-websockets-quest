@@ -28,7 +28,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
         [JsonProperty("questId")]
         public string QuestId { get; set; }
         public async Task InitGameState(string[] gameStateFields)
-        {
+        {            
             QuestId = gameStateFields[0];
             Phase = gameStateFields[1];
             await _publisher.PublishUpdatePhase(QuestId, Phase);
