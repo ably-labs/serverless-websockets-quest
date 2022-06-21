@@ -11,11 +11,11 @@ namespace AblyLabs.ServerlessWebsocketsQuest
 {
     public class CreateTokenRequest
     {
-        private IRealtimeClient _realtime;
+        private IRestClient _ablyClient;
 
-        public CreateTokenRequest(IRealtimeClient realtime)
+        public CreateTokenRequest(IRestClient ablyClient)
         {
-            _realtime = realtime;
+            _ablyClient = ablyClient;
         }
 
         [FunctionName(nameof(CreateTokenRequest))]
@@ -25,7 +25,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest
             ILogger log)
         {
             var tokenParams = new TokenParams() { ClientId = clientId ?? Guid.NewGuid().ToString() };
-            var tokenData = await _realtime.Auth.RequestTokenAsync(tokenParams);
+            var tokenData = await _ablyClient.Auth.RequestTokenAsync(tokenParams);
 
             return new OkObjectResult(tokenData);
         }

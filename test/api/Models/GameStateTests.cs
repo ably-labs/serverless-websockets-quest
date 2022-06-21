@@ -22,8 +22,8 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Test.Models
         [MemberData(nameof(GetPlayers))]
         public void GetNextPlayerName(List<string> playerNames, string? currentPlayerName, string expectedPlayerName)
         {
-            var realtimeClient = Substitute.For<IRealtimeClient>();
-            var gameState = new GameState(realtimeClient) { PlayerNames = playerNames };
+            var ablyClient = Substitute.For<IRestClient>();
+            var gameState = new GameState(ablyClient) { PlayerNames = playerNames };
             gameState.GetNextPlayerName(currentPlayerName).Should().Be(expectedPlayerName);
         }
 
@@ -31,8 +31,8 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Test.Models
         [MemberData(nameof(GetPlayers))]
         public void GetRandomPlayerName(List<string> playerNames, string? currentPlayerName, string expectedPlayerName)
         {
-            var realtimeClient = Substitute.For<IRealtimeClient>();
-            var gameState = new GameState(realtimeClient) { PlayerNames = playerNames };
+            var ablyClient = Substitute.For<IRestClient>();
+            var gameState = new GameState(ablyClient) { PlayerNames = playerNames };
             gameState.GetRandomPlayerName().Should().NotBe(CharacterClassDefinitions.Monster.Name);
         }
     }

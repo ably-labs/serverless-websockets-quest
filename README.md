@@ -17,7 +17,7 @@ flowchart BT
   end
   AblyApp[Ably]
   P1 & P2 & P3 -- HTTP --> SWA --> AF
-  AF -. Websocket .-> AblyApp[Ably]
+  AF -- HTTP --> AblyApp[Ably]
   AblyApp -. Websocket .-> P1 & P2 & P3
 ```
 

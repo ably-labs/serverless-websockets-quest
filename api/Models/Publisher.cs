@@ -1,29 +1,29 @@
 using System.Threading.Tasks;
 using IO.Ably;
-using IO.Ably.Realtime;
+using IO.Ably.Rest;
 
 namespace AblyLabs.ServerlessWebsocketsQuest.Models
 {
     public class Publisher
     {
-        private readonly IRealtimeClient? _realtimeClient;
-        private IRealtimeChannel? _realtimeChannel;
+        private readonly IRestClient? _ablyClient;
+        private IRestChannel? _channel;
 
-        public Publisher(IRealtimeClient realtimeClient)
+        public Publisher(IRestClient ablyClient)
         {
-            _realtimeClient = realtimeClient;
+            _ablyClient = ablyClient;
         }
 
-        public Publisher(IRealtimeChannel realtimeChannel)
+        public Publisher(IRestChannel channel)
         {
-            _realtimeChannel = realtimeChannel;
+            _channel = channel;
         }
 
         public async Task PublishAddPlayer(string questId, string playerName, string characterClass, int health)
         {
-            if (_realtimeClient != null)
+            if (_ablyClient != null)
             {
-                var channel = _realtimeClient.Channels.Get(questId);
+                var channel = _ablyClient.Channels.Get(questId);
                 await channel.PublishAsync(
                     "add-player",
                         new
@@ -38,9 +38,9 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
 
         public async Task PublishPlayerUnderAttack(string questId, string playerName, string characterClass, int health, int? damage, bool isDefeated)
         {
-            if (_realtimeClient != null)
+            if (_ablyClient != null)
             {
-                var channel = _realtimeClient.Channels.Get(questId);
+                var channel = _ablyClient.Channels.Get(questId);
                 await channel.PublishAsync(
                     "player-under-attack",
                         new
@@ -57,13 +57,13 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
 
         public async Task PublishPlayerAttacking(string questId, string playerAttacking, string playerUnderAttack, int damage)
         {
-            if (_realtimeClient != null)
+            if (_ablyClient != null)
             {
-                _realtimeChannel = _realtimeClient.Channels.Get(questId);
+                _channel = _ablyClient.Channels.Get(questId);
             }
-            if (_realtimeChannel != null)
+            if (_channel != null)
             {
-                await _realtimeChannel.PublishAsync(
+                await _channel.PublishAsync(
                     "player-attacking",
                         new
                         {
@@ -77,9 +77,9 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
 
         public async Task PublishUpdatePhase(string questId, string phase, bool? teamHasWon = null)
         {
-            if (_realtimeClient != null)
+            if (_ablyClient != null)
             {
-                var channel = _realtimeClient.Channels.Get(questId);
+                var channel = _ablyClient.Channels.Get(questId);
                 await channel.PublishAsync(
                     "update-phase",
                     new
@@ -93,13 +93,13 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
 
         public async Task PublishUpdateMessage(string questId, string message, bool isError)
         {
-            if (_realtimeClient != null)
+            if (_ablyClient != null)
             {
-                _realtimeChannel = _realtimeClient.Channels.Get(questId);
+                _channel = _ablyClient.Channels.Get(questId);
             }
-            if (_realtimeChannel != null)
+            if (_channel != null)
             {
-                await _realtimeChannel.PublishAsync(
+                await _channel.PublishAsync(
                     "update-message",
                         new
                         {
@@ -112,13 +112,13 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
 
         public async Task PublishPlayerTurnAsync(string questId, string message, string playerName)
         {
-            if (_realtimeClient != null)
+            if (_ablyClient != null)
             {
-                _realtimeChannel = _realtimeClient.Channels.Get(questId);
+                _channel = _ablyClient.Channels.Get(questId);
             }
-            if (_realtimeChannel != null)
+            if (_channel != null)
             {
-                await _realtimeChannel.PublishAsync(
+                await _channel.PublishAsync(
                     "check-player-turn",
                     new
                     {

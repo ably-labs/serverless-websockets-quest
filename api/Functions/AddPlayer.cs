@@ -12,13 +12,13 @@ namespace AblyLabs.ServerlessWebsocketsQuest
 {
     public class AddPlayer
     {
-        private IRealtimeClient _realtime;
+        private IRestClient _ablyClient;
 
-        public AddPlayer(IRealtimeClient realtime)
+        public AddPlayer(IRestClient ablyClient)
         {
-            _realtime = realtime;
+            _ablyClient = ablyClient;
         }
-        
+
         /// The AddPlayer function is called when a player joins a quest created by the host.
         /// The Player Id & Health will be stored in a Durable Entity.
         [FunctionName(nameof(AddPlayer))]
@@ -28,7 +28,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest
             ILogger log)
         {
             var questData = await req.Content.ReadAsAsync<QuestData>();
-            var channel = _realtime.Channels.Get(questData.QuestId);
+            var channel = _ablyClient.Channels.Get(questData.QuestId);
             var gameEngine = new GameEngine(durableClient, questData.QuestId, channel);
             try
             {

@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using IO.Ably.Realtime;
+using IO.Ably.Rest;
 
 namespace AblyLabs.ServerlessWebsocketsQuest.Models
 {
@@ -8,10 +9,10 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
     {
         private readonly IDurableClient _durableClient;
         private readonly string _questId;
-        private readonly IRealtimeChannel? _channel;
+        private readonly IRestChannel? _channel;
         private readonly Publisher _publisher;
 
-        public GameEngine(IDurableClient durableClient, string questId, IRealtimeChannel channel)
+        public GameEngine(IDurableClient durableClient, string questId, IRestChannel channel)
         {
             _durableClient = durableClient;
             _questId = questId;

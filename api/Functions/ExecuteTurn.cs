@@ -12,11 +12,11 @@ namespace AblyLabs.ServerlessWebsocketsQuest
 {
     public class ExecuteTurn
     {
-        private IRealtimeClient _realtime;
+        private IRestClient _ablyClient;
 
-        public ExecuteTurn(IRealtimeClient realtime)
+        public ExecuteTurn(IRestClient ablyClient)
         {
-            _realtime = realtime;
+            _ablyClient = ablyClient;
         }
 
         // The ExecuteTurn function is called by a player that performs a turn.
@@ -28,7 +28,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest
         {
             // Read Turn object from Ably Message
             var questData = await req.Content.ReadAsAsync<QuestData>();
-            var channel = _realtime.Channels.Get(questData.QuestId);
+            var channel = _ablyClient.Channels.Get(questData.QuestId);
             var gameEngine = new GameEngine(durableClient, questData.QuestId, channel);
             await gameEngine.ExecuteTurnAsync(questData.PlayerName);
 
