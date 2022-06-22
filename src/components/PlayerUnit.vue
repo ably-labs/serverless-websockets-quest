@@ -13,7 +13,7 @@ const props = defineProps({
 const store = gameStore();
 const targetPlayer: Player = props.player as Player;
 
-function isActive(): boolean { return targetPlayer.name === store.currentPlayer; }
+function isActive(): boolean { return targetPlayer.name === store.currentPlayer && store.teamHasWon === undefined; }
 function isDisabled(): boolean { return !targetPlayer.isAvailable || store.isPlayerAdded; }
 function showDamage(): boolean { return targetPlayer.damage > 0; }
 function getName(): string { return targetPlayer.characterClass === store.characterClass && store.playerName !== "" ? store.playerName : targetPlayer.name; }

@@ -58,7 +58,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             if (IsPartyComplete)
             {
                 await UpdatePhase(GamePhases.Play);
-                await Task.Delay(2000);
+                await Task.Delay(1000);
                 await AttackByMonster();
             }
         }

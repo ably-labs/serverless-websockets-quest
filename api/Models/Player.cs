@@ -55,7 +55,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
                 await _publisher.PublishUpdateMessage(QuestId, message, false);
                 if (PlayerName == CharacterClassDefinitions.Monster.Name)
                 {
-                    await Task.Delay(1500);
+                    await Task.Delay(1000);
                     var teamHasWon = true;
                     await _publisher.PublishUpdatePhase(QuestId, GamePhases.End, teamHasWon);
                 }
