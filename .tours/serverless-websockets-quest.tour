@@ -7,7 +7,7 @@
     },
     {
       "directory": "api/Functions",
-      "description": "### The game API\r\n\r\nThe API of the game exposes several HTTP endpoints which are implemented in C# (.NET 6) Azure Functions."
+      "description": "### The game API\r\n\r\nThe API of the game exposes several HTTP endpoints which are implemented in C# (.NET 6) Azure Functions.\r\n\r\n- **CreateQuest**; triggered by the first player to start a new quest.\r\n- **JoinQuest**; triggered by players who want to join an existing quest and the quest ID exists.\r\n- **GetQuestExists**;  triggered by players who would like to join a quest to determine if they provided a valid quest ID.\r\n- **AddPlayer**; triggered by the player once they have selected their character and name.\r\n- **ExecuteTurn**; triggered by the player when they want to attack.\r\n- **CreateTokenRequest**; provides an authentication token and is triggered when a connection to Ably is made via the front-end."
     },
     {
       "file": "api/Functions/CreateQuest.cs",
