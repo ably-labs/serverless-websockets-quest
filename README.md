@@ -10,7 +10,7 @@ The players trigger HTTP based serverless functions to play the game. The functi
 
 ![Communication between player devices and the serverless application.](./media/communication-between-back-end-and-front-end.png)
 
-The game can be played online at [quest.ably.dev](https://quest.ably.dev).
+The game can be played online at [quest.ably.dev](https://quest.ably.dev). Read the full blog post [here](https://ably.com/blog/quest-for-serverless-websockets-azure-functions-adventure).
 
 ## Tech Stack
 
