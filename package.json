@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "ably": "^1.2.27",
-    "node-fetch": "^3.2.6",
+    "node-fetch": "^3.2.8",
     "pinia": "^2.0.14",
     "uuid": "^8.3.2",
     "vue": "^3.2.37"
