@@ -59,7 +59,7 @@ jobs:
             --functions-version 4
 
     - name: Setup .NET ${{ env.DOTNET_VERSION }} Environment
-      uses: actions/setup-dotnet@v2
+      uses: actions/setup-dotnet@v3.0.0
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
     - name: 'Resolve Project Dependencies'
