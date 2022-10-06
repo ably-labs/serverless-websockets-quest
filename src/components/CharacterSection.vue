@@ -47,6 +47,16 @@ async function addPlayer() {
 
 function numberOfPlayersRemaining(): number { return  4 - store.players.length; }
 
+function isAddDisabled(): boolean {
+    if (store.playerName === "" && !store.isPlayerAdded) {
+        return true;
+    } else if (store.playerName !== "" && !store.isPlayerAdded) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
 </script>
 
 <template>
@@ -55,8 +65,8 @@ function numberOfPlayersRemaining(): number { return  4 - store.players.length; 
     <h2>Select and name your character</h2>
     <PlayersSection v-bind="{ useHealth:false, includeMonster:false, isPlayerSelect:true, showStats:false }" />
     <div v-if="!store.isPlayerAdded">
-        <input type="text" v-model="store.playerName" :disabled="store.isPlayerAdded" placeholder="Character name" />
-        <button @click="addPlayer" :disabled="store.isPlayerAdded">Add player</button>
+        <input type="text" v-model="store.playerName" :disabled="isAddDisabled()" placeholder="Character name" />
+        <button @click="addPlayer" :disabled="isAddDisabled()">Add player</button>
     </div>
     <p class="message">Waiting for {{ numberOfPlayersRemaining() }} player(s) to join.</p>
     <ErrorMessageSection :errorMessage=errorMessage />
