@@ -10,7 +10,7 @@ The players trigger HTTP based serverless functions to play the game. The functi
 
 ![Communication between player devices and the serverless application.](./media/communication-between-back-end-and-front-end.png)
 
-The game can be played online at [quest.ably.dev](https://quest.ably.dev). Read the full blog post [here](https://ably.com/blog/quest-for-serverless-websockets-azure-functions-adventure).
+The game can be played online at [quest.ably.dev](https://quest.ably.dev). Read the full blog post [here](https://ably.com/blog/quest-for-serverless-websockets-azure-functions-adventure?utm_source=ably-labs&utm_medium=github&utm_campaign=serverless-websockets-quest) or watch the [YouTube video](https://www.youtube.com/watch?v=KHzdc3USFU4).
 
 ## Tech Stack
 
@@ -30,7 +30,7 @@ You require the following dependencies:
 - [Azure Functions Core Tools](https://docs.microsoft.com/azure/azure-functions/functions-run-local?tabs=v4%2Cwindows%2Ccsharp%2Cportal%2Cbash). This is part of the Azure Functions extensions for VSCode that should be recommended for automatic installation when this repo is opened in VSCode.
 - [Azurite](https://marketplace.visualstudio.com/items?itemName=Azurite.azurite). This is an local storage emulator that is required for Entity Functions. When this repo is opened in VSCode a message will appear to install this extension.
 - [Azure Static Web Apps CLI](https://github.com/Azure/static-web-apps-cli). Install this tool globally by running this command in the terminal: `npm install -g @azure/static-web-apps-cli`.
-- A free Ably Account, [sign up](https://ably.com/signup) or [log in](https://ably.com/login) to ably.com, and [create a new app and copy the API key](https://faqs.ably.com/setting-up-and-managing-api-keys).
+- A free Ably Account, [sign up](https://ably.com/signup?utm_source=ably-labs&utm_medium=github&utm_campaign=serverless-websockets-quest) or [log in](https://ably.com/login?utm_source=ably-labs&utm_medium=github&utm_campaign=serverless-websockets-quest) to ably.com, and [create a new app and copy the API key](https://faqs.ably.com/setting-up-and-managing-api-keys?utm_source=ably-labs&utm_medium=github&utm_campaign=serverless-websockets-quest).
 
 ### Steps
 
@@ -68,8 +68,8 @@ For more questions or comments, please contact me on [Twitter](https://twitter.c
 
 - [Join our Discord server](https://discord.gg/q89gDHZcBK)
 - [Follow us on Twitter](https://twitter.com/ablyrealtime)
-- [Use our SDKs](https://github.com/ably/)
-- [Visit our website](https://ably.com)
+- [Use our SDKs](https://github.com/ably)
+- [Visit our website](https://ably.com/?utm_source=ably-labs&utm_medium=github&utm_campaign=serverless-websockets-quest)
 
 ---
-[![Ably logo](https://static.ably.dev/badge-black.svg?serverless-websockets-quest)](https://ably.com)
+[![Ably logo](https://static.ably.dev/badge-black.svg?serverless-websockets-quest)](https://ably.com/?utm_source=ably-labs&utm_medium=github&utm_campaign=serverless-websockets-quest)
