@@ -8,15 +8,13 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
     {
         private readonly IDurableClient _durableClient;
         private readonly string _questId;
-        private readonly IRestChannel? _channel;
         private readonly Publisher _publisher;
 
-        public GameEngine(IDurableClient durableClient, string questId, IRestChannel channel)
+        public GameEngine(IDurableClient durableClient, string questId, Publisher publisher)
         {
             _durableClient = durableClient;
             _questId = questId;
-            _channel = channel;
-            _publisher = new Publisher(_channel);
+            _publisher = publisher;
         }
 
         public async Task<string> CreateQuestAsync()

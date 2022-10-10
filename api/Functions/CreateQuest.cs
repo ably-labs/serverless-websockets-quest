@@ -5,18 +5,17 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
-using IO.Ably;
 using AblyLabs.ServerlessWebsocketsQuest.Models;
 
 namespace AblyLabs.ServerlessWebsocketsQuest
 {
     public class CreateQuest
     {
-        private IRestClient _ablyClient;
+        private Publisher _publisher;
 
-        public CreateQuest(IRestClient ablyClient)
+        public CreateQuest(Publisher publisher)
         {
-            _ablyClient = ablyClient;
+            _publisher = publisher;
         }
 
         /// The CreateQuest function is called by the host (the first player).
@@ -30,8 +29,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest
             if (req.Content != null)
             {
                 var questId = await req.Content.ReadAsStringAsync();
-                var channel = _ablyClient.Channels.Get(questId);
-                var gameEngine = new GameEngine(durableClient, questId, channel);
+                var gameEngine = new GameEngine(durableClient, questId, _publisher);
                 var gamePhase = await gameEngine.CreateQuestAsync();
 
                 return new OkObjectResult(gamePhase);

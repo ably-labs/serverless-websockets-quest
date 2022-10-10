@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using FluentAssertions;
+using NSubstitute;
 using Xunit;
 using AblyLabs.ServerlessWebsocketsQuest.Models;
-using NSubstitute;
-using IO.Ably;
 
 namespace AblyLabs.ServerlessWebsocketsQuest.Test.Models
 {
@@ -22,8 +21,8 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Test.Models
         [MemberData(nameof(GetPlayers))]
         public void GetNextPlayerName(List<string> playerNames, string? currentPlayerName, string expectedPlayerName)
         {
-            var ablyClient = Substitute.For<IRestClient>();
-            var gameState = new GameState(ablyClient) { PlayerNames = playerNames };
+            var publisher = Substitute.For<Publisher>();
+            var gameState = new GameState(publisher) { PlayerNames = playerNames };
             gameState.GetNextPlayerName(currentPlayerName).Should().Be(expectedPlayerName);
         }
 
@@ -31,8 +30,8 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Test.Models
         [MemberData(nameof(GetPlayers))]
         public void GetRandomPlayerName(List<string> playerNames, string? currentPlayerName, string expectedPlayerName)
         {
-            var ablyClient = Substitute.For<IRestClient>();
-            var gameState = new GameState(ablyClient) { PlayerNames = playerNames };
+            var publisher = Substitute.For<Publisher>();
+            var gameState = new GameState(publisher) { PlayerNames = playerNames };
             gameState.GetRandomPlayerName().Should().NotBe(CharacterClassDefinitions.Monster.Name);
         }
     }

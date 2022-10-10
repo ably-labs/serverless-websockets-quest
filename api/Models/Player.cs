@@ -10,13 +10,11 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
     [JsonObject(MemberSerialization.OptIn)]
     public class Player : IPlayer
     {
-        private readonly IRestClient _ablyClient;
         private readonly Publisher _publisher;
 
-        public Player(IRestClient ablyClient)
+        public Player(Publisher publisher)
         {
-            _ablyClient = ablyClient;
-            _publisher = new Publisher(_ablyClient);
+            _publisher = publisher;
             QuestId = string.Empty;
             PlayerName = string.Empty;
             CharacterClass = string.Empty;

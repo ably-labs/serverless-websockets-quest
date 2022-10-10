@@ -5,18 +5,17 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
-using IO.Ably;
 using AblyLabs.ServerlessWebsocketsQuest.Models;
 
 namespace AblyLabs.ServerlessWebsocketsQuest
 {
     public class AddPlayer
     {
-        private IRestClient _ablyClient;
+        private Publisher _publisher;
 
-        public AddPlayer(IRestClient ablyClient)
+        public AddPlayer(Publisher publisher)
         {
-            _ablyClient = ablyClient;
+            _publisher = publisher;
         }
 
         /// The AddPlayer function is called when a player joins a quest created by the host.
@@ -28,8 +27,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest
             ILogger log)
         {
             var questData = await req.Content.ReadAsAsync<QuestData>();
-            var channel = _ablyClient.Channels.Get(questData.QuestId);
-            var gameEngine = new GameEngine(durableClient, questData.QuestId, channel);
+            var gameEngine = new GameEngine(durableClient, questData.QuestId, _publisher);
             await gameEngine.AddPlayerAsync(questData.PlayerName, questData.CharacterClass);
 
             return new AcceptedResult();

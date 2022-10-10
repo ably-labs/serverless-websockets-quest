@@ -5,18 +5,17 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
-using IO.Ably;
 using AblyLabs.ServerlessWebsocketsQuest.Models;
 
 namespace AblyLabs.ServerlessWebsocketsQuest
 {
     public class GetQuestExists
     {
-        private IRestClient _ablyClient;
+        private Publisher _publisher;
 
-        public GetQuestExists(IRestClient ablyClient)
+        public GetQuestExists(Publisher publisher)
         {
-            _ablyClient = ablyClient;
+            _publisher = publisher;
         }
 
         /// The GetQuestExist function is called when a player wants to join a quest created by the host.
@@ -27,8 +26,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest
             string questId,
             ILogger log)
         {
-            var channel = _ablyClient.Channels.Get(questId);
-            var gameEngine = new GameEngine(durableClient, questId, channel);
+            var gameEngine = new GameEngine(durableClient, questId, _publisher);
             var result = await gameEngine.DoesQuestExistAsync();
 
             if (result.QuestExists)

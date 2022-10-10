@@ -13,13 +13,11 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
     public class GameState : IGameState
     {
         private const int NumberOfPlayers = 4;
-        private readonly IRestClient _ablyClient;
         private readonly Publisher _publisher;
 
-        public GameState(IRestClient ablyClient)
+        public GameState(Publisher publisher)
         {
-            _ablyClient = ablyClient;
-            _publisher = new Publisher(_ablyClient);
+            _publisher = publisher;
             QuestId = string.Empty;
             Phase = string.Empty;
             PlayerNames = new List<string>();
