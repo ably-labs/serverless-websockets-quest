@@ -5,8 +5,8 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
-using AblyLabs.ServerlessWebsocketsQuest.Models;
 using IO.Ably;
+using AblyLabs.ServerlessWebsocketsQuest.Models;
 
 namespace AblyLabs.ServerlessWebsocketsQuest
 {
@@ -33,6 +33,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest
                 var channel = _ablyClient.Channels.Get(questId);
                 var gameEngine = new GameEngine(durableClient, questId, channel);
                 var gamePhase = await gameEngine.CreateQuestAsync();
+
                 return new OkObjectResult(gamePhase);
             }
             else

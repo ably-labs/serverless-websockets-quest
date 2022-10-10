@@ -1,12 +1,12 @@
 using System.Threading.Tasks;
+using System.Net.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
-using System.Net.Http;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
-using AblyLabs.ServerlessWebsocketsQuest.Models;
 using IO.Ably;
+using AblyLabs.ServerlessWebsocketsQuest.Models;
 
 namespace AblyLabs.ServerlessWebsocketsQuest
 {
@@ -30,15 +30,9 @@ namespace AblyLabs.ServerlessWebsocketsQuest
             var questData = await req.Content.ReadAsAsync<QuestData>();
             var channel = _ablyClient.Channels.Get(questData.QuestId);
             var gameEngine = new GameEngine(durableClient, questData.QuestId, channel);
-            try
-            {
-                await gameEngine.AddPlayerAsync(questData.PlayerName, questData.CharacterClass);
-                return new AcceptedResult();
-            }
-            catch (System.Exception ex)
-            {
-                return new ObjectResult(ex) { StatusCode = 500 };
-            }
+            await gameEngine.AddPlayerAsync(questData.PlayerName, questData.CharacterClass);
+
+            return new AcceptedResult();
         }
     }
 }

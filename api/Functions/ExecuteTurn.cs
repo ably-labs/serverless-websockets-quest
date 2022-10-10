@@ -1,11 +1,11 @@
 using System.Threading.Tasks;
+using System.Net.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
-using IO.Ably;
-using System.Net.Http;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
+using IO.Ably;
 using AblyLabs.ServerlessWebsocketsQuest.Models;
 
 namespace AblyLabs.ServerlessWebsocketsQuest
@@ -19,7 +19,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest
             _ablyClient = ablyClient;
         }
 
-        // The ExecuteTurn function is called by a player that performs a turn.
+        /// The ExecuteTurn function is called by a player that performs a turn.
         [FunctionName(nameof(ExecuteTurn))]
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage req,

@@ -1,8 +1,8 @@
 using System;
-using AblyLabs.ServerlessWebsocketsQuest;
-using IO.Ably;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
+using IO.Ably;
+using AblyLabs.ServerlessWebsocketsQuest;
 
 [assembly: FunctionsStartup(typeof(Startup))]
 namespace AblyLabs.ServerlessWebsocketsQuest
