@@ -5,7 +5,7 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
 {
     public class Publisher
     {
-        private readonly IRestClient _ablyClient;
+        private readonly IRestClient? _ablyClient;
 
         public Publisher()
         {
