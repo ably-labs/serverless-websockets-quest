@@ -27,9 +27,9 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Test.Models
         {
             // Arrange
             var durableClient = Substitute.For<IDurableClient>();
-            var channel = Substitute.For<IRestChannel>();
             string questId = _fixture.Create<string>();
-            var gameEngine = new GameEngine(durableClient, questId, channel);
+            var publisher = Substitute.For<Publisher>();
+            var gameEngine = new GameEngine(durableClient, questId, publisher);
 
             // Act
             await gameEngine.CreateQuestAsync();
@@ -45,9 +45,9 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Test.Models
         {
             // Arrange
             var durableClient = Substitute.For<IDurableClient>();
-            var channel = Substitute.For<IRestChannel>();
             string questId = _fixture.Create<string>();
-            var gameEngine = new GameEngine(durableClient, questId, channel);
+            var publisher = Substitute.For<Publisher>();
+            var gameEngine = new GameEngine(durableClient, questId, publisher);
             string playerName = _fixture.Create<string>();
             string className = "fighter";
 
@@ -65,9 +65,9 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Test.Models
         {
             // Arrange
             var durableClient = Substitute.For<IDurableClient>();
-            var channel = Substitute.For<IRestChannel>();
+            var publisher = Substitute.For<Publisher>();
             string questId = _fixture.Create<string>();
-            var gameEngine = new GameEngine(durableClient, questId, channel);
+            var gameEngine = new GameEngine(durableClient, questId, publisher);
             string playerName = _fixture.Create<string>();
             string className = "fighter";
 
@@ -104,9 +104,9 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Test.Models
                 EntityState = player
             };
             durableClient.ReadEntityStateAsync<Player>(Arg.Any<EntityId>()).Returns(Task.FromResult(entityStateResponsePlayer));
-            var channel = Substitute.For<IRestChannel>();
+            var publisher = Substitute.For<Publisher>();
             string questId = _fixture.Create<string>();
-            var gameEngine = new GameEngine(durableClient, questId, channel);
+            var gameEngine = new GameEngine(durableClient, questId, publisher);
 
             // Act
             await gameEngine.ExecuteTurnAsync(CharacterClassDefinitions.Monster.Name);
@@ -116,14 +116,16 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Test.Models
                 Arg.Any<EntityId>(),
                 Arg.Any<Action<IPlayer>>());
 
-            await channel.Received(1).PublishAsync(
-                "update-player",
-                Arg.Any<object>());
+            await publisher.Received(1).PublishPlayerAttacking(
+                Arg.Is<string>(questId),
+                Arg.Any<string>(),
+                Arg.Any<string>(),
+                Arg.Any<int>());
 
-            await channel.Received(1).PublishAsync(
-                "check-player-turn",
-                Arg.Any<object>());
+            await publisher.Received(1).PublishPlayerTurnAsync(
+                Arg.Is<string>(questId),
+                Arg.Any<string>(),
+                Arg.Any<string>());
         }
-
     }
 }

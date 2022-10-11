@@ -1,9 +1,8 @@
-using Xunit;
-using AblyLabs.ServerlessWebsocketsQuest.Models;
+using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
-using IO.Ably;
-using System.Threading.Tasks;
+using Xunit;
+using AblyLabs.ServerlessWebsocketsQuest.Models;
 
 namespace AblyLabs.ServerlessWebsocketsQuest.Test.Models
 {
@@ -17,8 +16,8 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Test.Models
         [InlineData(100, 110, 0)]
         public async Task ApplyDamageToPlayer(int health, int damage, int result)
         {
-            var ablyClient = Substitute.For<IRestClient>();
-            var player = new Player(ablyClient) { Health = health };
+            var publisher = Substitute.For<Publisher>();
+            var player = new Player(publisher) { Health = health };
             await player.ApplyDamage(damage);
             player.Health.Should().Be(result);
         }

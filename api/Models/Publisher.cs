@@ -1,22 +1,19 @@
 using System.Threading.Tasks;
 using IO.Ably;
-using IO.Ably.Rest;
 
 namespace AblyLabs.ServerlessWebsocketsQuest.Models
 {
     public class Publisher
     {
         private readonly IRestClient? _ablyClient;
-        private IRestChannel? _channel;
+
+        public Publisher()
+        {
+        }
 
         public Publisher(IRestClient ablyClient)
         {
             _ablyClient = ablyClient;
-        }
-
-        public Publisher(IRestChannel channel)
-        {
-            _channel = channel;
         }
 
         public async Task PublishAddPlayer(string questId, string playerName, string characterClass, int health)
@@ -59,11 +56,8 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
         {
             if (_ablyClient != null)
             {
-                _channel = _ablyClient.Channels.Get(questId);
-            }
-            if (_channel != null)
-            {
-                await _channel.PublishAsync(
+                var channel = _ablyClient.Channels.Get(questId);
+                await channel.PublishAsync(
                     "player-attacking",
                         new
                         {
@@ -95,11 +89,8 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
         {
             if (_ablyClient != null)
             {
-                _channel = _ablyClient.Channels.Get(questId);
-            }
-            if (_channel != null)
-            {
-                await _channel.PublishAsync(
+                var channel = _ablyClient.Channels.Get(questId);
+                await channel.PublishAsync(
                     "update-message",
                         new
                         {
@@ -114,11 +105,8 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
         {
             if (_ablyClient != null)
             {
-                _channel = _ablyClient.Channels.Get(questId);
-            }
-            if (_channel != null)
-            {
-                await _channel.PublishAsync(
+                var channel = _ablyClient.Channels.Get(questId);
+                await channel.PublishAsync(
                     "check-player-turn",
                     new
                     {
