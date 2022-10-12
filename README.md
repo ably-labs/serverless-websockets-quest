@@ -30,7 +30,7 @@ You require the following dependencies:
 - [Azure Functions Core Tools](https://docs.microsoft.com/azure/azure-functions/functions-run-local?tabs=v4%2Cwindows%2Ccsharp%2Cportal%2Cbash). This is part of the Azure Functions extensions for VSCode that should be recommended for automatic installation when this repo is opened in VSCode.
 - [Azurite](https://marketplace.visualstudio.com/items?itemName=Azurite.azurite). This is an local storage emulator that is required for Entity Functions. When this repo is opened in VSCode a message will appear to install this extension.
 - [Azure Static Web Apps CLI](https://github.com/Azure/static-web-apps-cli). Install this tool globally by running this command in the terminal: `npm install -g @azure/static-web-apps-cli`.
-- A free Ably Account, [sign up](https://ably.com/signup?utm_source=ably-labs&utm_medium=github&utm_campaign=serverless-websockets-quest) or [log in](https://ably.com/login?utm_source=ably-labs&utm_medium=github&utm_campaign=serverless-websockets-quest) to ably.com, and [create a new app and copy the API key](https://faqs.ably.com/setting-up-and-managing-api-keys?utm_source=ably-labs&utm_medium=github&utm_campaign=serverless-websockets-quest).
+- A free Ably Account, [sign up](https://ably.com/signup?utm_source=gitub&utm_medium=repo&utm_campaign=GLB-2207-serverless-websockets-quest&utm_content=repo-serverless-websockets-quest&src=GLB-2207-serverless-websockets-quest-repo) or [log in](https://ably.com/login?utm_source=gitub&utm_medium=repo&utm_campaign=GLB-2207-serverless-websockets-quest&utm_content=repo-serverless-websockets-quest&src=GLB-2207-serverless-websockets-quest-repo) to ably.com, and [create a new app and copy the API key](https://faqs.ably.com/setting-up-and-managing-api-keys?utm_source=gitub&utm_medium=repo&utm_campaign=GLB-2207-serverless-websockets-quest&utm_content=repo-serverless-websockets-quest&src=GLB-2207-serverless-websockets-quest-repo).
 
 ### Steps
 
@@ -69,7 +69,7 @@ For more questions or comments, please contact me on [Twitter](https://twitter.c
 - [Join our Discord server](https://discord.gg/q89gDHZcBK)
 - [Follow us on Twitter](https://twitter.com/ablyrealtime)
 - [Use our SDKs](https://github.com/ably)
-- [Visit our website](https://ably.com/?utm_source=ably-labs&utm_medium=github&utm_campaign=serverless-websockets-quest)
+- [Visit our website](https://ably.com/?utm_source=gitub&utm_medium=repo&utm_campaign=GLB-2207-serverless-websockets-quest&utm_content=repo-serverless-websockets-quest&src=GLB-2207-serverless-websockets-quest-repo)
 
 ---
-[![Ably logo](https://static.ably.dev/badge-black.svg?serverless-websockets-quest)](https://ably.com/?utm_source=ably-labs&utm_medium=github&utm_campaign=serverless-websockets-quest)
+[![Ably logo](https://static.ably.dev/badge-black.svg?serverless-websockets-quest)](https://ably.com/?utm_source=gitub&utm_medium=repo&utm_campaign=GLB-2207-serverless-websockets-quest&utm_content=repo-serverless-websockets-quest&src=GLB-2207-serverless-websockets-quest-repo)

@@ -24,6 +24,13 @@ async function addPlayer() {
         errorMessage.value = "";
     }
 
+    if (store.players.includes(store.playerName)) {
+        errorMessage.value = `The name ${store.playerName} is already chosen by another player. Please choose another name.`;
+        return
+    } else {
+        errorMessage.value = "";
+    }
+
     store.isPlayerAdded = true;
     const questExistsResponse = await window.fetch(`/api/GetQuestExists/${store.questId}`);
     const questExistsMessage = await questExistsResponse.text();
