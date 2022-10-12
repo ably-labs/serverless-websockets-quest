@@ -24,8 +24,7 @@ async function addPlayer() {
         errorMessage.value = "";
     }
 
-    if (store.players.includes(store.playerName))
-    {
+    if (store.players.includes(store.playerName)) {
         errorMessage.value = `The name ${store.playerName} is already chosen by another player. Please choose another name.`;
         return
     } else {
