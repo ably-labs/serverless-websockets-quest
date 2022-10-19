@@ -50,37 +50,37 @@
     {
       "file": "api/Models/GameEngine.cs",
       "description": "### GameEngine\r\n\r\nThe `GameEngine` is responsible for the majority of the game flow and orchestrates actions using the `GameState` and `Player` classes.",
-      "line": 8
+      "line": 6
     },
     {
       "file": "api/Models/GameEngine.cs",
       "description": "### InitializeGameStateAsync\r\n\r\nThe `InitializeGameStateAsync` method is responsible for:\r\n\r\n- Creating the monster, a `Player` (a non-player character, NPC).\r\n- Creating the initial `GameState` that contains the quest ID and the name of the game phase.\r\n- Adding the monster to the list of players in the `GameState`.",
-      "line": 49
+      "line": 45
     },
     {
       "file": "api/Models/Player.cs",
       "description": "### Player entity function\r\n\r\nThe `Player` entity function is responsible for maintaining the state of a player in the game. The game has four players: the monster (NPC), and 3 real players. Each one has their own `Player` entity function.",
-      "line": 11
+      "line": 10
     },
     {
       "file": "api/Models/Player.cs",
       "description": "### Player -> Ably\r\n\r\nOnce a `Player` entity is initialized, a message will be published to an Ably channel. The players who have joined the quest are subscribed to this channel and will receive a message that a new player has joined.",
-      "line": 42
+      "line": 39
     },
     {
       "file": "api/Models/GameState.cs",
       "description": "### `GameState` entity function\r\n\r\nThe `GameState` entity function is responsible for maintaining the state of the game, such as the quest ID, the player names, and the game phase (start, character selection, play, end).",
-      "line": 13
+      "line": 12
     },
     {
       "file": "api/Models/GameState.cs",
       "description": "### GameState -> Ably\r\n\r\nOnce the QuestId and Phase have been set a message is published to advance the player to the next game phase.",
-      "line": 34
+      "line": 31
     },
     {
       "file": "api/Models/Publisher.cs",
       "description": "### Publisher\r\n\r\nThe final step of game logic functionality in the API is publishing messages to the players that have joined the quest. Since several classes need access to this functionality, I've wrapped it in a `Publisher` class for ease of use.",
-      "line": 7
+      "line": 6
     },
     {
       "file": "src/stores/index.ts",

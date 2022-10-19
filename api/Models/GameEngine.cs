@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
-using IO.Ably.Rest;
 
 namespace AblyLabs.ServerlessWebsocketsQuest.Models
 {
