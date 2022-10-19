@@ -40,7 +40,17 @@
     },
     {
       "directory": "api/Models",
-      "description": "### Creating a new Quest\r\n\r\nTo illustrate how Azure Functions and the `GameEngine`, `GameState`, and `Player` classes work together, I'll show the `CreateQuest` functionality starting at the Azure Function, and ending with publishing messages using Ably."
+      "description": "### Creating a new Quest\r\n\r\nTo illustrate how the Vue front-end, Azure Functions, and the `GameEngine`, `GameState`, and `Player` classes work together, I'll show the `CreateQuest` functionality starting in the `StartSection` Vue component, and ending with publishing messages using Ably."
+    },
+    {
+      "file": "src/components/StartSection.vue",
+      "description": "## Start Quest button",
+      "line": 56
+    },
+    {
+      "file": "src/components/StartSection.vue",
+      "description": "## createQuest front-end",
+      "line": 12
     },
     {
       "file": "api/Functions/CreateQuest.cs",
