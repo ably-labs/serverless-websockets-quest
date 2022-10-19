@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
-using IO.Ably;
 using Newtonsoft.Json;
 
 namespace AblyLabs.ServerlessWebsocketsQuest.Models
