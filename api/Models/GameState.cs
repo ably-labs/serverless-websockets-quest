@@ -24,6 +24,13 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
 
         [JsonProperty("questId")]
         public string QuestId { get; set; }
+
+        [JsonProperty("phase")]
+        public string Phase { get; set; }
+
+        [JsonProperty("players")]
+        public List<string> PlayerNames { get; set; }
+
         public async Task InitGameState(string[] gameStateFields)
         {
             QuestId = gameStateFields[0];
@@ -31,16 +38,12 @@ namespace AblyLabs.ServerlessWebsocketsQuest.Models
             await _publisher.PublishUpdatePhase(QuestId, Phase);
         }
 
-        [JsonProperty("phase")]
-        public string Phase { get; set; }
         public async Task UpdatePhase(string phase)
         {
             Phase = phase;
             await _publisher.PublishUpdatePhase(QuestId, Phase);
         }
 
-        [JsonProperty("players")]
-        public List<string> PlayerNames { get; set; }
         public async Task AddPlayerName(string playerName)
         {
             if (PlayerNames == null)
