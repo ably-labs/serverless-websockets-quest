@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="ably.io" Version="1.2.9" />
+    <PackageReference Include="ably.io" Version="1.2.10" />
     <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.DurableTask" Version="2.8.1" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Http" Version="3.2.0" />
