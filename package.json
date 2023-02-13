@@ -8,7 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "ably": "^1.2.27",
+    "ably": "^1.2.36",
     "node-fetch": "^3.2.10",
     "pinia": "^2.0.16",
     "uuid": "^8.3.2",
